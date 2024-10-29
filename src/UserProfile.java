@@ -9,7 +9,8 @@ public class UserProfile implements User {
     private String password;  //password associated with user
     private String dateJoined;  //date the user created their account
 
-    public UserProfile(String username, ArrayList<String> friends, ArrayList<String> blockedFriends, String email, String password, String dateJoined) {
+    public UserProfile(String username, ArrayList<String> friends, ArrayList<String> blockedFriends, String email,
+                       String password, String dateJoined) {
 
         this.username = username;
         this.friends = friends;
@@ -37,11 +38,5 @@ public class UserProfile implements User {
 
     public String getDateJoined() {return this.dateJoined;}
     public void setDateJoined(String newDateJoined) {this.dateJoined = newDateJoined;}
-
-    public static void main(String[] args) {
-
-        System.out.println("seems to be working");
-
-    }
 
 }
