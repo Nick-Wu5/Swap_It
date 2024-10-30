@@ -78,5 +78,4 @@ public class UserProfile implements User {
         this.blockedFriends.add(userToBlock);
     }
 
-
 }

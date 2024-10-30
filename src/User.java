@@ -17,4 +17,8 @@ public interface User {
     String getDateJoined();
     void setDateJoined(String newDateJoined);
 
+    boolean addFriend(UserProfile userToAdd);
+    void removeFriend(UserProfile userToRemove);
+    void blockUser(UserProfile userToBlock);
+
 }
