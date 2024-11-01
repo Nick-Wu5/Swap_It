@@ -1,45 +1,24 @@
 import java.util.*;
 
-public class User {
+public interface User {
 
-    private String username;  //unqiue name associated with user
-    private ArrayList<String> friends;  //list of friends of user
-    private ArrayList<String> blockedFriends;  //list of blocked friends of user
-    private String email;  //email associated with user
-    private String password;  //password associated with user
-    private String dateJoined;  //date the user created their account
+    String getUsername();
+    void setUsername(String newUsername);
 
-    public User(String username, ArrayList<String> friends, ArrayList<String> blockedFriends, String email, String password, String dateJoined) {
+    ArrayList<UserProfile> getFriends();
+    void setFriends(ArrayList<UserProfile> newFriends);
 
-        this.username = username;
-        this.friends = friends;
-        this.blockedFriends = blockedFriends;
-        this.email = email;
-        this.password = password;
-        this.dateJoined = dateJoined;
-    }
+    String getEmail();
+    void setEmail(String newEmail);
 
-    //Getters and Setters
-    public String getUsername() {return this.username;}
-    public void setUsername(String newUsername) {this.username = newUsername;}
+    String getPassword();
+    void setPassword(String newPassword);
 
-    public ArrayList<String> getFriends() {return this.friends;}
-    public void setFriends(ArrayList<String> newFriends) {this.friends = newFriends;}
+    String getDateJoined();
+    void setDateJoined(String newDateJoined);
 
-    public ArrayList<String> getBlockedFriends() {return this.blockedFriends;}
-    public void setBlockedFriends(ArrayList<String> newBlockedFriends) {this.blockedFriends = newBlockedFriends;}
-
-    public String getEmail() {return this.email;}
-    public void setEmail(String newEmail) {this.email = newEmail;}
-
-    public String getPassword() {return this.password;}
-    public void setPassword(String newPassword) {this.password = newPassword;}
-
-    public String getDateJoined() {return this.dateJoined;}
-    public void setDateJoined(String newDateJoined) {this.dateJoined = newDateJoined;}
-
-    public static void main(String[] args) {
-        System.out.println("seems to be working");
-    }
+    boolean addFriend(UserProfile userToAdd);
+    void removeFriend(UserProfile userToRemove);
+    void blockUser(UserProfile userToBlock);
 
 }
