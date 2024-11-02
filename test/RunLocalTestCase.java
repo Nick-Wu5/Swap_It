@@ -6,11 +6,11 @@ import java.util.ArrayList;
 public class RunLocalTestCase {
     private UserProfile user1;
     private UserProfile user2;
-    private UserProfile user3; // A blocked user
+    private UserProfile user3;
 
     @Before
     public void setUp() {
-        //Creating an object to use for test case
+        //Creating user objects to use for test case
         user1 = new UserProfile("ramyap686", new ArrayList<UserProfile>(), new ArrayList<UserProfile>(),
                 "ramya.prasanna06@gmail.com", "7685958484","10/2/2024");
         user2 = new UserProfile("ryangosling", new ArrayList<UserProfile>(), new ArrayList<UserProfile>(),
@@ -46,10 +46,10 @@ public class RunLocalTestCase {
 
     @Test
     public void testBlockUser() {
-        user1.blockUser(user2); //block user2 from user1's profile
-        assertFalse(user1.getFriends().contains(user2)); //if user2 is still in user1's friends list, return false
-        assertTrue(user1.getBlockedFriends().contains(user2)); //if user2 is in user1's blocked friends list, return true
+        user1.blockUser(user3); //block user3 from user1's profile
+        assertFalse(user1.getFriends().contains(user3)); //if user3 is still in user1's friends list, return false
+        assertTrue(user1.getBlockedFriends().contains(user3)); //if user3 is in user1's blocked friends list, return true
 
-        assertFalse(user1.addFriend(user2)); //returns false if able to add blocked user
+        assertFalse(user1.addFriend(user3)); //returns false if able to add blocked user
     }
 }
