@@ -1,7 +1,6 @@
 import java.util.*;
 import java.io.*;
 
-
 public class CreateNewUser extends UserProfile {
     private static String dateJoined;
     private String username;
@@ -11,13 +10,13 @@ public class CreateNewUser extends UserProfile {
     private static final String filename = "users.txt";
 
     public CreateNewUser(String username, String password) {
-        super(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com", password, dateJoined);
+        super(username,username + "@example.com", password, dateJoined);
         this.username = username;
         this.password = password;
         this.alreadyRegistered = checkIfUserExists(username);
 
         if (!alreadyRegistered) { //redo
-            UserProfile newUserProfile = new UserProfile(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com", password, getDateJoined());
+            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password, getDateJoined());
             userProfiles.add(newUserProfile);
             saveUserToFile();
         }
@@ -46,7 +45,7 @@ public class CreateNewUser extends UserProfile {
                 if (parts.length == 2) {
                     String username = parts[0];
                     String password = parts[1];
-                    UserProfile userProfile = new UserProfile(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com",password, dateJoined);
+                    UserProfile userProfile = new UserProfile(username, username + "@example.com",password, dateJoined);
                     userProfiles.add(userProfile);
                 }
             }

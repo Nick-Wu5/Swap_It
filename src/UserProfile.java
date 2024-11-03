@@ -25,6 +25,8 @@ public class UserProfile implements User {
 
     }
 
+    public UserProfile() {}
+
     //Getters and Setters
     public String getUsername() {return this.username;}
     public void setUsername(String newUsername) {this.username = newUsername;}

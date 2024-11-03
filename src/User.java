@@ -21,4 +21,6 @@ public interface User {
     void removeFriend(String userToRemove);
     void blockUser(String userToBlock);
 
+    String toFileFormat();
+    void saveToFile();
 }
