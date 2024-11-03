@@ -14,8 +14,6 @@ public interface User {
     String getPassword();
     void setPassword(String newPassword);
 
-    String getDateJoined();
-    void setDateJoined(String newDateJoined);
 
     boolean addFriend(String userToAdd);
     void removeFriend(String userToRemove);

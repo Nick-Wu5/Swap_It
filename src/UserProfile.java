@@ -10,16 +10,14 @@ public class UserProfile implements User {
     private ArrayList<String> blockedFriends;  //list of blocked friends of user
     private String email;  //email associated with user
     private String password;  //password associated with user
-    private String dateJoined;  //date the user created their account
 
-    public UserProfile(String username, String email, String password, String dateJoined) {
+    public UserProfile(String username, String email, String password) {
 
         this.username = username;
         this.friends = new ArrayList<String>();
         this.blockedFriends = new ArrayList<String>();
         this.email = email;
         this.password = password;
-        this.dateJoined = dateJoined;
 
         saveToFile();
 
@@ -43,8 +41,6 @@ public class UserProfile implements User {
     public String getPassword() {return this.password;}
     public void setPassword(String newPassword) {this.password = newPassword;}
 
-    public String getDateJoined() {return this.dateJoined;}
-    public void setDateJoined(String newDateJoined) {this.dateJoined = newDateJoined;}
 
     /**
      * Add Friend Method
@@ -97,7 +93,7 @@ public class UserProfile implements User {
 
         // Return the formatted string with commas separating the main fields
         return this.username + "," + friendsList + "," + blockedList + "," + this.email + "," +
-                this.password + "," + this.dateJoined;
+                this.password;
     }
 
     /**
