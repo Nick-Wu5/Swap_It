@@ -36,7 +36,7 @@ class CreateNewUserTest {
         // Attempt to create the same user again
         CreateNewUser duplicateUser = new CreateNewUser("duplicateUser", "anotherPassword");
         assertTrue(duplicateUser.isAlreadyRegistered(), "User should be marked as already registered");
-        assertNull(duplicateUser.getUserProfiles(), "No profile should be created for duplicate user");
+        assertNull(duplicateUser.getUserProfiles(), "No profile should be created for duplicate user"); //this test is failing
     }
 
     @Test

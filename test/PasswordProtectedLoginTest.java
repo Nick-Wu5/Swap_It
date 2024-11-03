@@ -28,7 +28,7 @@ class PasswordProtectedLoginTest {
         PasswordProtectedLogin loginSystem = new PasswordProtectedLogin();
 
         // Check if users and passwords were loaded correctly
-        assertEquals(2, PasswordProtectedLogin.getUsers().size(), "Two users should be loaded from file");
+        assertEquals(2, PasswordProtectedLogin.getUsers().size(), "Two users should be loaded from file"); //this test failed
         assertEquals("testUser", PasswordProtectedLogin.getUsers().get(0), "First username should match");
         assertEquals("password123", PasswordProtectedLogin.getPasses().get(0), "First password should match");
     }

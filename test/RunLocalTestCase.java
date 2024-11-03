@@ -16,7 +16,7 @@ public class RunLocalTestCase {
     @Before
     public void setUp() {
         //Creating user objects to use for test case
-        user1 = new UserProfile("ramyap686", "ramya.prasanna06@gmail.com", "7685958484",
+        user1 = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484",
                 "10/2/2024");
         user2 = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone",
                 "09/24/2006");
@@ -57,7 +57,7 @@ public class RunLocalTestCase {
     @Test
     public void testToFileFormat() {
         // Test the toFileFormat method for user1
-        String expected1 = "ramyap686,,,ramya.prasanna06@gmail.com,7685958484,10/2/2024";
+        String expected1 = "taylorswift246,,,taylor.swift@gmail.com,7685958484,10/2/2024";
         assertEquals(expected1, user1.toFileFormat());
 
         // Test the toFileFormat method for user2

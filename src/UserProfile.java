@@ -98,7 +98,7 @@ public class UserProfile implements User {
 
         // Return the formatted string with commas separating the main fields
         return this.username + "," + friendsList + "," + blockedList + "," + this.email + "," +
-                this.password;
+                this.password + "," + this.dateJoined;
     }
 
     /**
