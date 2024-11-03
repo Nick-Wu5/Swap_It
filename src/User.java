@@ -8,16 +8,17 @@ public interface User {
     ArrayList<String> getFriends();
     void setFriends(ArrayList<String> newFriends);
 
-    ArrayList<String> getBlockedFriends();
-    void setBlockedFriends(ArrayList<String> newBlockedFriends);
-
     String getEmail();
     void setEmail(String newEmail);
 
     String getPassword();
     void setPassword(String newPassword);
 
-    String getDateJoined();
-    void setDateJoined(String newDateJoined);
 
+    boolean addFriend(String userToAdd);
+    void removeFriend(String userToRemove);
+    void blockUser(String userToBlock);
+
+    String toFileFormat();
+    void saveToFile();
 }

@@ -1,4 +1,5 @@
 public class Timer {
+
     private int timer; //timer that goes off before taking a picture
     private int currentMonth; //today's month, range from 1-12
     private int currentDay; //today's day, range from 1-31
