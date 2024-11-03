@@ -21,6 +21,35 @@ public class CreateNewUser extends UserProfile {
             saveUserToFile();
         }
     }
+
+    public String getUsername() {
+        return this.username;
+    }
+    public String getPassword() {
+        return this.password;
+    }
+    public boolean isAlreadyRegistered() {
+        return this.alreadyRegistered;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setAlreadyRegistered(boolean alreadyRegistered) {
+        this.alreadyRegistered = alreadyRegistered;
+    }
+
+    public UserProfile getUserProfile() {
+        if (!alreadyRegistered) {
+            return userProfiles.get(userProfiles.size() - 1); // Return the newly added user
+        } else {
+            System.out.println("User already registered, cannot create profile.");
+            return null;
+        }
+    }
+
     private boolean checkIfUserExists(String username) {
         for (UserProfile profile : userProfiles) {
             if (profile.getUsername().equals(username)) {
@@ -53,14 +82,6 @@ public class CreateNewUser extends UserProfile {
             System.out.println("Error reading users from file: " + e.getMessage());
         }
     }
-    public UserProfile getUserProfile() {
-        if (!alreadyRegistered) {
-            return userProfiles.get(userProfiles.size() - 1); // Return the newly added user
-        } else {
-            System.out.println("User already registered, cannot create profile.");
-            return null;
-        }
-    }
 
     public static void main(String[] args) {
         loadUsersFromFile();
@@ -74,7 +95,7 @@ public class CreateNewUser extends UserProfile {
 
         CreateNewUser newUser = new CreateNewUser(username, password);
 
-        if (newUser.alreadyRegistered == true) {
+        if (newUser.alreadyRegistered) {
             System.out.println("User already registered!");
         } else{
             System.out.println("User registered successfully!");
