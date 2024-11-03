@@ -15,11 +15,19 @@ public class CreateNewUser extends UserProfile {
         this.password = password;
         this.alreadyRegistered = checkIfUserExists(username);
 
-        if (!alreadyRegistered) { //redo
+        if (!alreadyRegistered) { //this is messing with the test cases but i don't know how to fix it
             UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password, dateJoined);
             userProfiles.add(newUserProfile);
             saveUserToFile();
         }
+    }
+
+    public CreateNewUser() {
+        CreateNewUser.dateJoined = null;
+        this.username = null;
+        this.password = null;
+        this.alreadyRegistered = false;
+        CreateNewUser.userProfiles = null;
     }
 
     public static ArrayList<UserProfile> getUserProfiles() {

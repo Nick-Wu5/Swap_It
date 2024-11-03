@@ -24,11 +24,14 @@ class PasswordProtectedLoginTest {
 
     @Test
     void testLoadUsersFromFile() {
+        //Clear the array list before intializing a new one
+        PasswordProtectedLogin.getUsers().clear();
+
         // Initialize the login system, which should load users from the file
         PasswordProtectedLogin loginSystem = new PasswordProtectedLogin();
 
         // Check if users and passwords were loaded correctly
-        assertEquals(2, PasswordProtectedLogin.getUsers().size(), "Two users should be loaded from file"); //this test failed
+        assertEquals(2, PasswordProtectedLogin.getUsers().size(), "Two users should be loaded from file");
         assertEquals("testUser", PasswordProtectedLogin.getUsers().get(0), "First username should match");
         assertEquals("password123", PasswordProtectedLogin.getPasses().get(0), "First password should match");
     }
