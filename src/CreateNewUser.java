@@ -5,18 +5,18 @@ public class CreateNewUser extends UserProfile {
     private static String dateJoined; //date of when the user first creates an account
     private String username; //unique name associated with this user
     private String password; //password associated with user
-    private boolean alreadyRegistered; //checks if the user
-    public static ArrayList<UserProfile> userProfiles = new ArrayList<>();
-    private static final String filename = "users.txt";
+    private boolean alreadyRegistered; //checks if the username is already a registered account
+    public static ArrayList<UserProfile> userProfiles = new ArrayList<>(); //a list of all user profiles, everytime one is added the entire array list will be changed
+    private static final String filename = "users.txt"; //name of the file that stores user profiles
 
     public CreateNewUser(String username, String password) {
-        super(username,username + "@example.com", password);
+        super(username,username + "@example.com", password, dateJoined);
         this.username = username;
         this.password = password;
         this.alreadyRegistered = checkIfUserExists(username);
 
         if (!alreadyRegistered) { //redo
-            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password);
+            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password, dateJoined);
             userProfiles.add(newUserProfile);
             saveUserToFile();
         }
@@ -74,7 +74,7 @@ public class CreateNewUser extends UserProfile {
                 if (parts.length == 2) {
                     String username = parts[0];
                     String password = parts[1];
-                    UserProfile userProfile = new UserProfile(username, username + "@example.com",password);
+                    UserProfile userProfile = new UserProfile(username, username + "@example.com",password, dateJoined);
                     userProfiles.add(userProfile);
                 }
             }
