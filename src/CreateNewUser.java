@@ -2,11 +2,11 @@ import java.util.*;
 import java.io.*;
 
 public class CreateNewUser extends UserProfile {
-    private static String dateJoined;
-    private String username;
-    private String password;
-    private boolean alreadyRegistered;
-    private static ArrayList<UserProfile> userProfiles = new ArrayList<>();
+    private static String dateJoined; //date of when the user first creates an account
+    private String username; //unique name associated with this user
+    private String password; //password associated with user
+    private boolean alreadyRegistered; //checks if the user
+    public static ArrayList<UserProfile> userProfiles = new ArrayList<>();
     private static final String filename = "users.txt";
 
     public CreateNewUser(String username, String password) {

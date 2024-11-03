@@ -8,7 +8,7 @@ class CreateNewUserTest {
     @BeforeEach
     void setUp() {
         // Clear the file and userProfiles list before each test to ensure no data carries over
-        CreateNewUser.getUserProfile().clear();
+        CreateNewUser.userProfiles.clear();
         try {
             Files.write(Paths.get("users.txt"), new byte[0]); // Clear users.txt file
         } catch (IOException e) {
@@ -36,7 +36,7 @@ class CreateNewUserTest {
         // Attempt to create the same user again
         CreateNewUser duplicateUser = new CreateNewUser("duplicateUser", "anotherPassword");
         assertTrue(duplicateUser.isAlreadyRegistered(), "User should be marked as already registered");
-        assertNull(duplicateUser.getUserProfile(), "No profile should be created for duplicate user");
+        assertNull(duplicateUser.userProfiles, "No profile should be created for duplicate user");
     }
 
     @Test
@@ -45,12 +45,12 @@ class CreateNewUserTest {
         new CreateNewUser("persistentUser", "persistentPass");
 
         // Clear the in-memory list and reload from file
-        CreateNewUser.getUserProfile().clear();
+        CreateNewUser.userProfiles.clear();
         CreateNewUser.loadUsersFromFile();
 
         // Check if the user was loaded correctly
-        assertEquals(1, CreateNewUser.getUserProfile().size(), "One user should be loaded from file");
-        UserProfile loadedUser = CreateNewUser.getUserProfile().get(0);
+        assertEquals(1, CreateNewUser.userProfiles.size(), "One user should be loaded from file");
+        UserProfile loadedUser = CreateNewUser.userProfiles.get(0);
         assertEquals("persistentUser", loadedUser.getUsername(), "Loaded username should match");
     }
 }
