@@ -6,7 +6,7 @@ public class CreateNewUser extends UserProfile {
     private String username; //unique name associated with this user
     private String password; //password associated with user
     private boolean alreadyRegistered; //checks if the username is already a registered account
-    public static ArrayList<UserProfile> userProfiles = new ArrayList<>(); //a list of all user profiles, everytime one is added the entire array list will be changed
+    private static ArrayList<UserProfile> userProfiles = new ArrayList<>(); //a list of all user profiles, everytime one is added the entire array list will be changed
     private static final String filename = "users.txt"; //name of the file that stores user profiles
 
     public CreateNewUser(String username, String password) {
@@ -20,6 +20,10 @@ public class CreateNewUser extends UserProfile {
             userProfiles.add(newUserProfile);
             saveUserToFile();
         }
+    }
+
+    public static ArrayList<UserProfile> getUserProfiles() {
+        return CreateNewUser.userProfiles;
     }
 
     public String getUsername() {
@@ -41,7 +45,7 @@ public class CreateNewUser extends UserProfile {
         this.alreadyRegistered = alreadyRegistered;
     }
 
-    public UserProfile getUserProfile() {
+    public UserProfile getUser() { //should not be confused with the getter method getUserProfiles
         if (!alreadyRegistered) {
             return userProfiles.get(userProfiles.size() - 1); // Return the newly added user
         } else {
