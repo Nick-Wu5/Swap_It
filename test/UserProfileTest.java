@@ -5,10 +5,8 @@ import static org.junit.Assert.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-public class RunLocalTestCase {
+public class UserProfileTest {
     private UserProfile user1;
     private UserProfile user2;
     private UserProfile user3;
