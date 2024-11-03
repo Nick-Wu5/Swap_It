@@ -8,7 +8,7 @@ class CreateNewUserTest {
     @BeforeEach
     void setUp() {
         // Clear the file and userProfiles list before each test to ensure no data carries over
-        CreateNewUser.userProfiles.clear();
+        CreateNewUser.getUserProfile().clear();
         try {
             Files.write(Paths.get("users.txt"), new byte[0]); // Clear users.txt file
         } catch (IOException e) {
@@ -20,7 +20,7 @@ class CreateNewUserTest {
     void testCreateNewUserNotAlreadyRegistered() {
         // Test creating a user that doesn't already exist
         CreateNewUser newUser = new CreateNewUser("newUser", "password123");
-        assertFalse(newUser.alreadyRegistered, "User should not be registered initially");
+        assertFalse(newUser.isAlreadyRegistered(), "User should not be registered initially");
 
         // Check if the user profile was created
         UserProfile profile = newUser.getUserProfile();
@@ -35,7 +35,7 @@ class CreateNewUserTest {
 
         // Attempt to create the same user again
         CreateNewUser duplicateUser = new CreateNewUser("duplicateUser", "anotherPassword");
-        assertTrue(duplicateUser.alreadyRegistered, "User should be marked as already registered");
+        assertTrue(duplicateUser.isAlreadyRegistered(), "User should be marked as already registered");
         assertNull(duplicateUser.getUserProfile(), "No profile should be created for duplicate user");
     }
 
@@ -45,12 +45,12 @@ class CreateNewUserTest {
         new CreateNewUser("persistentUser", "persistentPass");
 
         // Clear the in-memory list and reload from file
-        CreateNewUser.userProfiles.clear();
+        CreateNewUser.getUserProfile().clear();
         CreateNewUser.loadUsersFromFile();
 
         // Check if the user was loaded correctly
-        assertEquals(1, CreateNewUser.userProfiles.size(), "One user should be loaded from file");
-        UserProfile loadedUser = CreateNewUser.userProfiles.get(0);
+        assertEquals(1, CreateNewUser.getUserProfile().size(), "One user should be loaded from file");
+        UserProfile loadedUser = CreateNewUser.getUserProfile().get(0);
         assertEquals("persistentUser", loadedUser.getUsername(), "Loaded username should match");
     }
 }
