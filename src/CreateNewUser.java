@@ -1,28 +1,34 @@
 import java.util.*;
 import java.io.*;
 
-// gotta add usernames/passwords to a file (buffered reader?)
-public class CreateNewUser {
+
+public class CreateNewUser extends UserProfile {
+    private static String dateJoined;
     private String username;
     private String password;
     private boolean alreadyRegistered;
-    private static ArrayList<String> users = new ArrayList<>();
-    private static ArrayList<String> passes = new ArrayList<>();
+    private static ArrayList<UserProfile> userProfiles = new ArrayList<>();
     private static final String filename = "users.txt";
 
     public CreateNewUser(String username, String password) {
+        super(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com", password, dateJoined);
         this.username = username;
         this.password = password;
         this.alreadyRegistered = checkIfUserExists(username);
 
-        if (!alreadyRegistered) {
-            users.add(username);
-            passes.add(password);
+        if (!alreadyRegistered) { //redo
+            UserProfile newUserProfile = new UserProfile(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com", password, getDateJoined());
+            userProfiles.add(newUserProfile);
             saveUserToFile();
         }
     }
     private boolean checkIfUserExists(String username) {
-        return users.contains(username);
+        for (UserProfile profile : userProfiles) {
+            if (profile.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
     private void saveUserToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
@@ -38,12 +44,22 @@ public class CreateNewUser {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
                 if (parts.length == 2) {
-                    users.add(parts[0]);
-                    passes.add(parts[1]);
+                    String username = parts[0];
+                    String password = parts[1];
+                    UserProfile userProfile = new UserProfile(username, new ArrayList<>(), new ArrayList<>(),username + "@example.com",password, dateJoined);
+                    userProfiles.add(userProfile);
                 }
             }
         } catch (IOException e) {
             System.out.println("Error reading users from file: " + e.getMessage());
+        }
+    }
+    public UserProfile getUserProfile() {
+        if (!alreadyRegistered) {
+            return userProfiles.get(userProfiles.size() - 1); // Return the newly added user
+        } else {
+            System.out.println("User already registered, cannot create profile.");
+            return null;
         }
     }
 
@@ -63,9 +79,13 @@ public class CreateNewUser {
             System.out.println("User already registered!");
         } else{
             System.out.println("User registered successfully!");
+            UserProfile profile = newUser.getUserProfile();
+            if (profile != null) {
+                System.out.println("User profile created for " + profile.getUsername());
         }
 
         scanner.close();
     }
 
+}
 }
