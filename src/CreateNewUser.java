@@ -103,7 +103,7 @@ public class CreateNewUser extends UserProfile {
             System.out.println("User already registered!");
         } else{
             System.out.println("User registered successfully!");
-            UserProfile profile = newUser.getUserProfile();
+            UserProfile profile = newUser.getUser();
             if (profile != null) {
                 System.out.println("User profile created for " + profile.getUsername());
         }

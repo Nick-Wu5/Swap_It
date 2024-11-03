@@ -55,7 +55,7 @@ public class PasswordProtectedLogin {
     }
 
 
-    private boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password) { //made this method public, so it is accessible by the test case
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equals(username) && passes.get(i).equals(password)) {
                 return true;
