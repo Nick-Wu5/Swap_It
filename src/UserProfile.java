@@ -6,18 +6,17 @@ import java.util.*;
 public class UserProfile implements User {
 
     private String username;  //unique name associated with user
-    private ArrayList<UserProfile> friends;  //list of friends of user
-    private ArrayList<UserProfile> blockedFriends;  //list of blocked friends of user
+    private ArrayList<String> friends;  //list of friends of user
+    private ArrayList<String> blockedFriends;  //list of blocked friends of user
     private String email;  //email associated with user
     private String password;  //password associated with user
     private String dateJoined;  //date the user created their account
 
-    public UserProfile(String username, ArrayList<UserProfile> friends, ArrayList<UserProfile> blockedFriends, String email,
-                       String password, String dateJoined) {
+    public UserProfile(String username, String email, String password, String dateJoined) {
 
         this.username = username;
-        this.friends = friends;
-        this.blockedFriends = blockedFriends;
+        this.friends = new ArrayList<String>();
+        this.blockedFriends = new ArrayList<String>();
         this.email = email;
         this.password = password;
         this.dateJoined = dateJoined;
@@ -30,11 +29,11 @@ public class UserProfile implements User {
     public String getUsername() {return this.username;}
     public void setUsername(String newUsername) {this.username = newUsername;}
 
-    public ArrayList<UserProfile> getFriends() {return this.friends;}
-    public void setFriends(ArrayList<UserProfile> newFriends) {this.friends = newFriends;}
+    public ArrayList<String> getFriends() {return this.friends;}
+    public void setFriends(ArrayList<String> newFriends) {this.friends = newFriends;}
 
-    public ArrayList<UserProfile> getBlockedFriends() {return this.blockedFriends;}
-    public void setBlockedFriends(ArrayList<UserProfile> newBlockedFriends) {this.blockedFriends = newBlockedFriends;}
+    public ArrayList<String> getBlockedFriends() {return this.blockedFriends;}
+    public void setBlockedFriends(ArrayList<String> newBlockedFriends) {this.blockedFriends = newBlockedFriends;}
 
     public String getEmail() {return this.email;}
     public void setEmail(String newEmail) {this.email = newEmail;}
@@ -50,9 +49,9 @@ public class UserProfile implements User {
      * @param userToAdd - the user account to add to the friend list.
      * @return True if the user passed has been successfully added, false if otherwise.
      */
-    public boolean addFriend(UserProfile userToAdd) {
+    public boolean addFriend(String userToAdd) {
 
-        for (UserProfile blockedFriend : blockedFriends) {
+        for (String blockedFriend : this.blockedFriends) {
             if (userToAdd.equals(blockedFriend)) {
                 return false;
             }
@@ -66,7 +65,7 @@ public class UserProfile implements User {
      * Remove Friend Method
      * @param userToRemove - the user account to add to the friend list.
      */
-    public void removeFriend(UserProfile userToRemove) {
+    public void removeFriend(String userToRemove) {
         this.friends.remove(userToRemove);
     }
 
@@ -74,9 +73,9 @@ public class UserProfile implements User {
      * Block User Method
      * @param userToBlock - the user account to add to the friend list
      * */
-    public void blockUser(UserProfile userToBlock) {
+    public void blockUser(String userToBlock) {
 
-        for (UserProfile friend : friends) {
+        for (String friend : this.friends) {
             if (userToBlock.equals(friend)) {
                 this.removeFriend(friend);
             }
@@ -90,24 +89,20 @@ public class UserProfile implements User {
      */
     public String toFileFormat() {
 
-        // Convert friends and blockedFriends to simple strings, e.g., just usernames
-        StringBuilder friendsList = new StringBuilder();
-        for (UserProfile friend : friends) {
-            friendsList.append(friend.username).append(";");
-        }
+        // Convert friends and blockedFriends to strings
+        String friendsList = String.join(";", this.friends);
+        String blockedList = String.join(";", this.blockedFriends);
 
-        StringBuilder blockedList = new StringBuilder();
-        for (UserProfile blocked : blockedFriends) {
-            blockedList.append(blocked.username).append(";");
-        }
-
-        return username + "," + friendsList.toString() + "," + blockedList.toString() + "," + email + "," + password + "," + dateJoined;
+        // Return the formatted string with commas separating the main fields
+        return this.username + "," + friendsList + "," + blockedList + "," + this.email + "," +
+                this.password + "," + this.dateJoined;
     }
 
     /**
      * Save To File Method - writes user account information to the users.txt file
      */
-    private void saveToFile() {
+    public void saveToFile() {
+        //use file writer to
         try (FileWriter fw = new FileWriter("users.txt", true); // 'true' for appending
              PrintWriter pw = new PrintWriter(fw)) {
             pw.println(this.toFileFormat());
@@ -115,5 +110,4 @@ public class UserProfile implements User {
             e.printStackTrace();
         }
     }
-
 }

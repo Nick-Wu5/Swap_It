@@ -1,1 +1,2 @@
-oca:getmoney
+johndoe,,,johndoe@example.com,password123,2024-11-01
+janedoe,,,janedoe@example.com,password456,2024-11-02

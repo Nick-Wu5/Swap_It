@@ -5,8 +5,8 @@ public interface User {
     String getUsername();
     void setUsername(String newUsername);
 
-    ArrayList<UserProfile> getFriends();
-    void setFriends(ArrayList<UserProfile> newFriends);
+    ArrayList<String> getFriends();
+    void setFriends(ArrayList<String> newFriends);
 
     String getEmail();
     void setEmail(String newEmail);
@@ -17,8 +17,8 @@ public interface User {
     String getDateJoined();
     void setDateJoined(String newDateJoined);
 
-    boolean addFriend(UserProfile userToAdd);
-    void removeFriend(UserProfile userToRemove);
-    void blockUser(UserProfile userToBlock);
+    boolean addFriend(String userToAdd);
+    void removeFriend(String userToRemove);
+    void blockUser(String userToBlock);
 
 }
