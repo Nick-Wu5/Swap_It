@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class UserSearch {
+public class UserSearch implements Search {
 
     /**
      * Search For Profile By Username Method
@@ -9,7 +9,7 @@ public class UserSearch {
      * @param username - account username that someone is looking for
      * @return a UserProfile object is that username is in users.txt, null if otherwise
      */
-    public static UserProfile findUserByUsername(String username) {
+    public UserProfile findUserByUsername(String username) {
         try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {

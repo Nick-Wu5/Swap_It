@@ -1,4 +1,1 @@
-persistentUser,,,persistentUser@example.com,persistentPass,null
-persistentUser,,,persistentUser@example.com,persistentPass,null
-persistentUser:persistentPass
-persistentUser,,,persistentUser@example.com,persistentPass,null
+

@@ -70,6 +70,7 @@ public class CreateNewUser extends UserProfile {
         }
         return false;
     }
+
     private void saveUserToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(username + ":" + password);

@@ -14,7 +14,6 @@ public class NewsComment implements NewsFeed {
         this.content = content;
         this.author = author;
 
-
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
             writer.println("Author: " + author.getUsername());
             writer.println("Content: " + content);
