@@ -26,6 +26,13 @@ public class PasswordProtectedLogin {
         }
     }
 
+    public static ArrayList<String> getUsers() {
+        return PasswordProtectedLogin.users;
+    }
+
+    public static ArrayList<String> getPasses() {
+        return PasswordProtectedLogin.passes;
+    }
 
     public boolean login() {
         Scanner scanner = new Scanner(System.in);
