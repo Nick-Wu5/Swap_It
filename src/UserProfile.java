@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class UserProfile implements User {
@@ -18,6 +21,9 @@ public class UserProfile implements User {
         this.email = email;
         this.password = password;
         this.dateJoined = dateJoined;
+
+        saveToFile();
+
     }
 
     //Getters and Setters
@@ -76,6 +82,38 @@ public class UserProfile implements User {
             }
         }
         this.blockedFriends.add(userToBlock);
+    }
+
+    /**
+     * User File Formatting Method
+     * @return a string that contains all the user account information to be saved
+     */
+    public String toFileFormat() {
+
+        // Convert friends and blockedFriends to simple strings, e.g., just usernames
+        StringBuilder friendsList = new StringBuilder();
+        for (UserProfile friend : friends) {
+            friendsList.append(friend.username).append(";");
+        }
+
+        StringBuilder blockedList = new StringBuilder();
+        for (UserProfile blocked : blockedFriends) {
+            blockedList.append(blocked.username).append(";");
+        }
+
+        return username + "," + friendsList.toString() + "," + blockedList.toString() + "," + email + "," + password + "," + dateJoined;
+    }
+
+    /**
+     * Save To File Method - writes user account information to the users.txt file
+     */
+    private void saveToFile() {
+        try (FileWriter fw = new FileWriter("users.txt", true); // 'true' for appending
+             PrintWriter pw = new PrintWriter(fw)) {
+            pw.println(this.toFileFormat());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
