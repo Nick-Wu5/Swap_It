@@ -2,7 +2,6 @@ import java.util.*;
 import java.io.*;
 
 public class CreateNewUser extends UserProfile {
-    private static String dateJoined; //date of when the user first creates an account
     private String username; //unique name associated with this user
     private String password; //password associated with user
     private boolean alreadyRegistered; //checks if the username is already a registered account
@@ -10,20 +9,22 @@ public class CreateNewUser extends UserProfile {
     private static final String filename = "users.txt"; //name of the file that stores user profiles
 
     public CreateNewUser(String username, String password) {
-        super(username,username + "@example.com", password, dateJoined);
+        super(username,username + "@example.com", password);
         this.username = username;
         this.password = password;
         this.alreadyRegistered = checkIfUserExists(username);
 
         if (!alreadyRegistered) { //this is messing with the test cases but i don't know how to fix it
-            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password, dateJoined);
+            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password);
             userProfiles.add(newUserProfile);
             saveUserToFile();
+            System.out.println("User registered successfully!");
+        } else {
+            System.out.println("User already registered, cannot create profile.");
         }
     }
 
     public CreateNewUser() {
-        CreateNewUser.dateJoined = null;
         this.username = null;
         this.password = null;
         this.alreadyRegistered = false;
@@ -87,7 +88,7 @@ public class CreateNewUser extends UserProfile {
                 if (parts.length == 2) {
                     String username = parts[0];
                     String password = parts[1];
-                    UserProfile userProfile = new UserProfile(username, username + "@example.com",password, dateJoined);
+                    UserProfile userProfile = new UserProfile(username, username + "@example.com",password);
                     userProfiles.add(userProfile);
                 }
             }
