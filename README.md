@@ -1,9 +1,9 @@
 # Swap_It
 
 ## Table of Contents
-- [Compiling and Running SwapIt](#??) 
-- [Submissions](#??) 
-- [Detailed Description of Classes](#??)
+- [Compiling and Running SwapIt](#compiling-and-running-swapit) 
+- [Submissions](#submissions) 
+- [Detailed Description of Classes](#detailed-description-of-classes)
 
 ## Compiling and Running SwapIt
 * ____ - Submitted Vocareum workspace
