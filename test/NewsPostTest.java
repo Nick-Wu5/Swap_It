@@ -13,13 +13,13 @@ import static org.junit.Assert.*;
 
 public class NewsPostTest {
 
-    public static void main(String[] args) {
+    public void testPost() {
         // Assuming UserProfile and NewsComment classes are already defined
         UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
-        
+
         // Create a NewsPost instance
         NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
-        
+
         // Test post details
         assertEquals("The usernames should match the user object", post.getAuthor().getUsername(), "taylorswift246");
         assertEquals("The title should match the post object", post.getTitle(), "Test Post Title");
@@ -31,10 +31,18 @@ public class NewsPostTest {
         post.incrementUpvotes();
         post.incrementUpvotes();
         assertEquals("The upvotes should equal 2" + post.getUpvotes(), "2");
-        
+
         post.incrementDownvotes();
         assertEquals("The upvotes should equal 1 after being decremented" + post.getUpvotes(), "1");
+    }
+    
+    public void testComments() {
+        // Assuming UserProfile and NewsComment classes are already defined
+        UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
 
+        // Create a NewsPost instance
+        NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
+        
         // Test adding comments
         UserProfile commenter = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone");
         NewsComment comment1 = new NewsComment("Great post!", commenter);
