@@ -1,5 +1,7 @@
 public interface Search {
 
-    UserProfile findUserByUsername(String username);
+    static UserProfile findUserByUsername(String username) {
+        return null;
+    }
 
 }

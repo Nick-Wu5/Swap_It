@@ -1,7 +1,8 @@
 public class NewsPostTest {
+
     public static void main(String[] args) {
         // Assuming UserProfile and NewsComment classes are already defined
-        UserProfile author = new UserProfile("testAuthor");
+        UserProfile author = new UserProfile("johndoe,,,johndoe@example.com,password123");
         
         // Create a NewsPost instance
         NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");

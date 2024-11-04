@@ -9,7 +9,7 @@ public class UserSearch implements Search {
      * @param username - account username that someone is looking for
      * @return a UserProfile object is that username is in users.txt, null if otherwise
      */
-    public UserProfile findUserByUsername(String username) {
+    public static UserProfile findUserByUsername(String username) {
         try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -37,21 +37,19 @@ public class UserSearch implements Search {
      * @param parsedUsername - username of searched user
      * @return the UserProfile of the searched user if their username exists in database
      */
-    private static UserProfile getSearchedUser(String[] userDetails, String parsedUsername) {
+    public static UserProfile getSearchedUser(String[] userDetails, String parsedUsername) {
 
         //Get email, password, and dateJoined from data
         ArrayList<String> friends = new ArrayList<>(Arrays.asList(userDetails[1].split(";")));
         ArrayList<String> blockedFriends = new ArrayList<>(Arrays.asList(userDetails[2].split(";")));
         String email = userDetails[3];
         String password = userDetails[4];
-        String dateJoined = userDetails[5];
 
         // Avoid using the constructor that saves to a file by using a different approach
         UserProfile searchedUser = new UserProfile();  // Use a no-arg constructor
         searchedUser.setUsername(parsedUsername);
         searchedUser.setEmail(email);
         searchedUser.setPassword(password);
-        searchedUser.setDateJoined(dateJoined);
         searchedUser.setFriends(friends);
         searchedUser.setBlockedFriends(blockedFriends);
         return searchedUser;
