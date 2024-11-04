@@ -1,1 +1,2 @@
-
+johndoe,,,johndoe@example.com,password123
+janedoe,;friend1;friend2;,;blocked1;,janedoe@example.com,password456

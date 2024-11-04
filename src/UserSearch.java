@@ -16,7 +16,7 @@ public class UserSearch implements Search {
                 String[] userDetails = line.split(",");
 
                 //Making sure every line is correctly formatted
-                if (userDetails.length >= 6) {
+                if (userDetails.length >= 5) {
                     String parsedUsername = userDetails[0];
 
                     // Check if the parsed username matches the search criteria
