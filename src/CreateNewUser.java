@@ -7,6 +7,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Team Project - Social Media App
+ * <p>
+ * This program provides a social networking system that allows users to create password-protected accounts and log in
+ * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
+ * remove friends. The system also supports account and relationship management for an interactive user experience.
+ *
+ * @version November 17, 2024
+ * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ */
 public class CreateNewUser extends UserProfile implements CreateNewUserInterface {
     private String username;
     private String password;
@@ -77,7 +87,7 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
 
     public UserProfile getUser() {
         if (!this.alreadyRegistered) {
-            return (UserProfile)userProfiles.get(userProfiles.size() - 1);
+            return (UserProfile) userProfiles.get(userProfiles.size() - 1);
         } else {
             System.out.println("User already registered, cannot create profile.");
             return null;
@@ -93,8 +103,8 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
                 return false;
             }
 
-            profile = (UserProfile)var2.next();
-        } while(!profile.getUsername().equals(username));
+            profile = (UserProfile) var2.next();
+        } while (!profile.getUsername().equals(username));
 
         return true;
     }
@@ -130,7 +140,7 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
 
             String line;
             try {
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(":");
                     if (parts.length == 2) {
                         String username = parts[0];

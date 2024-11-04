@@ -4,6 +4,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * Team Project - Social Media App
+ * <p>
+ * This program provides a social networking system that allows users to create password-protected accounts and log in
+ * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
+ * remove friends. The system also supports account and relationship management for an interactive user experience.
+ *
+ * @version November 17, 2024
+ * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ */
 public class NewsPost implements NewsFeed {
     private UserProfile author;
     private String title;
@@ -40,6 +50,7 @@ public class NewsPost implements NewsFeed {
     public void incrementUpvotes() {
         upvotes++;
     }
+
     public void incrementDownvotes() {
         downvotes++;
     }
@@ -47,21 +58,27 @@ public class NewsPost implements NewsFeed {
     public UserProfile getAuthor() {
         return author;
     }
+
     public String getTitle() {
         return title;
     }
+
     public String getImagePath() {
         return imagePath;
     }
+
     public String getDate() {
         return date;
     }
+
     public int getUpvotes() {
-        return upvotes-downvotes;
+        return upvotes - downvotes;
     }
+
     public ArrayList<NewsComment> getComments() {
         return comments;
     }
+
     public void addComment(NewsComment comment) {
         comments.add(comment);
     }

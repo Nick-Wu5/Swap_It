@@ -1,6 +1,16 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Team Project - Social Media App
+ * <p>
+ * This program provides a social networking system that allows users to create password-protected accounts and log in
+ * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
+ * remove friends. The system also supports account and relationship management for an interactive user experience.
+ *
+ * @version November 17, 2024
+ * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ */
 public class UserSearch implements Search {
 
     /**
@@ -32,8 +42,7 @@ public class UserSearch implements Search {
     }
 
     /**
-     *
-     * @param userDetails - a string containing the information of the user from the users.txt file
+     * @param userDetails    - a string containing the information of the user from the users.txt file
      * @param parsedUsername - username of searched user
      * @return the UserProfile of the searched user if their username exists in database
      */

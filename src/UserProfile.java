@@ -3,6 +3,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * Team Project - Social Media App
+ * <p>
+ * This program provides a social networking system that allows users to create password-protected accounts and log in
+ * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
+ * remove friends. The system also supports account and relationship management for an interactive user experience.
+ *
+ * @version November 17, 2024
+ * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ */
 public class UserProfile implements User {
 
     private String username;  //unique name associated with user
@@ -23,28 +33,53 @@ public class UserProfile implements User {
 
     }
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
     //Getters and Setters
-    public String getUsername() {return this.username;}
-    public void setUsername(String newUsername) {this.username = newUsername;}
+    public String getUsername() {
+        return this.username;
+    }
 
-    public ArrayList<String> getFriends() {return this.friends;}
-    public void setFriends(ArrayList<String> newFriends) {this.friends = newFriends;}
+    public void setUsername(String newUsername) {
+        this.username = newUsername;
+    }
 
-    public ArrayList<String> getBlockedFriends() {return this.blockedFriends;}
-    public void setBlockedFriends(ArrayList<String> newBlockedFriends) {this.blockedFriends = newBlockedFriends;}
+    public ArrayList<String> getFriends() {
+        return this.friends;
+    }
 
-    public String getEmail() {return this.email;}
-    public void setEmail(String newEmail) {this.email = newEmail;}
+    public void setFriends(ArrayList<String> newFriends) {
+        this.friends = newFriends;
+    }
 
-    public String getPassword() {return this.password;}
-    public void setPassword(String newPassword) {this.password = newPassword;}
+    public ArrayList<String> getBlockedFriends() {
+        return this.blockedFriends;
+    }
 
+    public void setBlockedFriends(ArrayList<String> newBlockedFriends) {
+        this.blockedFriends = newBlockedFriends;
+    }
 
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
 
     /**
      * Add Friend Method
+     *
      * @param userToAdd - the user account to add to the friend list.
      * @return True if the user passed has been successfully added, false if otherwise.
      */
@@ -62,6 +97,7 @@ public class UserProfile implements User {
 
     /**
      * Remove Friend Method
+     *
      * @param userToRemove - the user account to add to the friend list.
      */
     public void removeFriend(String userToRemove) {
@@ -70,8 +106,9 @@ public class UserProfile implements User {
 
     /**
      * Block User Method
+     *
      * @param userToBlock - the user account to add to the friend list
-     * */
+     */
     public void blockUser(String userToBlock) {
 
         for (String friend : this.friends) {
@@ -84,6 +121,7 @@ public class UserProfile implements User {
 
     /**
      * User File Formatting Method
+     *
      * @return a string that contains all the user account information to be saved
      */
     public String toFileFormat() {
