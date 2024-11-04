@@ -6,8 +6,10 @@
 - [Detailed Description of Classes](#detailed-description-of-classes)
 
 ## Compiling and Running SwapIt
-* ____ - Submitted Vocareum workspace
+
 ## Submissions
+
+* ____ - Submitted Vocareum workspace
 
 ## Detailed Description of Classes
 
