@@ -1,3 +1,5 @@
+import static org.junit.Assert.*;
+
 /**
  * Team Project - Social Media App
  * <p>
@@ -8,28 +10,30 @@
  * @version November 17, 2024
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
+
 public class NewsCommentTest {
-    public static void main(String[] args) {
-        // Assuming UserProfile class is already defined
-        UserProfile commenter = new UserProfile("commenterUser");
 
-        // Create a NewsComment instance
-        NewsComment comment = new NewsComment("This is a test comment.", commenter);
+    public void testComments() {
+        // Assuming UserProfile and NewsComment classes are already defined
+        UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
 
-        // Test comment details
-        System.out.println("Comment Author: " + comment.getAuthor().getUsername());
-        System.out.println("Comment Content: " + comment.getContent());
-        System.out.println("Initial Upvotes: " + comment.getUpvotes()); // Expected: 0
+        // Create a NewsPost instance
+        NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
 
-        // Test upvoting and downvoting
-        comment.incrementUpvotes();
-        comment.incrementUpvotes();
-        comment.incrementDownvotes();
-        System.out.println("Upvotes after voting: " + comment.getUpvotes()); // Expected: 1 (2 upvotes - 1 downvote)
+        // Test adding comments
+        UserProfile commenter = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone");
+        NewsComment comment1 = new NewsComment("Great post!", commenter);
+        NewsComment comment2 = new NewsComment("Thanks for sharing!", commenter);
 
-        // Add more votes to verify accuracy
-        comment.incrementDownvotes();
-        comment.incrementUpvotes();
-        System.out.println("Final Upvotes after more voting: " + comment.getUpvotes()); // Expected: 1 (3 upvotes - 2 downvotes)
+        post.addComment(comment1);
+        post.addComment(comment2);
+        comment1.incrementUpvotes();
+        comment1.incrementDownvotes();
+
+        // Verify comments were added
+        assertEquals("The number of comments made should equal 2" + post.getComments().size(), "2");
+        assertEquals("The author of the comment should match" + comment1.getAuthor().getUsername(), "ryangosling");
+        assertEquals("The contents of the comment should match" + comment2.getContent(), "Thanks for sharing!");
+        assertEquals("The UpVotes should equal 0" + comment1.getUpvotes(), "0");
     }
 }
