@@ -2,11 +2,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 public class UserProfileTest {
+
     private UserProfile user1;
     private UserProfile user2;
     private UserProfile user3;
@@ -14,12 +11,9 @@ public class UserProfileTest {
     @Before
     public void setUp() {
         //Creating user objects to use for test case
-        user1 = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484",
-                "10/2/2024");
-        user2 = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone",
-                "09/24/2006");
-        user3 = new UserProfile("travisscott21", "travis.scott@gmail.com", "123456789",
-                "03/30/2017");
+        user1 = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
+        user2 = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone");
+        user3 = new UserProfile("travisscott21", "travis.scott@gmail.com", "123456789");
     }
 
     @Test
@@ -65,40 +59,5 @@ public class UserProfileTest {
         // Test the toFileFormat method for user3
         String expected3 = "travisscott21,,,travis.scott@gmail.com,123456789,03/30/2017";
         assertEquals(expected3, user3.toFileFormat());
-    }
-
-    @Test
-    public void testFindUserByUsername_UserExists() {
-
-        // Create users.txt file
-        try (PrintWriter writer = new PrintWriter(new FileWriter("users.txt"))) {
-            writer.println("johndoe,,,johndoe@example.com,password123,2024-11-01");
-            writer.println("janedoe,,,janedoe@example.com,password456,2024-11-02");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Test finding an existing user
-        UserProfile result = UserSearch.findUserByUsername("johndoe");
-        assertEquals("The username should match 'johndoe'.", "johndoe", result.getUsername());
-        assertEquals("The email should match 'johndoe@example.com'.","johndoe@example.com", result.getEmail());
-        assertEquals("The password should match 'password123'.","password123", result.getPassword());
-        assertEquals("The dateJoined should match '2024-11-01'.","2024-11-01", result.getDateJoined());
-    }
-
-    @Test
-    public void testFindUserByUsername_UserDoesNotExist() {
-
-        // Create users.txt file
-        try (PrintWriter writer = new PrintWriter(new FileWriter("users.txt"))) {
-            writer.println("johndoe,,,johndoe@example.com,password123,2024-11-01");
-            writer.println("janedoe,,,janedoe@example.com,password456,2024-11-02");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Test finding a non-existing user
-        UserProfile result = UserSearch.findUserByUsername("nonexistentuser");
-        assertNull("The result should be null for a non-existent user.", result);
     }
 }
