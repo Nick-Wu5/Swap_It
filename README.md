@@ -7,6 +7,8 @@
 
 ## Compiling and Running SwapIt
 
+Our project is compiled and run using the Main.java file.  This file essentially contains a demo of how the program (without GUIs) can be used by a user including how an account can be created, how friends can be added and removed, user search, making posts and comments, and user authentication.
+
 ## Submissions
 
 * ____ - Submitted Vocareum workspace
