@@ -18,11 +18,11 @@ import java.util.Scanner;
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class CreateNewUser extends UserProfile implements CreateNewUserInterface {
-    private String username;
-    private String password;
-    private boolean alreadyRegistered;
-    private static ArrayList<UserProfile> userProfiles = new ArrayList();
-    private static final String filename = "users.txt";
+    private String username;  //username for user profile
+    private String password;  //password for user profile
+    private boolean alreadyRegistered;  //signifies whether account has been registered or not
+    private static ArrayList<UserProfile> userProfiles = new ArrayList();  //list of userProfiles
+    private static final String filename = "users.txt";  //file name for user.txt
 
     public CreateNewUser(String username, String password) {
         super(username, username + "@example.com", password);

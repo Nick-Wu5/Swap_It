@@ -12,9 +12,9 @@ import java.io.*;
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
-    private static final String filename = "users.txt";
-    private static ArrayList<String> users = new ArrayList<>();
-    private static ArrayList<String> passes = new ArrayList<>();
+    private static final String filename = "users.txt";  //file name of users.txt
+    private static ArrayList<String> users = new ArrayList<>();  //list of users
+    private static ArrayList<String> passes = new ArrayList<>();  //lis of passes
 
 
     public PasswordProtectedLogin() {
@@ -23,7 +23,7 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
 
     private void loadUsersFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
+            String line;  //temp line of each line in users.txt
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
                 if (parts.length == 2) {

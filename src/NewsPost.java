@@ -15,13 +15,13 @@ import java.util.ArrayList;
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class NewsPost implements NewsFeed {
-    private UserProfile author;
-    private String title;
-    private String imagePath;
-    private String date;
-    private int upvotes;
-    private int downvotes;
-    private ArrayList<NewsComment> comments;
+    private UserProfile author;  //author profile of post
+    private String title;  //title of post
+    private String imagePath;  //path to image of post
+    private String date;  //date of published post
+    private int upvotes;  //number of upvotes per post
+    private int downvotes;  //number of downvotes per post
+    private ArrayList<NewsComment> comments;  //number of comments per post
 
     public NewsPost(UserProfile author, String title, String imagePath, String date) {
         this.author = author;

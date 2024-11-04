@@ -11,6 +11,8 @@ import java.util.*;
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public interface CreateNewUserInterface {
+
+    //Getters and setters
     String getUsername();
 
     void setUsername(String username);

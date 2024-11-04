@@ -13,10 +13,11 @@ import java.io.PrintWriter;
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class NewsComment implements NewsFeed {
-    private int upvotes;
-    private int downvotes;
-    private String content;
-    private UserProfile author;
+
+    private int upvotes;  //number of upvotes per post
+    private int downvotes;  //number of downvotes per post
+    private String content;  //text content of post
+    private UserProfile author;  //author that published post
 
     public NewsComment(String content, UserProfile author) {
         this.upvotes = 0;
