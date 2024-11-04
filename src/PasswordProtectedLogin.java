@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class PasswordProtectedLogin {
+public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
     private static final String filename = "users.txt";
     private static ArrayList<String> users = new ArrayList<>();
     private static ArrayList<String> passes = new ArrayList<>();
