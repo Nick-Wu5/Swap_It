@@ -1,3 +1,5 @@
+import static org.junit.Assert.*;
+
 /**
  * Team Project - Social Media App
  * <p>
@@ -8,44 +10,45 @@
  * @version November 17, 2024
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
+
 public class NewsPostTest {
 
     public static void main(String[] args) {
         // Assuming UserProfile and NewsComment classes are already defined
-        UserProfile author = new UserProfile("johndoe,,,johndoe@example.com,password123");
-
+        UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
+        
         // Create a NewsPost instance
         NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
-
+        
         // Test post details
-        System.out.println("Post Author: " + post.getAuthor().getUsername());
-        System.out.println("Post Title: " + post.getTitle());
-        System.out.println("Post Image Path: " + post.getImagePath());
-        System.out.println("Post Date: " + post.getDate());
-        System.out.println("Initial Upvotes: " + post.getUpvotes()); // Expected: 0
+        assertEquals("The usernames should match the user object", post.getAuthor().getUsername(), "taylorswift246");
+        assertEquals("The title should match the post object", post.getTitle(), "Test Post Title");
+        assertEquals("The image path should match the post object", post.getImagePath(), "/path/to/image.jpg");
+        assertEquals("The date should match the post object" + post.getDate(), "2024-11-03");
+        assertEquals("The upvotes should equal 0" + post.getUpvotes(), "0");
 
         // Test upvoting and downvoting
         post.incrementUpvotes();
         post.incrementUpvotes();
+        assertEquals("The upvotes should equal 2" + post.getUpvotes(), "2");
+        
         post.incrementDownvotes();
-        System.out.println("Upvotes after voting: " + post.getUpvotes()); // Expected: 1
+        assertEquals("The upvotes should equal 1 after being decremented" + post.getUpvotes(), "1");
 
         // Test adding comments
-        UserProfile commenter = new UserProfile("commenter");
+        UserProfile commenter = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone");
         NewsComment comment1 = new NewsComment("Great post!", commenter);
         NewsComment comment2 = new NewsComment("Thanks for sharing!", commenter);
 
         post.addComment(comment1);
         post.addComment(comment2);
+        comment1.incrementUpvotes();
+        comment1.incrementDownvotes();
 
         // Verify comments were added
-        System.out.println("Number of comments: " + post.getComments().size()); // Expected: 2
-
-        // Display each comment's details
-        for (NewsComment comment : post.getComments()) {
-            System.out.println("Comment Author: " + comment.getAuthor().getUsername());
-            System.out.println("Comment Content: " + comment.getContent());
-            System.out.println("Comment Upvotes: " + comment.getUpvotes());
-        }
+        assertEquals("The number of comments made should equal 2" + post.getComments().size(), "2");
+        assertEquals("The author of the comment should match" + comment1.getAuthor().getUsername(), "ryangosling");
+        assertEquals("The contents of the comment should match" + comment2.getContent(), "Thanks for sharing!");
+        assertEquals("The UpVotes should equal 0" + comment1.getUpvotes(), "0");
     }
 }
