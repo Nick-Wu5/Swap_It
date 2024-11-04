@@ -10,7 +10,7 @@ import java.util.*;
  * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
  * remove friends. The system also supports account and relationship management for an interactive user experience.
  *
- * @version November 17, 2024
+ * @version November 3, 2024
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class UserProfile implements User {
@@ -114,6 +114,7 @@ public class UserProfile implements User {
         for (String friend : this.friends) {
             if (userToBlock.equals(friend)) {
                 this.removeFriend(friend);
+                break;
             }
         }
         this.blockedFriends.add(userToBlock);

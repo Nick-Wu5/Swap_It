@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
  * remove friends. The system also supports account and relationship management for an interactive user experience.
  *
- * @version November 17, 2024
+ * @version November 3, 2024
  * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 class CreateNewUserTest {
