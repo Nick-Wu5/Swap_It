@@ -29,8 +29,6 @@ public class UserProfile implements User {
         this.email = email;
         this.password = password;
 
-        saveToFile();
-
     }
 
     public UserProfile() {

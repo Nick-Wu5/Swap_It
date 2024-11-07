@@ -13,17 +13,10 @@ import java.util.*;
 public interface CreateNewUserInterface {
 
     //Getters and setters
-    String getUsername();
-
-    void setUsername(String username);
 
     ArrayList<String> getFriends();
 
     void setFriends(ArrayList<String> friends);
-
-    String getPassword();
-
-    void setPassword(String password);
 
     ArrayList<String> getBlockedFriends();
 

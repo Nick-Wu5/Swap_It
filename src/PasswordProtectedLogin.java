@@ -16,13 +16,12 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
     private static ArrayList<String> users = new ArrayList<>();  //list of users
     private static ArrayList<String> passes = new ArrayList<>();  //lis of passes
 
-
     public PasswordProtectedLogin() {
         loadUsersFromFile();
     }
 
     private void loadUsersFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
             String line;  //temp line of each line in users.txt
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
@@ -44,27 +43,6 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
         return PasswordProtectedLogin.passes;
     }
 
-    public boolean login() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter username: ");
-        String username = scanner.nextLine();
-
-        System.out.println("Enter password: ");
-        String password = scanner.nextLine();
-
-        boolean authenticated = authenticate(username, password);
-
-        if (authenticated) {
-            System.out.println("Login successful! Welcome, " + username);
-        } else {
-            System.out.println("Invalid username or password. Please try again.");
-        }
-
-        return authenticated;
-    }
-
-
     public boolean authenticate(String username, String password) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equals(username) && passes.get(i).equals(password)) {
@@ -72,10 +50,5 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        PasswordProtectedLogin loginSystem = new PasswordProtectedLogin();
-        loginSystem.login();
     }
 }
