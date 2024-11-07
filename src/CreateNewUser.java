@@ -22,15 +22,15 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
     private String password;  //password for user profile
     private boolean alreadyRegistered;  //signifies whether account has been registered or not
     private static ArrayList<UserProfile> userProfiles = new ArrayList();  //list of userProfiles
-    private static final String filename = "users.txt";  //file name for user.txt
+    private static final String FILENAME = "users.txt";  //file name for user.txt
 
-    public CreateNewUser(String username, String password) {
-        super(username, username + "@example.com", password);
-        this.username = username;
+    public CreateNewUser(String userName, String password) {
+        super(userName, userName + "@example.com", password);
+        this.username = userName;
         this.password = password;
         this.alreadyRegistered = this.checkIfUserExists(username);
         if (!this.alreadyRegistered) {
-            UserProfile newUserProfile = new UserProfile(username, username + "@example.com", password);
+            UserProfile newUserProfile = new UserProfile(userName, userName + "@example.com", password);
             userProfiles.add(newUserProfile);
             this.saveUserToFile();
             System.out.println("User registered successfully!");
@@ -94,7 +94,7 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
         }
     }
 
-    private boolean checkIfUserExists(String username) {
+    private boolean checkIfUserExists(String userName) {
         Iterator var2 = userProfiles.iterator();
 
         UserProfile profile;
@@ -104,7 +104,7 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
             }
 
             profile = (UserProfile) var2.next();
-        } while (!profile.getUsername().equals(username));
+        } while (!profile.getUsername().equals(userName));
 
         return true;
     }
