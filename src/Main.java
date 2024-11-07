@@ -6,7 +6,7 @@
  * remove friends. The system also supports account and relationship management for an interactive user experience.
  *
  * @version November 3, 2024
- * @authors Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class Main {
 
