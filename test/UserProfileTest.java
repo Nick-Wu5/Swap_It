@@ -34,26 +34,33 @@ public class UserProfileTest {
 
     @Test
     public void testRemoveFriend() {
+        //checks if user2 is already a friend of user1 and if not, adds user2 to user1's friend list
         if (!user1.getFriends().contains("ryangosling")) {
             user1.addFriend("ryangosling");
-        } //checks if user2 is already a friend of user1 and if not, adds user2 to user1's friend list
+        }
         user1.removeFriend("ryangosling");
-        assertFalse(user1.getFriends().contains("ryangosling")); // if user2 is still a friend in user1's list after being removed, return false
+        // if user2 is still a friend in user1's list after being removed, return false
+        assertFalse(user1.getFriends().contains("ryangosling"));
 
+        //checks if user3 is already a friend of user1 and if not, adds user3 to user1's friend list
         if (!user1.getFriends().contains("travisscott21")) {
             user1.addFriend("travisscott21");
-        } //checks if user3 is already a friend of user1 and if not, adds user3 to user1's friend list
+        }
         user1.removeFriend("travisscott21");
-        assertFalse(user1.getFriends().contains("travisscott21")); // if user3 is still a friend in user1's list after being removed, return false
+        // if user3 is still a friend in user1's list after being removed, return false
+        assertFalse(user1.getFriends().contains("travisscott21"));
     }
 
     @Test
     public void testBlockUser() {
-        user1.blockUser("travisscott21"); //block user3 from user1's profile
-        assertFalse(user1.getFriends().contains("travisscott21")); //if user3 is still in user1's friends list, return false
-        assertTrue(user1.getBlockedFriends().contains("travisscott21")); //if user3 is in user1's blocked friends list, return true
-
-        assertFalse(user1.addFriend("travisscott21")); //returns false if able to add blocked user
+        //block user3 from user1's profile
+        user1.blockUser("travisscott21");
+        //if user3 is still in user1's friends list, return false
+        assertFalse(user1.getFriends().contains("travisscott21"));
+        //if user3 is in user1's blocked friends list, return true
+        assertTrue(user1.getBlockedFriends().contains("travisscott21"));
+        //returns false if able to add blocked user
+        assertFalse(user1.addFriend("travisscott21"));
     }
 
     @Test
