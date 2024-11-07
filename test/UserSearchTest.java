@@ -32,7 +32,7 @@ public class UserSearchTest {
     }
 
     @Test
-    public void testFindUserByUsername_UserExists() {
+    public void testFindUserByUsernameUserExists() {
         // Test for a user that exists
         UserProfile result = UserSearch.findUserByUsername("johndoe");
 
@@ -43,7 +43,7 @@ public class UserSearchTest {
     }
 
     @Test
-    public void testFindUserByUsername_UserDoesNotExist() {
+    public void testFindUserByUsernameUserDoesNotExist() {
         // Test for a user that does not exist
         UserProfile result = UserSearch.findUserByUsername("nonexistentuser");
 
@@ -51,7 +51,7 @@ public class UserSearchTest {
     }
 
     @Test
-    public void testFindUserByUsername_UserWithFriendsAndBlocked() {
+    public void testFindUserByUsernameUserWithFriendsAndBlocked() {
         // Test for a user with friends and blocked users
         UserProfile result = UserSearch.findUserByUsername("janedoe");
 
@@ -61,7 +61,8 @@ public class UserSearchTest {
         assertEquals("The password should match 'password456'.", "password456", result.getPassword());
         assertTrue("The friends list should contain 'friend1'.", result.getFriends().contains("friend1"));
         assertTrue("The friends list should contain 'friend2'.", result.getFriends().contains("friend2"));
-        assertTrue("The blocked friends list should contain 'blocked1'.", result.getBlockedFriends().contains("blocked1"));
+        assertTrue("The blocked friends list should contain 'blocked1'.",
+                   result.getBlockedFriends().contains("blocked1"));
     }
 
     @Test
@@ -77,7 +78,9 @@ public class UserSearchTest {
         assertEquals("The username should match 'janedoe'.", "janedoe", result.getUsername());
         assertEquals("The email should match 'janedoe@example.com'.", "janedoe@example.com", result.getEmail());
         assertEquals("The password should match 'password456'.", "password456", result.getPassword());
-        assertEquals("The friends list should contain 'friend1' and 'friend2'.", new ArrayList<>(Arrays.asList("friend1", "friend2")), result.getFriends());
-        assertEquals("The blocked friends list should contain 'blocked1'.", new ArrayList<>(Arrays.asList("blocked1")), result.getBlockedFriends());
+        assertEquals("The friends list should contain 'friend1' and 'friend2'.", 
+                     new ArrayList<>(Arrays.asList("friend1", "friend2")), result.getFriends());
+        assertEquals("The blocked friends list should contain 'blocked1'.", 
+                     new ArrayList<>(Arrays.asList("blocked1")), result.getBlockedFriends());
     }
 }
