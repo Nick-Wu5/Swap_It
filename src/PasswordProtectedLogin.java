@@ -12,7 +12,7 @@ import java.io.*;
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
-    private static final String filename = "users.txt";  //file name of users.txt
+    private static final String FILENAME = "users.txt";  //file name of users.txt
     private static ArrayList<String> users = new ArrayList<>();  //list of users
     private static ArrayList<String> passes = new ArrayList<>();  //lis of passes
 
@@ -65,7 +65,7 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
     }
 
 
-    public boolean authenticate(String username, String password) { //made this method public, so it is accessible by the test case
+    public boolean authenticate(String username, String password) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equals(username) && passes.get(i).equals(password)) {
                 return true;
