@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PasswordProtectedLoginTest {
 
-    private static final String filename = "users.txt";
+    private static final String FILENAME = "users.txt";
 
     @BeforeEach
     void setUp() throws IOException {
@@ -54,8 +54,10 @@ class PasswordProtectedLoginTest {
         PasswordProtectedLogin loginSystem = new PasswordProtectedLogin();
 
         // Test valid login credentials
-        assertTrue(loginSystem.authenticate("testUser", "password123"), "Valid credentials should authenticate successfully");
-        assertTrue(loginSystem.authenticate("admin", "adminPass"), "Valid credentials should authenticate successfully");
+        assertTrue(loginSystem.authenticate("testUser", "password123"), 
+                   "Valid credentials should authenticate successfully");
+        assertTrue(loginSystem.authenticate("admin", "adminPass"), 
+                   "Valid credentials should authenticate successfully");
     }
 
     @Test
@@ -64,7 +66,9 @@ class PasswordProtectedLoginTest {
         PasswordProtectedLogin loginSystem = new PasswordProtectedLogin();
 
         // Test invalid login credentials
-        assertFalse(loginSystem.authenticate("testUser", "wrongPassword"), "Invalid password should not authenticate");
-        assertFalse(loginSystem.authenticate("unknownUser", "password123"), "Unknown username should not authenticate");
+        assertFalse(loginSystem.authenticate("testUser", "wrongPassword"), 
+                    "Invalid password should not authenticate");
+        assertFalse(loginSystem.authenticate("unknownUser", "password123"), 
+                    "Unknown username should not authenticate");
     }
 }
