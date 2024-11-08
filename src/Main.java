@@ -89,20 +89,6 @@ public class Main {
 
         // Demonstrating secure account creation
         System.out.println("\nCreating New User Accounts:");
-        CreateNewUser newUser1 = new CreateNewUser("johnsmith", "securePass123");
-        CreateNewUser newUser2 = new CreateNewUser("janedoe", "password456");
-
-        // Displaying user registration status
-        if (!newUser1.isAlreadyRegistered()) {
-            System.out.println("User 'johnsmith' registered successfully!");
-        } else {
-            System.out.println("User 'johnsmith' is already registered.");
-        }
-        if (!newUser2.isAlreadyRegistered()) {
-            System.out.println("User 'janedoe' registered successfully!");
-        } else {
-            System.out.println("User 'janedoe' is already registered.");
-        }
 
         // Demonstrating password-protected login
         System.out.println("\nPassword-Protected Login:");

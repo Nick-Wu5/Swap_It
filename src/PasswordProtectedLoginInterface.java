@@ -11,9 +11,5 @@ import java.util.ArrayList;
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public interface PasswordProtectedLoginInterface {
-
-    boolean login();
-
     boolean authenticate(String username, String password);
-
 }
