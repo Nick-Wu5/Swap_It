@@ -1,7 +1,5 @@
 import javax.xml.stream.events.Comment;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -45,6 +43,31 @@ public class NewsPost implements NewsFeed {
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
+    }
+
+    public static void deletePost(String title) {
+        try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempFile.txt"));
+             PrintWriter writePost = new PrintWriter(new FileWriter("newsPost.txt", false));
+             BufferedReader tempRead = new BufferedReader(new FileReader("tempFile.txt"));
+             BufferedReader readPost = new BufferedReader(new FileReader("newsPost.txt"))) {
+            String line;
+            while ((line = readPost.readLine()) != null) {
+                if (line.contains(title)) {
+                    continue;
+                }
+                tempWrite.println(line);
+            }
+            while ((line = tempRead.readLine()) != null) {
+                writePost.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteComment(String title) {
+        //IMPORTANT: add author and TITLE to comment info
+
     }
 
     public void incrementUpvotes() {

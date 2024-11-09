@@ -53,10 +53,12 @@ public class Main {
         System.out.println(user1.getUsername() + " removed " + user2.getUsername() + " from friends list.");
         System.out.println(user1.getUsername() + "'s updated friends list: " + user1.getFriends());
 
-        // Creating and displaying a news post
+        /*
+
+        Creating and displaying a news post
         System.out.println("\nCreating and Displaying News Posts:");
         NewsPost post1 = new NewsPost(user1, "New Album Release", "/images/album.jpg", "2024-11-03");
-        System.out.println("Post Author: " + post1.getAuthor().getUsername());
+        System.out.println("Post Author: " + post1.getAuthor());
         System.out.println("Post Title: " + post1.getTitle());
         System.out.println("Post Image Path: " + post1.getImagePath());
         System.out.println("Post Date: " + post1.getDate());
@@ -86,6 +88,8 @@ public class Main {
             System.out.println("Comment Content: " + comment.getContent());
             System.out.println("Comment Upvotes: " + comment.getUpvotes());
         }
+
+         */
 
         // Demonstrating secure account creation
         System.out.println("\nCreating New User Accounts:");

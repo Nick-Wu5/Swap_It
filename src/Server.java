@@ -1,6 +1,8 @@
 import java.net.*;
 import java.io.*;
+import java.nio.file.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Server extends PasswordProtectedLogin implements Runnable {
 
@@ -21,10 +23,12 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         try (Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter write = new PrintWriter(socket.getOutputStream());
-             ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream())){
+             ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream());
+             BufferedReader readPost = new BufferedReader(new FileReader("newsPost.txt"))) {
 
             System.out.println("Server: Client connected");
 
+            UserProfile currentUser = null;
             String loginOrRegister = read.readLine();
 
             if (loginOrRegister.equals("login")) {
@@ -73,11 +77,13 @@ public class Server extends PasswordProtectedLogin implements Runnable {
             }
 
             while (loggedIn) {
-
+                currentUser = UserSearch.findUserByUsername(username);
                 String menu = read.readLine();
                 String prompt = "";
 
                 switch (menu) {
+                    //switch case for comment stuff
+                    //IMPORTANT: make delete comment & post methods (after this is done we can just call this method)
                     case "search" -> {
                         prompt = read.readLine();
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
@@ -93,19 +99,66 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             new NewsPost(username, title, imagePath, date);
                             //make sure this saves to a file somehow
                         } else if (prompt.equals("delete")) {
+                            //IMPORTANT: need to delete comments associated with post as well
                             //make an arraylist of all posts made by the user and dropdown of title
                             String title = read.readLine();
                             //needs to search through a file for a title and then delete the info of that post
-
-
+                            NewsPost.deletePost(title);
+                            //make sure each post's info is on one line
+                        }
+                    }
+                    case "friend" -> {
+                        prompt = read.readLine();
+                        switch (prompt) {
+                            case "add" -> {
+                                String friendToAdd = read.readLine();
+                                currentUser.addFriend(friendToAdd);
+                            }
+                            case "block" -> {
+                                String userToBlock = read.readLine();
+                                currentUser.blockUser(userToBlock);
+                            }
+                            case "remove" -> {
+                                String friendToRemove = read.readLine();
+                                currentUser.removeFriend(friendToRemove);
+                            }
+                        }
+                    }
+                    case "view" -> {
+                        prompt = read.readLine();
+                        switch(prompt) {
+                            case "post" -> {
+                                //load posts for this specfic user
+                                //IMPORTANT: change file & newsPost to put all post info on one line
+                                String line;
+                                ArrayList<String> posts = new ArrayList<>();
+                                while ((line = readPost.readLine()) != null) {
+                                    if(line.contains(currentUser.getUsername())) {
+                                        posts.add(line);
+                                    }
+                                }
+                                objectWrite.writeObject(posts);
+                                //need to parse through arraylist & make array splitting semicolons and make pretty
+                            }
+                            case "info" -> {
+                                //load info for this specfic user
+                                StringBuilder accountInfo = new StringBuilder();
+                                accountInfo.append(currentUser.getUsername() + ";");
+                                accountInfo.append(currentUser.getEmail() + ";");
+                                accountInfo.append(currentUser.getPassword() + ";");
+                                accountInfo.append(currentUser.getFriends() + ";");
+                                accountInfo.append(currentUser.getBlockedFriends() + ";");
+                                //could possibly return string value of number of posts
+                                write.println(accountInfo);
+                            }
                         }
                     }
                 }
-
             }
 
         } catch (IOException e) {
-
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
