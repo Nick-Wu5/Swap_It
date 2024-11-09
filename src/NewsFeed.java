@@ -15,5 +15,5 @@ public interface NewsFeed {
 
     int getUpvotes();
 
-    UserProfile getAuthor();
+    String getAuthor();
 }

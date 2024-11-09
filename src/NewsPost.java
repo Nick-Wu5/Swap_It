@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class NewsPost implements NewsFeed {
-    private UserProfile author;  //author profile of post
+    private String author;  //author profile of post
     private String title;  //title of post
     private String imagePath;  //path to image of post
     private String date;  //date of published post
@@ -23,7 +23,7 @@ public class NewsPost implements NewsFeed {
     private int downvotes;  //number of downvotes per post
     private ArrayList<NewsComment> comments;  //number of comments per post
 
-    public NewsPost(UserProfile author, String title, String imagePath, String date) {
+    public NewsPost(String author, String title, String imagePath, String date) {
         this.author = author;
         this.title = title;
         this.imagePath = imagePath;
@@ -34,7 +34,7 @@ public class NewsPost implements NewsFeed {
 
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsPosts.txt", true))) {
-            writer.println("Author: " + author.getUsername());
+            writer.println("Author: " + author);
             writer.println("Title: " + title);
             writer.println("Image Path: " + imagePath);
             writer.println("Date: " + date);
@@ -55,7 +55,7 @@ public class NewsPost implements NewsFeed {
         downvotes++;
     }
 
-    public UserProfile getAuthor() {
+    public String getAuthor() {
         return author;
     }
 

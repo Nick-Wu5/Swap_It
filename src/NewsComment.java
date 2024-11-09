@@ -17,16 +17,16 @@ public class NewsComment implements NewsFeed {
     private int upvotes;  //number of upvotes per post
     private int downvotes;  //number of downvotes per post
     private String content;  //text content of post
-    private UserProfile author;  //author that published post
+    private String author;  //author that published post
 
-    public NewsComment(String content, UserProfile author) {
+    public NewsComment(String content, String author) {
         this.upvotes = 0;
         this.downvotes = 0;
         this.content = content;
         this.author = author;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
-            writer.println("Author: " + author.getUsername());
+            writer.println("Author: " + author);
             writer.println("Content: " + content);
             writer.println("Upvotes: " + upvotes);
             writer.println("Downvotes: " + downvotes);
@@ -44,7 +44,7 @@ public class NewsComment implements NewsFeed {
         return content;
     }
 
-    public UserProfile getAuthor() {
+    public String getAuthor() {
         return author;
     }
 

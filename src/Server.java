@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.time.LocalDate;
 
 public class Server extends PasswordProtectedLogin implements Runnable {
 
@@ -19,7 +20,8 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
         try (Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter write = new PrintWriter(socket.getOutputStream())){
+             PrintWriter write = new PrintWriter(socket.getOutputStream());
+             ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream())){
 
             System.out.println("Server: Client connected");
 
@@ -72,7 +74,33 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
             while (loggedIn) {
 
+                String menu = read.readLine();
+                String prompt = "";
 
+                switch (menu) {
+                    case "search" -> {
+                        prompt = read.readLine();
+                        UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
+                        objectWrite.writeObject(searchedUser);
+                        // deal with the null on the client side & resend menu
+                    }
+                    case "post" -> {
+                        prompt = read.readLine();
+                        if (prompt.equals("create")) {
+                            String title = read.readLine();
+                            String imagePath = read.readLine();
+                            String date = String.valueOf(LocalDate.now());
+                            new NewsPost(username, title, imagePath, date);
+                            //make sure this saves to a file somehow
+                        } else if (prompt.equals("delete")) {
+                            //make an arraylist of all posts made by the user and dropdown of title
+                            String title = read.readLine();
+                            //needs to search through a file for a title and then delete the info of that post
+
+
+                        }
+                    }
+                }
 
             }
 
