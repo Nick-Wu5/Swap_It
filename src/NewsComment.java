@@ -15,22 +15,20 @@ import java.io.PrintWriter;
 public class NewsComment implements NewsFeed {
 
     private int upvotes;  //number of upvotes per post
+    private String captionOfPost; //title of post the comment is about
     private int downvotes;  //number of downvotes per post
     private String content;  //text content of post
     private String author;  //author that published post
 
-    public NewsComment(String content, String author) {
+    public NewsComment(String content, String author, String captionOfPost) {
         this.upvotes = 0;
         this.downvotes = 0;
         this.content = content;
         this.author = author;
+        this.captionOfPost = captionOfPost;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
-            writer.println("Author: " + author);
-            writer.println("Content: " + content);
-            writer.println("Upvotes: " + upvotes);
-            writer.println("Downvotes: " + downvotes);
-            writer.println("-----");
+            writer.println(author + "," + content + "," + captionOfPost + "," + upvotes + "," + downvotes);
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
