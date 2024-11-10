@@ -22,7 +22,7 @@ public class NewsPostTest {
 
         // Test post details
         assertEquals("The usernames should match the user object", post.getAuthor().getUsername(), "taylorswift246");
-        assertEquals("The title should match the post object", post.getTitle(), "Test Post Title");
+        assertEquals("The title should match the post object", post.getCaption(), "Test Post Title");
         assertEquals("The image path should match the post object", post.getImagePath(), "/path/to/image.jpg");
         assertEquals("The date should match the post object" + post.getDate(), "2024-11-03");
         assertEquals("The upvotes should equal 0" + post.getUpvotes(), "0");

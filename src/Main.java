@@ -59,7 +59,7 @@ public class Main {
         System.out.println("\nCreating and Displaying News Posts:");
         NewsPost post1 = new NewsPost(user1, "New Album Release", "/images/album.jpg", "2024-11-03");
         System.out.println("Post Author: " + post1.getAuthor());
-        System.out.println("Post Title: " + post1.getTitle());
+        System.out.println("Post Title: " + post1.getCaption());
         System.out.println("Post Image Path: " + post1.getImagePath());
         System.out.println("Post Date: " + post1.getDate());
         System.out.println("Initial Upvotes: " + post1.getUpvotes());

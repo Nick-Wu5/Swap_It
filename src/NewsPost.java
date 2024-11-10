@@ -1,4 +1,3 @@
-import javax.xml.stream.events.Comment;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -14,16 +13,16 @@ import java.util.ArrayList;
  */
 public class NewsPost implements NewsFeed {
     private String author;  //author profile of post
-    private String title;  //title of post
+    private String caption;  //caption of post
     private String imagePath;  //path to image of post
     private String date;  //date of published post
     private int upvotes;  //number of upvotes per post
     private int downvotes;  //number of downvotes per post
     private ArrayList<NewsComment> comments;  //number of comments per post
 
-    public NewsPost(String author, String title, String imagePath, String date) {
+    public NewsPost(String author, String caption, String imagePath, String date) {
         this.author = author;
-        this.title = title;
+        this.caption = caption;
         this.imagePath = imagePath;
         this.date = date;
         this.upvotes = 0;
@@ -32,27 +31,21 @@ public class NewsPost implements NewsFeed {
 
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsPosts.txt", true))) {
-            writer.println("Author: " + author);
-            writer.println("Title: " + title);
-            writer.println("Image Path: " + imagePath);
-            writer.println("Date: " + date);
-            writer.println("Upvotes: " + upvotes);
-            writer.println("Downvotes: " + downvotes);
-            writer.println("Comments: " + comments.size() + " comments");
-            writer.println("-----");
+            writer.println(author + "," + caption + "," + imagePath + "," + date + "," + upvotes + "," + downvotes + ","
+                    + comments.size());
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
     }
 
-    public static void deletePost(String title) {
+    public static void deletePost(String caption) {
         try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempFile.txt"));
              PrintWriter writePost = new PrintWriter(new FileWriter("newsPost.txt", false));
              BufferedReader tempRead = new BufferedReader(new FileReader("tempFile.txt"));
              BufferedReader readPost = new BufferedReader(new FileReader("newsPost.txt"))) {
             String line;
             while ((line = readPost.readLine()) != null) {
-                if (line.contains(title)) {
+                if (line.contains(caption)) {
                     continue;
                 }
                 tempWrite.println(line);
@@ -82,8 +75,8 @@ public class NewsPost implements NewsFeed {
         return author;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCaption() {
+        return caption;
     }
 
     public String getImagePath() {
@@ -104,5 +97,10 @@ public class NewsPost implements NewsFeed {
 
     public void addComment(NewsComment comment) {
         comments.add(comment);
+    }
+
+    public static void main(String[] args) {
+
+        NewsPost newPost1 = new NewsPost("divya", "new views", "this is an image path", "11/10/2024");
     }
 }
