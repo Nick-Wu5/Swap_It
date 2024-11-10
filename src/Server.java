@@ -143,13 +143,20 @@ public class Server extends PasswordProtectedLogin {
                                 //load posts for this specfic user
                                 //IMPORTANT: change file & newsPost to put all post info on one line
                                 String line;
-                                ArrayList<String> posts = new ArrayList<>();
+                                ArrayList<NewsPost> userPosts = new ArrayList<>();
+
                                 while ((line = readPost.readLine()) != null) {
                                     if(line.contains(currentUser.getUsername())) {
-                                        posts.add(line);
+
+                                        String[] postInfo = line.split(",");
+
+                                        NewsPost tempPost = new NewsPost(postInfo[0], postInfo[1], postInfo[2], postInfo[3]);
+
+                                        tempPost.setComments(NewsPost.findComments(postInfo[1]));
+                                        userPosts.add(tempPost);
                                     }
                                 }
-                                objectWrite.writeObject(posts);
+                                objectWrite.writeObject(userPosts);
                                 //need to parse through arraylist & make array splitting semicolons and make pretty
                             }
                             case "info" -> {

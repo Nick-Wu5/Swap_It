@@ -20,7 +20,7 @@ public class NewsComment implements NewsFeed {
     private String content;  //text content of post
     private String author;  //author that published post
 
-    public NewsComment(String content, String author, String captionOfPost) {
+    public NewsComment(String content, String author, String captionOfPost, int upvotes, int downvotes) {
         this.upvotes = 0;
         this.downvotes = 0;
         this.content = content;
@@ -28,7 +28,7 @@ public class NewsComment implements NewsFeed {
         this.captionOfPost = captionOfPost;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
-            writer.println(author + "," + content + "," + captionOfPost + "," + upvotes + "," + downvotes);
+            writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }

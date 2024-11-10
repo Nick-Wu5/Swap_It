@@ -58,6 +58,29 @@ public class NewsPost implements NewsFeed {
         }
     }
 
+    public static ArrayList<NewsComment> findComments(String captionOfPost) {
+
+        ArrayList<NewsComment> comments = new ArrayList<>();
+
+        try (BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
+            String line;
+
+            while ((line = readComments.readLine()) != null) {
+                if (line.contains(captionOfPost)) {
+
+                    String[] commentInfo = line.split(",");
+
+                    comments.add(new NewsComment(commentInfo[0], commentInfo[1], commentInfo[2],
+                            Integer.parseInt(commentInfo[3]), Integer.parseInt(commentInfo[4])));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return comments;
+    }
+
     public static void deleteComment(String title) {
         //IMPORTANT: add author and TITLE to comment info
 
@@ -97,6 +120,10 @@ public class NewsPost implements NewsFeed {
 
     public void addComment(NewsComment comment) {
         comments.add(comment);
+    }
+
+    public void setComments(ArrayList<NewsComment> comments) {
+        this.comments = comments;
     }
 
     public static void main(String[] args) {
