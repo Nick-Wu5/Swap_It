@@ -1,6 +1,4 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * Team Project - Social Media App
@@ -52,5 +50,24 @@ public class NewsComment implements NewsFeed {
 
     public void incrementDownvotes() {
         downvotes++;
+    }
+    public void deleteComment() {
+        try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempComments.txt"));
+             PrintWriter writeComments = new PrintWriter(new FileWriter("newsComments.txt", false));
+             BufferedReader tempRead = new BufferedReader(new FileReader("tempComments.txt"));
+             BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
+            String line;
+            while ((line = readComments.readLine()) != null) {
+                if (line.contains(content)) {
+                    continue;
+                }
+                tempWrite.println(line);
+            }
+            while ((line = tempRead.readLine()) != null) {
+                writeComments.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
