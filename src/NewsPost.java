@@ -81,6 +81,29 @@ public class NewsPost implements NewsFeed {
         return comments;
     }
 
+    public static ArrayList<NewsComment> findCommentsForUser(String username) {
+
+        ArrayList<NewsComment> comments = new ArrayList<>();
+
+        try (BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
+            String line;
+
+            while ((line = readComments.readLine()) != null) {
+                if (line.contains(username)) {
+
+                    String[] commentInfo = line.split(",");
+
+                    comments.add(new NewsComment(commentInfo[0], commentInfo[1], commentInfo[2],
+                            Integer.parseInt(commentInfo[3]), Integer.parseInt(commentInfo[4])));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return comments;
+    }
+
     public static void deleteComment(String title) {
         //IMPORTANT: add author and TITLE to comment info
 

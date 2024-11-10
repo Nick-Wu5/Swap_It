@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
 import java.nio.file.*;
@@ -113,6 +114,11 @@ public class Server extends PasswordProtectedLogin {
                             //needs to search through a file for a title and then delete the info of that post
                             NewsPost.deletePost(title);
                             //make sure each post's info is on one line
+                        } else if (prompt.equals("delete comment")) {
+
+                            String content = read.readLine();
+                            NewsPost.deleteComment(content);
+
                         }
                     }
                     case "friend" -> {

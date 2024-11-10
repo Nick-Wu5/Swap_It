@@ -51,7 +51,8 @@ public class NewsComment implements NewsFeed {
     public void incrementDownvotes() {
         downvotes++;
     }
-    public void deleteComment() {
+    public void deleteComment(String content) {
+
         try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempComments.txt"));
              PrintWriter writeComments = new PrintWriter(new FileWriter("newsComments.txt", false));
              BufferedReader tempRead = new BufferedReader(new FileReader("tempComments.txt"));
