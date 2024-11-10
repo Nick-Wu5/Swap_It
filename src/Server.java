@@ -6,9 +6,19 @@ import java.util.ArrayList;
 
 public class Server extends PasswordProtectedLogin implements Runnable {
 
-    ServerSocket serverSocket = new ServerSocket(4242);
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new Server());
+        Thread thread2 = new Thread(new Server());
 
-    public Server() throws IOException {
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -20,7 +30,8 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         boolean loggedIn = false;
         boolean alreadyRegistered = false;
 
-        try (Socket socket = serverSocket.accept();
+        try (ServerSocket serverSocket = new ServerSocket(4242);
+             Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter write = new PrintWriter(socket.getOutputStream());
              ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream());
