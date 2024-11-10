@@ -122,6 +122,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 String friendToRemove = read.readLine();
                                 currentUser.removeFriend(friendToRemove);
                             }
+                            default -> {
+                                System.out.println("A valid input was not selected!");
+                                throw new Exception();
+                            }
                         }
                     }
                     case "view" -> {
@@ -151,7 +155,15 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 //could possibly return string value of number of posts
                                 write.println(accountInfo);
                             }
+                            default -> {
+                                System.out.println("A valid input was not selected!");
+                                throw new Exception();
+                            }
                         }
+                    }
+                    default -> {
+                        System.out.println("A valid input was not selected!");
+                        throw new Exception();
                     }
                 }
             }

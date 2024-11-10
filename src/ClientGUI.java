@@ -63,6 +63,7 @@ public class ClientGUI {
                 return false;
                 }
                  */
+                // fix register to match client & server register
                 if (client.register(usernameField.getText(), emailField.getText(), passwordField.getText())) {
                     displayArea.append("Registration successful.\n");
                 } else {
@@ -87,6 +88,7 @@ public class ClientGUI {
             /* create method in client.java
             public void connectToServer(){}
              */
+            //should reflect client & server connecting
             clientImpl.connectToServer();
         } catch (IOException e) {
             System.out.println("Failed to connect to server: " + e.getMessage());
