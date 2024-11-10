@@ -4,25 +4,23 @@ import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Server extends PasswordProtectedLogin implements Runnable {
+public class Server extends PasswordProtectedLogin {
+
+    ServerSocket serverSocket = new ServerSocket(1234);
+
+    public Server() throws IOException {
+    }
 
     public static void main(String[] args) {
-        Thread thread1 = new Thread(new Server());
-        Thread thread2 = new Thread(new Server());
-
-        thread1.start();
-        thread2.start();
-
         try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e) {
+            Server server = new Server();
+            server.start();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void run() {
+    public void start() {
 
         String username = "";
         String email = "";
@@ -30,26 +28,23 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         boolean loggedIn = false;
         boolean alreadyRegistered = false;
 
-        try (ServerSocket serverSocket = new ServerSocket(4242);
-             Socket socket = serverSocket.accept();
+        try (Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter write = new PrintWriter(socket.getOutputStream());
              ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream());
-             BufferedReader readPost = new BufferedReader(new FileReader("newsPost.txt"))) {
+             BufferedReader readPost = new BufferedReader(new FileReader("newsPosts.txt"))) {
 
             System.out.println("Server: Client connected");
-
             UserProfile currentUser = null;
             String loginOrRegister = read.readLine();
 
             if (loginOrRegister.equals("login")) {
                 do {
-                    while (username.isEmpty() && password.isEmpty()) {
-                        if (read.readLine().contains("username")) {
-                            username = read.readLine().substring(read.readLine().indexOf(":") + 1);
-                        }
-
-                        if (read.readLine().contains("password")) {
+                    while (username.isEmpty() || password.isEmpty()) {
+                        String line = read.readLine();
+                        if (line.contains("username")) {
+                            username = line.substring(read.readLine().indexOf(":") + 1);
+                        } else if (line.contains("password")) {
                             password = read.readLine().substring(read.readLine().indexOf(":") + 1);
                         }
                     }
@@ -88,6 +83,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
             }
 
             while (loggedIn) {
+
                 currentUser = UserSearch.findUserByUsername(username);
                 String menu = read.readLine();
                 String prompt = "";
@@ -99,6 +95,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         prompt = read.readLine();
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
                         objectWrite.writeObject(searchedUser);
+                        objectWrite.flush();
                         // deal with the null on the client side & resend menu
                     }
                     case "post" -> {

@@ -9,7 +9,7 @@ public class Client {
         Scanner scan = new Scanner(System.in);
 
         // Connect to the server
-        Socket socket = new Socket("localhost", 4242);
+        Socket socket = new Socket("localhost", 1234);
 
         // Input/Output streams
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -31,7 +31,7 @@ public class Client {
                 writer.println("password:" + password);
 
                 String loginResponse = reader.readLine();
-                if (loginResponse.contains("Incorrect")) {
+                if (loginResponse.isEmpty() || loginResponse == null) {
                     System.out.println("Login failed. Try again.");
                     return;
                 }
