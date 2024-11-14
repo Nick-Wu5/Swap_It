@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 public class Server extends PasswordProtectedLogin {
 
+    //initializes the server socket at port 1234
     ServerSocket serverSocket = new ServerSocket(1234);
 
+    //handles IOException during server initialization
     public Server() throws IOException {
     }
 
@@ -19,6 +21,7 @@ public class Server extends PasswordProtectedLogin {
         }
     }
 
+    //handles client connections and actions
     public void start() {
 
         System.out.println(new File("users.txt").getAbsolutePath());
@@ -29,6 +32,7 @@ public class Server extends PasswordProtectedLogin {
         boolean loginComplete = false;
         boolean registrationComplete = false;
 
+        //try with resources for socket communication
         try (Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
@@ -37,12 +41,13 @@ public class Server extends PasswordProtectedLogin {
 
             System.out.println("Server: Client connected");
             UserProfile currentUser = null;
-            String loginOrRegister = read.readLine();
+            String loginOrRegister = read.readLine(); //login or registration choice
 
             if (loginOrRegister.equals("login")) {
 
                 System.out.println("User selected login");
 
+                // loop until a successful login
                 do {
                     username = read.readLine();
                     System.out.println("received username");
@@ -61,6 +66,7 @@ public class Server extends PasswordProtectedLogin {
 
                 System.out.println("User selected register");
 
+                // loop until a successful registration
                 do {
 
                     username = read.readLine();
@@ -74,7 +80,7 @@ public class Server extends PasswordProtectedLogin {
 
                     CreateNewUser tempUser = new CreateNewUser(username, email, password);
 
-                    if (!tempUser.isAlreadyRegistered()) {
+                    if (!tempUser.isAlreadyRegistered()) { // checks if user already exists
                         System.out.println("User: " + username + " created and saved to file");
                         registrationComplete = true;
                         objectWrite.writeBoolean(registrationComplete);
@@ -88,6 +94,7 @@ public class Server extends PasswordProtectedLogin {
                 } while (!registrationComplete);
             }
 
+            //handles actions while logged in
             while (loginComplete) {
 
                 currentUser = UserSearch.findUserByUsername(username);
@@ -97,14 +104,14 @@ public class Server extends PasswordProtectedLogin {
                 switch (menu) {
                     //switch case for comment stuff
                     //IMPORTANT: make delete comment & post methods (after this is done we can just call this method)
-                    case "1" -> {
+                    case "1" -> { // search for a user
                         prompt = read.readLine();
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
                         objectWrite.writeObject(searchedUser);
                         objectWrite.flush();
                         // deal with the null on the client side & resend menu
                     }
-                    case "2" -> {
+                    case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();
                         if (prompt.equals("create")) {
                             String title = read.readLine();
@@ -126,7 +133,7 @@ public class Server extends PasswordProtectedLogin {
 
                         }
                     }
-                    case "3" -> {
+                    case "3" -> { // add/block/remove friends
                         prompt = read.readLine();
                         switch (prompt) {
                             case "add" -> {
@@ -147,7 +154,7 @@ public class Server extends PasswordProtectedLogin {
                             }
                         }
                     }
-                    case "4" -> {
+                    case "4" -> {  // view posts and info
                         prompt = read.readLine();
                         switch(prompt) {
                             case "post" -> {
