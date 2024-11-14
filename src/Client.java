@@ -73,7 +73,7 @@ public class Client {
             // Main menu
             while (true) {
                 System.out.println("\n>>> Main Menu : Please Enter A Number <<<");
-                System.out.println("\n1 : Search" + "\n2 : Post" + "\n3 : Friends" + "\n4 : View" + "\n5 : Exit");
+                System.out.println("\n1 : Search" + "\n2 : Post" + "\n3 : Friends" + "\n4 : View" + "\n5 : Exit\n");
 
                 String menuAction = scan.nextLine();
                 writer.println(menuAction);
@@ -95,6 +95,7 @@ public class Client {
                         } else {
                             System.out.println("Received an unexpected response: " + userProfile);
                         }
+                        break;
 
                     case "2": //handles post creation/deletion
                         System.out.println("Do you want to 'create' or 'delete' a post?");
