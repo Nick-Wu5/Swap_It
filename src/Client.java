@@ -18,12 +18,13 @@ public class Client {
              ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());) {
 
             do {
-
+                // authentication method choice
                 System.out.println("\nPlease Specify An Authentication Method");
                 System.out.println("\n--> 'Login' or 'Register' <--\n");
                 String choice = scan.nextLine().trim();
-                writer.println(choice);
+                writer.println(choice); // send choice to server
 
+                // login process
                 if (choice.equalsIgnoreCase("login")) {
 
                     System.out.println("Enter your username:");
@@ -42,6 +43,7 @@ public class Client {
                         System.out.println("Login Failed. Please try again");
                     }
 
+                    //registration process
                 } else if (choice.equalsIgnoreCase("register")) {
 
                     System.out.println("Enter a username:");
@@ -56,7 +58,7 @@ public class Client {
                     String password = scan.nextLine();
                     writer.println(password);
 
-                    registrationComplete = objectReader.readBoolean();
+                    registrationComplete = objectReader.readBoolean(); // receives registration status from server
 
                     if (registrationComplete) {
                         System.out.println("Registration complete.");
@@ -66,9 +68,9 @@ public class Client {
 
                 }
 
-            } while (!registrationComplete && !loginComplete);
+            } while (!registrationComplete && !loginComplete); // loops until login or registration is successful
 
-            System.out.println("\n--------- Welcome To Swap_It ---------");
+            System.out.println("\n--------- Welcome To Swap_It ---------"); // welcome message
 
             // Main menu
             while (true) {
@@ -79,7 +81,7 @@ public class Client {
                 writer.println(menuAction);
 
                 switch (menuAction.toLowerCase()) {
-                    case "search":
+                    case "search": // handles user search
                         System.out.println("Enter username to search:");
                         String searchUsername = scan.nextLine();
                         writer.println(searchUsername);
@@ -92,7 +94,7 @@ public class Client {
                         }
                         break;
 
-                    case "post":
+                    case "post": // handles post creation/deletion
                         System.out.println("Do you want to 'create' or 'delete' a post?");
                         String postAction = scan.nextLine();
                         writer.println(postAction);
@@ -116,7 +118,7 @@ public class Client {
                         }
                         break;
 
-                    case "friend":
+                    case "friend": // handles friend actions
                         System.out.println("Do you want to 'add', 'block', or 'remove' a friend?");
                         String friendAction = scan.nextLine();
                         writer.println(friendAction);
@@ -128,7 +130,7 @@ public class Client {
                         System.out.println("Friend action performed.");
                         break;
 
-                    case "view":
+                    case "view": // handles viewing posts or account info
                         System.out.println("Do you want to view 'post' or 'info'?");
                         String viewAction = scan.nextLine();
                         writer.println(viewAction);
