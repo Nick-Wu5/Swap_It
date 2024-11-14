@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -20,7 +16,7 @@ import java.util.Scanner;
 public class CreateNewUser extends UserProfile implements CreateNewUserInterface {
 
     private boolean alreadyRegistered;  //signifies whether account has been registered or not
-    private static ArrayList<UserProfile> userProfiles = new ArrayList();  //list of userProfiles
+    private static ArrayList<UserProfile> userProfiles;  //list of userProfiles
     private static final String FILENAME = "users.txt";  //file name for user.txt
 
     public CreateNewUser(String username, String email, String password) {
@@ -73,51 +69,41 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
         }
     }
 
-    private boolean checkIfUserExists(String userName) {
-        Iterator var2 = userProfiles.iterator();
+    private boolean checkIfUserExists(String username) {
 
-        UserProfile profile;
-        do {
-            if (!var2.hasNext()) {
-                return false;
+        CreateNewUser.loadUsersFromFile();
+
+        for (UserProfile user : userProfiles) {
+            if (user.getUsername().equals(username)) {
+                return true;
             }
-
-            profile = (UserProfile) var2.next();
-        } while (!profile.getUsername().equals(userName));
-
-        return true;
+        }
+        return false;
     }
 
     public static void loadUsersFromFile() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("users.txt"));
+        userProfiles = new ArrayList<>();
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
             String line;
-            try {
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(":");
-                    if (parts.length == 2) {
-                        String username = parts[0];
-                        String password = parts[1];
-                        UserProfile userProfile = new UserProfile(username, username + "@example.com", password);
-                        userProfiles.add(userProfile);
-                    }
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) { // Ensure there are at least three parts
+                    String username = parts[0];
+                    String email = parts[1];
+                    String password = parts[2];
+                    UserProfile userProfile = new UserProfile(username, email, password);
+                    userProfiles.add(userProfile);
+                } else {
+                    System.out.println("skipping weird line");
                 }
-            } catch (Throwable var7) {
-                try {
-                    reader.close();
-                } catch (Throwable var6) {
-                    var7.addSuppressed(var6);
-                }
-
-                throw var7;
             }
-
-            reader.close();
-        } catch (IOException var8) {
-            IOException e = var8;
-            System.out.println("Error reading users from file: " + e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + FILENAME);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + FILENAME);
+            e.printStackTrace();
         }
-
     }
 }

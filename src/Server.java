@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
-import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -23,15 +21,17 @@ public class Server extends PasswordProtectedLogin {
 
     public void start() {
 
+        System.out.println(new File("users.txt").getAbsolutePath());
+
         String username = "";
         String email = "";
         String password = "";
-        boolean loggedIn = false;
-        boolean alreadyRegistered = false;
+        boolean loginComplete = false;
+        boolean registrationComplete = false;
 
         try (Socket socket = serverSocket.accept();
              BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter write = new PrintWriter(socket.getOutputStream());
+             PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
              ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream());
              BufferedReader readPost = new BufferedReader(new FileReader("newsPosts.txt"))) {
 
@@ -40,50 +40,55 @@ public class Server extends PasswordProtectedLogin {
             String loginOrRegister = read.readLine();
 
             if (loginOrRegister.equals("login")) {
+
+                System.out.println("User selected login");
+
                 do {
-                    while (username.isEmpty() || password.isEmpty()) {
-                        String line = read.readLine();
-                        if (line.contains("username")) {
-                            username = line.substring(read.readLine().indexOf(":") + 1);
-                        } else if (line.contains("password")) {
-                            password = read.readLine().substring(read.readLine().indexOf(":") + 1);
-                        }
-                    }
+                    username = read.readLine();
+                    System.out.println("received username");
 
-                    loggedIn = authenticate(username, password);
+                    password = read.readLine();
+                    System.out.println("received password");
 
-                    if (!loggedIn) {
-                        write.println("Incorrect username or password");
-                    }
+                    loginComplete = authenticate(username, password);
 
-                } while (!loggedIn);
+                    objectWrite.writeBoolean(loginComplete);
+                    objectWrite.flush();
+
+                } while (!loginComplete);
 
             } else if (loginOrRegister.equals("register")) {
 
+                System.out.println("User selected register");
+
                 do {
 
-                    while (username.isEmpty() && email.isEmpty() && password.isEmpty()) {
+                    username = read.readLine();
+                    System.out.println("received username");
 
-                        if (read.readLine().contains("username")) {
-                            username = read.readLine().substring(read.readLine().indexOf(":") + 1);
-                        }
+                    email = read.readLine();
+                    System.out.println("received email");
 
-                        if (read.readLine().contains("email")) {
-                            email = read.readLine().substring(read.readLine().indexOf(":") + 1);
-                        }
-
-                        if (read.readLine().contains("password")) {
-                            password = read.readLine().substring(read.readLine().indexOf(":") + 1);
-                        }
-                    }
+                    password = read.readLine();
+                    System.out.println("received password");
 
                     CreateNewUser tempUser = new CreateNewUser(username, email, password);
-                    alreadyRegistered = tempUser.isAlreadyRegistered();
 
-                } while (alreadyRegistered);
+                    if (!tempUser.isAlreadyRegistered()) {
+                        System.out.println("User: " + username + " created and saved to file");
+                        registrationComplete = true;
+                        objectWrite.writeBoolean(registrationComplete);
+                        objectWrite.flush();
+                    } else {
+                        System.out.println("User already exists, please login");
+                        objectWrite.writeBoolean(registrationComplete);
+                        objectWrite.flush();
+                    }
+
+                } while (!registrationComplete);
             }
 
-            while (loggedIn) {
+            while (loginComplete) {
 
                 currentUser = UserSearch.findUserByUsername(username);
                 String menu = read.readLine();
@@ -92,14 +97,14 @@ public class Server extends PasswordProtectedLogin {
                 switch (menu) {
                     //switch case for comment stuff
                     //IMPORTANT: make delete comment & post methods (after this is done we can just call this method)
-                    case "search" -> {
+                    case "1" -> {
                         prompt = read.readLine();
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
                         objectWrite.writeObject(searchedUser);
                         objectWrite.flush();
                         // deal with the null on the client side & resend menu
                     }
-                    case "post" -> {
+                    case "2" -> {
                         prompt = read.readLine();
                         if (prompt.equals("create")) {
                             String title = read.readLine();
@@ -121,7 +126,7 @@ public class Server extends PasswordProtectedLogin {
 
                         }
                     }
-                    case "friend" -> {
+                    case "3" -> {
                         prompt = read.readLine();
                         switch (prompt) {
                             case "add" -> {
@@ -142,7 +147,7 @@ public class Server extends PasswordProtectedLogin {
                             }
                         }
                     }
-                    case "view" -> {
+                    case "4" -> {
                         prompt = read.readLine();
                         switch(prompt) {
                             case "post" -> {

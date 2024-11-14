@@ -130,14 +130,13 @@ public class UserProfile implements User {
         String blockedList = String.join(";", this.blockedFriends);
 
         // Return the formatted string with commas separating the main fields
-        return this.username + "," + friendsList + "," + blockedList + "," + this.email + "," +
-                this.password;
+        return this.username + "," + this.email + "," + this.password + "," + friendsList + "," + blockedList;
     }
 
     /**
      * Save To File Method - writes user account information to the users.txt file
      */
-    public void saveToFile() {
+    public synchronized void saveToFile() {
         //use file writer to
         try (FileWriter fw = new FileWriter("users.txt", true); // 'true' for appending
              PrintWriter pw = new PrintWriter(fw)) {

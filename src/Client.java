@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.*;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -6,54 +7,74 @@ import java.util.ArrayList;
 public class Client {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Scanner scan = new Scanner(System.in);
 
-        // Connect to the server
-        Socket socket = new Socket("localhost", 1234);
+        boolean registrationComplete = false;
+        boolean loginComplete = false;
 
-        // Input/Output streams
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true); // Auto-flush
-        ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());
+        try (Scanner scan = new Scanner(System.in);
+             Socket socket = new Socket("localhost", 1234);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+             ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());) {
 
-        try {
-            System.out.println("Do you want to 'login' or 'register'?");
-            String choice = scan.nextLine().trim();
-            writer.println(choice);
+            do {
 
-            if (choice.equalsIgnoreCase("login")) {
-                System.out.println("Enter your username:");
-                String username = scan.nextLine();
-                writer.println("username:" + username);
+                System.out.println("\nPlease Specify An Authentication Method");
+                System.out.println("\n--> 'Login' or 'Register' <--\n");
+                String choice = scan.nextLine().trim();
+                writer.println(choice);
 
-                System.out.println("Enter your password:");
-                String password = scan.nextLine();
-                writer.println("password:" + password);
+                if (choice.equalsIgnoreCase("login")) {
 
-                String loginResponse = reader.readLine();
-                if (loginResponse.isEmpty() || loginResponse == null) {
-                    System.out.println("Login failed. Try again.");
-                    return;
+                    System.out.println("Enter your username:");
+                    String username = scan.nextLine();
+                    writer.println(username);
+
+                    System.out.println("Enter your password:");
+                    String password = scan.nextLine();
+                    writer.println(password);
+
+                    loginComplete = objectReader.readBoolean();
+
+                    if (loginComplete) {
+                        System.out.println("Login Successful");
+                    } else {
+                        System.out.println("Login Failed. Please try again");
+                    }
+
+                } else if (choice.equalsIgnoreCase("register")) {
+
+                    System.out.println("Enter a username:");
+                    String username = scan.nextLine();
+                    writer.println(username);
+
+                    System.out.println("Enter an email:");
+                    String email = scan.nextLine();
+                    writer.println(email);
+
+                    System.out.println("Enter a password:");
+                    String password = scan.nextLine();
+                    writer.println(password);
+
+                    registrationComplete = objectReader.readBoolean();
+
+                    if (registrationComplete) {
+                        System.out.println("Registration complete.");
+                    } else {
+                        System.out.println("User already exists. Please login");
+                    }
+
                 }
-            } else if (choice.equalsIgnoreCase("register")) {
-                System.out.println("Enter a username:");
-                String username = scan.nextLine();
-                writer.println("username:" + username);
 
-                System.out.println("Enter an email:");
-                String email = scan.nextLine();
-                writer.println("email:" + email);
+            } while (!registrationComplete && !loginComplete);
 
-                System.out.println("Enter a password:");
-                String password = scan.nextLine();
-                writer.println("password:" + password);
-
-                System.out.println("Registration complete.");
-            }
+            System.out.println("\n--------- Welcome To Swap_It ---------");
 
             // Main menu
             while (true) {
-                System.out.println("Choose an action: search, post, friend, view, or exit");
+                System.out.println("\n>>> Main Menu : Please Enter A Number <<<");
+                System.out.println("\n1 : Search" + "\n2 : Post" + "\n3 : Friends" + "\n4 : View" + "\n5 : Exit");
+
                 String menuAction = scan.nextLine();
                 writer.println(menuAction);
 
@@ -114,11 +135,25 @@ public class Client {
 
                         if (viewAction.equalsIgnoreCase("post")) {
                             Object posts = objectReader.readObject();
-                            if (posts instanceof ArrayList) {
-                                ArrayList<String> postList = (ArrayList<String>) posts;
-                                for (String post : postList) {
+
+                            if (posts instanceof ArrayList<?>) {
+
+                                ArrayList<NewsPost> userPosts = new ArrayList<>();
+
+                                for (Object obj : (ArrayList<?>) posts) {
+
+                                    if (obj instanceof NewsPost) {
+                                        userPosts.add((NewsPost) obj);
+                                    } else {
+                                        System.out.println("found non-NewsPost obj");
+                                        return;
+                                    }
+                                }
+
+                                for (NewsPost post : userPosts) {
                                     System.out.println(post);
                                 }
+
                             } else {
                                 System.out.println("No posts available.");
                             }
@@ -136,13 +171,6 @@ public class Client {
                         System.out.println("Invalid option. Try again.");
                 }
             }
-        } finally {
-            // Close resources
-            objectReader.close();
-            writer.close();
-            reader.close();
-            socket.close();
-            scan.close();
         }
     }
 }

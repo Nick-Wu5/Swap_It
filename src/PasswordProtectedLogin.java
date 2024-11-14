@@ -21,14 +21,13 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
     }
 
     private void loadUsersFromFile() {
+
         try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
             String line;  //temp line of each line in users.txt
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length == 2) {
-                    users.add(parts[0]);
-                    passes.add(parts[1]);
-                }
+                String[] parts = line.split(",");
+                users.add(parts[0]);
+                passes.add(parts[2]);
             }
         } catch (IOException e) {
             System.out.println("Error reading users from file: " + e.getMessage());
