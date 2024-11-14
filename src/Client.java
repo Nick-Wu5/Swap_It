@@ -85,12 +85,19 @@ public class Client {
                         writer.println(searchUsername);
 
                         Object userProfile = objectReader.readObject();
+<<<<<<< Updated upstream
                         if (userProfile == null) {
                             System.out.println("User not found.");
+=======
+                        if (userProfile instanceof String) {
+                            System.out.println(userProfile); // "User not found" message
+                        } else if (userProfile instanceof User) {
+                            User user = (User) userProfile;
+                            System.out.println("Found user: " + user.getUsername());
+>>>>>>> Stashed changes
                         } else {
-                            System.out.println("User found: " + userProfile);
+                            System.out.println("Received an unexpected response: " + userProfile);
                         }
-                        break;
 
                     case "post": //handles post creation/deletion
                         System.out.println("Do you want to 'create' or 'delete' a post?");

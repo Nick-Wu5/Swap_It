@@ -125,9 +125,21 @@ public class UserProfile implements User {
      */
     public String toFileFormat() {
 
+        String friendsList;
+        String blockedList;
+
         // Convert friends and blockedFriends to strings
-        String friendsList = String.join(";", this.friends);
-        String blockedList = String.join(";", this.blockedFriends);
+        if (friends.isEmpty()) {
+            friendsList = "EmptyFriendsList";
+        } else {
+            friendsList = String.join(";", this.friends);
+        }
+
+        if (blockedFriends.isEmpty()) {
+            blockedList = "EmptyBlockedList";
+        } else {
+            blockedList = String.join(";", this.blockedFriends);
+        }
 
         // Return the formatted string with commas separating the main fields
         return this.username + "," + this.email + "," + this.password + "," + friendsList + "," + blockedList;

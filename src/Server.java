@@ -110,9 +110,14 @@ public class Server extends PasswordProtectedLogin {
                         System.out.println("searching for user: " + prompt);
 
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
-                        objectWrite.writeObject(searchedUser);
+
+                        if (searchedUser == null) {
+                            objectWrite.writeObject("User not found");
+                        } else {
+                            objectWrite.writeObject(searchedUser);
+                        }
+
                         objectWrite.flush();
-                        // deal with the null on the client side & resend menu
                     }
                     case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();

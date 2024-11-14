@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream
 nick,nickwu2005@outlook.com,penny123,,
 quinn,quinnwu2007@icloud.com,avian14165,,
 chris,chris_b@gmail.com,password123,,
 ramya,ramya.prasanna@gmail.com,purdue1234
 divya,divya.vemireddy@gmail.com,divya1234
+=======
+nick,nickwu2005@outlook.com,penny123,EmptyFriendsList,EmptyBlockedList
+quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
+>>>>>>> Stashed changes
