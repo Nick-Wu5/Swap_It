@@ -105,7 +105,10 @@ public class Server extends PasswordProtectedLogin {
                     //switch case for comment stuff
                     //IMPORTANT: make delete comment & post methods (after this is done we can just call this method)
                     case "1" -> { // search for a user
+
                         prompt = read.readLine();
+                        System.out.println("searching for user: " + prompt);
+
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
                         objectWrite.writeObject(searchedUser);
                         objectWrite.flush();
