@@ -79,12 +79,20 @@ public class Client {
                 writer.println(menuAction);
 
                 switch (menuAction.toLowerCase()) {
-                    case "search":
+                    case "1":
+
                         System.out.println("Enter username to search:");
                         String searchUsername = scan.nextLine();
                         writer.println(searchUsername);
 
                         Object userProfile = objectReader.readObject();
+                        System.out.println("received user profile: " + userProfile);
+                        
+                        if (userProfile instanceof User) {
+                            User user = (User) userProfile;
+                            System.out.println("Found " + user.getUsername());
+                        }
+
                         if (userProfile == null) {
                             System.out.println("User not found.");
                         } else {
@@ -92,7 +100,7 @@ public class Client {
                         }
                         break;
 
-                    case "post":
+                    case "2":
                         System.out.println("Do you want to 'create' or 'delete' a post?");
                         String postAction = scan.nextLine();
                         writer.println(postAction);
@@ -116,7 +124,7 @@ public class Client {
                         }
                         break;
 
-                    case "friend":
+                    case "3":
                         System.out.println("Do you want to 'add', 'block', or 'remove' a friend?");
                         String friendAction = scan.nextLine();
                         writer.println(friendAction);
@@ -128,7 +136,7 @@ public class Client {
                         System.out.println("Friend action performed.");
                         break;
 
-                    case "view":
+                    case "4":
                         System.out.println("Do you want to view 'post' or 'info'?");
                         String viewAction = scan.nextLine();
                         writer.println(viewAction);
@@ -163,7 +171,7 @@ public class Client {
                         }
                         break;
 
-                    case "exit":
+                    case "5":
                         System.out.println("Goodbye!");
                         return;
 

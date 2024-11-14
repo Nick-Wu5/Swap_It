@@ -24,20 +24,18 @@ public class UserSearch implements Search {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] userDetails = line.split(",");
+                String parsedUsername = userDetails[0];
 
-                //Making sure every line is correctly formatted
-                if (userDetails.length >= 5) {
-                    String parsedUsername = userDetails[0];
-
-                    // Check if the parsed username matches the search criteria
-                    if (parsedUsername.equals(username)) {
-                        return getSearchedUser(userDetails, parsedUsername);
-                    }
+                // Check if the parsed username matches the search criteria
+                if (parsedUsername.equals(username)) {
+                    System.out.println("Found user: " + username);
+                    return getSearchedUser(userDetails, parsedUsername);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("couldn't find user: " + username);
         return null;  //return null if no user is found
     }
 
@@ -48,11 +46,11 @@ public class UserSearch implements Search {
      */
     public static UserProfile getSearchedUser(String[] userDetails, String parsedUsername) {
 
-        //Get email, password, and dateJoined from data
-        ArrayList<String> friends = new ArrayList<>(Arrays.asList(userDetails[1].split(";")));
-        ArrayList<String> blockedFriends = new ArrayList<>(Arrays.asList(userDetails[2].split(";")));
-        String email = userDetails[3];
-        String password = userDetails[4];
+        //Get email, password, and friends from data
+        String email = userDetails[1];
+        String password = userDetails[2];
+        ArrayList<String> friends = new ArrayList<>(Arrays.asList(userDetails[3].split(";")));
+        ArrayList<String> blockedFriends = new ArrayList<>(Arrays.asList(userDetails[4].split(";")));
 
         // Avoid using the constructor that saves to a file by using a different approach
         UserProfile searchedUser = new UserProfile();  // Use a no-arg constructor
