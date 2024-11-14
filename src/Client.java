@@ -15,7 +15,7 @@ public class Client {
              Socket socket = new Socket("localhost", 1234);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-             ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());) {
+             ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream())) {
 
             do {
                 // authentication method choice
@@ -78,28 +78,25 @@ public class Client {
                 String menuAction = scan.nextLine();
                 writer.println(menuAction);
 
-                switch (menuAction.toLowerCase()) {
-                    case "search": // handles user search
-                        System.out.println("Enter username to search:");
+                switch (menuAction) {
+                    case "1": // handles user search
+                        System.out.println("\nEnter a username to search:");
                         String searchUsername = scan.nextLine();
                         writer.println(searchUsername);
 
                         Object userProfile = objectReader.readObject();
-<<<<<<< Updated upstream
-                        if (userProfile == null) {
-                            System.out.println("User not found.");
-=======
+
                         if (userProfile instanceof String) {
                             System.out.println(userProfile); // "User not found" message
                         } else if (userProfile instanceof User) {
                             User user = (User) userProfile;
                             System.out.println("Found user: " + user.getUsername());
->>>>>>> Stashed changes
+
                         } else {
                             System.out.println("Received an unexpected response: " + userProfile);
                         }
 
-                    case "post": //handles post creation/deletion
+                    case "2": //handles post creation/deletion
                         System.out.println("Do you want to 'create' or 'delete' a post?");
                         String postAction = scan.nextLine();
                         writer.println(postAction);
@@ -123,7 +120,7 @@ public class Client {
                         }
                         break;
 
-                    case "friend": //handles friend actions
+                    case "3": //handles friend actions
                         System.out.println("Do you want to 'add', 'block', or 'remove' a friend?");
                         String friendAction = scan.nextLine();
                         writer.println(friendAction);
@@ -135,7 +132,7 @@ public class Client {
                         System.out.println("Friend action performed.");
                         break;
 
-                    case "view": //handles viewing posts and account info
+                    case "4": //handles viewing posts and account info
                         System.out.println("Do you want to view 'post' or 'info'?");
                         String viewAction = scan.nextLine();
                         writer.println(viewAction);
@@ -170,7 +167,7 @@ public class Client {
                         }
                         break;
 
-                    case "exit":
+                    case "5":
                         System.out.println("Goodbye!");
                         return;
 

@@ -94,10 +94,11 @@ public class Server extends PasswordProtectedLogin {
                 } while (!registrationComplete);
             }
 
+            currentUser = UserSearch.findUserByUsername(username);
+
             //handles actions while logged in
             while (loginComplete) {
 
-                currentUser = UserSearch.findUserByUsername(username);
                 String menu = read.readLine();
                 String prompt = "";
 

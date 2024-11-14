@@ -2,6 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.io.Serializable;
 
 /**
  * Team Project - Social Media App
@@ -13,7 +14,7 @@ import java.util.*;
  * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
-public class UserProfile implements User {
+public class UserProfile implements User, Serializable {
 
     private String username;  //unique name associated with user
     private ArrayList<String> friends;  //list of friends of user
