@@ -158,4 +158,11 @@ public class UserProfile implements User, Serializable {
             e.printStackTrace();
         }
     }
+
+    public String printUserInfo() {
+
+        StringBuilder userInfo = new StringBuilder();
+
+        userInfo.append("Username: " + username + "\n");
+    }
 }

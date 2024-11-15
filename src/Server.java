@@ -119,6 +119,7 @@ public class Server extends PasswordProtectedLogin {
                         }
 
                         objectWrite.flush();
+                        break;
                     }
                     case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();
