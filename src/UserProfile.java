@@ -160,9 +160,9 @@ public class UserProfile implements User, Serializable {
     }
 
     public String printUserInfo() {
-
         StringBuilder userInfo = new StringBuilder();
 
-        userInfo.append("Username: " + username + "\n");
+        userInfo.append("Username: " + username + "\n" + "Friends: " + friends.size() + "\n");
+        return userInfo.toString();
     }
 }
