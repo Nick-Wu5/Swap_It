@@ -148,9 +148,4 @@ public class NewsPost implements NewsFeed {
     public void setComments(ArrayList<NewsComment> comments) {
         this.comments = comments;
     }
-
-    public static void main(String[] args) {
-
-        NewsPost newPost1 = new NewsPost("divya", "new views", "this is an image path", "11/10/2024");
-    }
 }
