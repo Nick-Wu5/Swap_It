@@ -184,6 +184,7 @@ public class NewsPost implements NewsFeed, Serializable {
 
         StringBuilder postInfo = new StringBuilder();
 
+        postInfo.append("---------------\n"); // Separator
         postInfo.append("author: " + author + "\n");
         postInfo.append("caption: " + caption + "\n");
         postInfo.append("imagePath: " + imagePath + "\n");
@@ -191,11 +192,11 @@ public class NewsPost implements NewsFeed, Serializable {
         postInfo.append("upvotes: " + upvotes + "\n");
         postInfo.append("downvotes: " + downvotes + "\n");
 
-        postInfo.append("comments: ");
+        postInfo.append("comments: \n ");
         for (NewsComment comment : comments) {
             postInfo.append(comment.toString() + "\n");
         }
-
+        postInfo.append("---------------\n");
         return postInfo.toString();
     }
 }
