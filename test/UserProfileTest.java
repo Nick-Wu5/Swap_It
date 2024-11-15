@@ -76,5 +76,24 @@ public class UserProfileTest {
         // Test the toFileFormat method for user3
         String expected3 = "travisscott21,,,travis.scott@gmail.com,123456789,03/30/2017";
         assertEquals(expected3, user3.toFileFormat());
+
+
     }
+
+    @Test
+    public void testPrintUserInfo() {
+        // when user initially has 0 friends
+    String expectedInfo = "Username: taylorswift246\nFriends: 0\n";
+    assertEquals(expectedInfo, user1.printUserInfo());
+
+    // add a friend and check again
+    user1.addFriend("ryangosling");
+    expectedInfo ="Username: taylorswift246\nFriends: 1\n";
+    assertEquals(expectedInfo, user1.printUserInfo());
+
+    // add another friend to user1 and check the output
+    user1.addFriend("travisscott21");
+    expectedInfo ="Username: taylorswift246\nFriends: 2\n";
+    assertEquals(expectedInfo, user1.printUserInfo());
+}
 }

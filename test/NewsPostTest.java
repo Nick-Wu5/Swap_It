@@ -1,3 +1,6 @@
+import org.junit.Test;
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -34,5 +37,56 @@ public class NewsPostTest {
 
         post.incrementDownvotes();
         assertEquals("The upvotes should equal 1 after being decremented" + post.getUpvotes(), "1");
+    }
+
+    @Test
+    public void testToString() {
+        NewsPost post = new NewsPost("author", "Test Title", "/path/to/image.jpg", "2024-11-03");
+        String expected = "author: author\n" +
+                "caption: Test Title\n" +
+                "imagePath: /path/to/image.jpg\n" +
+                "date: 2024-11-03\n" +
+                "upvotes: 0\n" +
+                "downvotes: 0\n" +
+                "comments: \n";
+        assertEquals("The toString method should return the correct string", expected, post.toString());
+    }
+
+    @Test
+    public void testFindComments() {
+        NewsPost post = new NewsPost("author", "Test Title", "/path/to/image.jpg", "2024-11-03");
+        NewsComment comment1 = new NewsComment("user1", "Great post!", "2024-11-03", 0, 0);
+        post.addComment(comment1);
+
+        ArrayList<NewsComment> comments = NewsPost.findComments("Test Title");
+        assertTrue("The comments list should contain the added comment", comments.contains(comment1));
+    }
+
+    @Test
+    public void testFindCommentsForUser() {
+        NewsPost post = new NewsPost("author", "Test Title", "/path/to/image.jpg", "2024-11-03");
+        NewsComment comment1 = new NewsComment("user1", "Great post!", "2024-11-03", 0, 0);
+        post.addComment(comment1);
+
+        ArrayList<NewsComment> userComments = NewsPost.findCommentsForUser("user1");
+        assertTrue("The user comments list should contain the comment by user1", userComments.contains(comment1));
+    }
+    @Test
+    public void testDeleteComment() {
+        // Create a NewsPost object
+        NewsPost post = new NewsPost("author", "Test Title", "/path/to/image.jpg", "2024-11-03");
+
+        // Add a comment to the post
+        NewsComment comment = new NewsComment("user1", "Great post!", "2024-11-03", 0, 0);
+        post.addComment(comment);
+
+        // Verify that the comment has been added
+        assertTrue("The post should contain the added comment", post.getComments().contains(comment));
+
+        // Assuming you have implemented the deleteComment method correctly, delete the comment
+        post.deleteComment("Great post!");
+
+        // Verify that the comment is removed
+        assertFalse("The post should no longer contain the deleted comment", post.getComments().contains(comment));
     }
 }
