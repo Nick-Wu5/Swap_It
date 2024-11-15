@@ -3,26 +3,34 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Server extends PasswordProtectedLogin {
+public class Server extends PasswordProtectedLogin implements Runnable {
 
     //initializes the server socket at port 1234
-    ServerSocket serverSocket = new ServerSocket(1234);
+    private Socket clientSocket;
 
     //handles IOException during server initialization
-    public Server() throws IOException {
+    public Server(Socket socket) {
+        this.clientSocket = socket;
     }
 
     public static void main(String[] args) {
-        try {
-            Server server = new Server();
-            server.start();
+        try (ServerSocket serverSocket = new ServerSocket(1234)) {
+            System.out.println("Server is listening to port 1234...");
+
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("Server: Client connected");
+
+                Thread clientThread = new Thread(new Server(socket));
+                clientThread.start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //handles client connections and actions
-    public void start() {
+    public void run() {
 
         System.out.println(new File("users.txt").getAbsolutePath());
 
@@ -33,10 +41,9 @@ public class Server extends PasswordProtectedLogin {
         boolean registrationComplete = false;
 
         //try with resources for socket communication
-        try (Socket socket = serverSocket.accept();
-             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
-             ObjectOutputStream objectWrite = new ObjectOutputStream(socket.getOutputStream());
+        try (BufferedReader read = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             PrintWriter write = new PrintWriter(clientSocket.getOutputStream(), true);
+             ObjectOutputStream objectWrite = new ObjectOutputStream(clientSocket.getOutputStream());
              BufferedReader readPost = new BufferedReader(new FileReader("newsPosts.txt"))) {
 
             System.out.println("Server: Client connected");
@@ -218,9 +225,16 @@ public class Server extends PasswordProtectedLogin {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error handling client: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();;
+                System.out.println("Client disconnected");
+            } catch (IOException e) {
+                System.out.println("Error closing socket: " + e.getMessage());
+            }
         }
     }
 }

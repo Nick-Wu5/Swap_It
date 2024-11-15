@@ -1,1 +1,5 @@
 divya,new views,this is an image path,11/10/2024,0,0,0
+ramya,i love cs 180,this is an image path,2024-11-15,0,0,0
+ramya,jedi council room is a vibe!,this is an image path,2024-11-15,0,0,0
+nick,fuck cs 180!,images/imagePath,2024-11-15,0,0,0
+nick,sonny angel dolls!,imagePath,2024-11-15,0,0,0

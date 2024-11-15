@@ -11,8 +11,8 @@ public class Client {
         boolean registrationComplete = false;
         boolean loginComplete = false;
 
-        try (Scanner scan = new Scanner(System.in);
-             Socket socket = new Socket("localhost", 1234);
+        try (Socket socket = new Socket("localhost", 1234);
+             Scanner scan = new Scanner(System.in);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
              ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream())) {
