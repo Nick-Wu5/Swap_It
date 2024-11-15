@@ -131,17 +131,21 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();
                         if (prompt.equals("create")) {
-                            String title = read.readLine();
-                            String imagePath = read.readLine();
-                            String date = String.valueOf(LocalDate.now());
-                            new NewsPost(username, title, imagePath, date);
+                            synchronized (this) {
+                                String title = read.readLine();
+                                String imagePath = read.readLine();
+                                String date = String.valueOf(LocalDate.now());
+                                new NewsPost(username, title, imagePath, date);
+                            }
                             //make sure this saves to a file somehow
                         } else if (prompt.equals("delete")) {
                             //IMPORTANT: need to delete comments associated with post as well
                             //make an arraylist of all posts made by the user and dropdown of title
-                            String title = read.readLine();
-                            //needs to search through a file for a title and then delete the info of that post
-                            NewsPost.deletePost(title);
+                            synchronized (this) {
+                                String title = read.readLine();
+                                //needs to search through a file for a title and then delete the info of that post
+                                NewsPost.deletePost(title);
+                            }
                             //make sure each post's info is on one line
                         } else if (prompt.equals("delete comment")) {
 
@@ -177,27 +181,29 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             case "post" -> {
                                 //load posts for this specfic user
                                 //IMPORTANT: change file & newsPost to put all post info on one line
-                                String line;
-                                ArrayList<NewsPost> userPosts = new ArrayList<>();
+                                synchronized (this) {
+                                    String line;
+                                    ArrayList<NewsPost> userPosts = new ArrayList<>();
 
-                                while ((line = readPost.readLine()) != null) {
-                                    if(line.contains(currentUser.getUsername())) {
+                                    while ((line = readPost.readLine()) != null) {
+                                        if (line.contains(currentUser.getUsername())) {
 
-                                        String[] postInfo = line.split(",");
+                                            String[] postInfo = line.split(",");
 
-                                        NewsPost tempPost = new NewsPost();
-                                        tempPost.setAuthor(postInfo[0]);
-                                        tempPost.setCaption(postInfo[1]);
-                                        tempPost.setImagePath(postInfo[2]);
-                                        tempPost.setDate(postInfo[3]);
-                                        tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
-                                        tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
-                                        tempPost.setComments(NewsPost.findComments(postInfo[1]));
+                                            NewsPost tempPost = new NewsPost();
+                                            tempPost.setAuthor(postInfo[0]);
+                                            tempPost.setCaption(postInfo[1]);
+                                            tempPost.setImagePath(postInfo[2]);
+                                            tempPost.setDate(postInfo[3]);
+                                            tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
+                                            tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
+                                            tempPost.setComments(NewsPost.findComments(postInfo[1]));
 
-                                        userPosts.add(tempPost);
+                                            userPosts.add(tempPost);
+                                        }
                                     }
+                                    objectWrite.writeObject(userPosts);
                                 }
-                                objectWrite.writeObject(userPosts);
                                 //need to parse through arraylist & make array splitting semicolons and make pretty
                             }
                             case "info" -> {
