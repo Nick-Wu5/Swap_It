@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
-public class NewsPost implements NewsFeed {
+public class NewsPost implements NewsFeed, Serializable {
     private String author;  //author profile of post
     private String caption;  //caption of post
     private String imagePath;  //path to image of post
@@ -37,6 +37,8 @@ public class NewsPost implements NewsFeed {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
     }
+
+    public NewsPost() {}
 
     public static void deletePost(String caption) {
         try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempFile.txt"));
@@ -121,20 +123,48 @@ public class NewsPost implements NewsFeed {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getCaption() {
         return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     public String getImagePath() {
         return imagePath;
     }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getDate() {
         return date;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public int getUpvotes() {
         return upvotes - downvotes;
+    }
+
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public int getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
     }
 
     public ArrayList<NewsComment> getComments() {
@@ -147,5 +177,25 @@ public class NewsPost implements NewsFeed {
 
     public void setComments(ArrayList<NewsComment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder postInfo = new StringBuilder();
+
+        postInfo.append("author: " + author + "\n");
+        postInfo.append("caption: " + caption + "\n");
+        postInfo.append("imagePath: " + imagePath + "\n");
+        postInfo.append("date: " + date + "\n");
+        postInfo.append("upvotes: " + upvotes + "\n");
+        postInfo.append("downvotes: " + downvotes + "\n");
+
+        postInfo.append("comments: ");
+        for (NewsComment comment : comments) {
+            postInfo.append(comment.toString() + "\n");
+        }
+
+        return postInfo.toString();
     }
 }

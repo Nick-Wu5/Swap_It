@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Team Project - Social Media App
  * <p>

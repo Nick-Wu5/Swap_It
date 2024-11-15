@@ -62,7 +62,7 @@ public class Server extends PasswordProtectedLogin {
 
                 } while (!loginComplete);
 
-            } else if (loginOrRegister.equals("register")) {
+            } else if (loginOrRegister.equalsIgnoreCase("register")) {
 
                 System.out.println("User selected register");
 
@@ -178,9 +178,15 @@ public class Server extends PasswordProtectedLogin {
 
                                         String[] postInfo = line.split(",");
 
-                                        NewsPost tempPost = new NewsPost(postInfo[0], postInfo[1], postInfo[2], postInfo[3]);
-
+                                        NewsPost tempPost = new NewsPost();
+                                        tempPost.setAuthor(postInfo[0]);
+                                        tempPost.setCaption(postInfo[1]);
+                                        tempPost.setImagePath(postInfo[2]);
+                                        tempPost.setDate(postInfo[3]);
+                                        tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
+                                        tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
                                         tempPost.setComments(NewsPost.findComments(postInfo[1]));
+
                                         userPosts.add(tempPost);
                                     }
                                 }

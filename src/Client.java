@@ -156,7 +156,7 @@ public class Client {
                                 }
 
                                 for (NewsPost post : userPosts) {
-                                    System.out.println(post);
+                                    System.out.println(post.toString());
                                 }
 
                             } else {

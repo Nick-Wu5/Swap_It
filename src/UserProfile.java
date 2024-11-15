@@ -164,5 +164,7 @@ public class UserProfile implements User, Serializable {
         StringBuilder userInfo = new StringBuilder();
 
         userInfo.append("Username: " + username + "\n");
+
+        return userInfo.toString();
     }
 }
