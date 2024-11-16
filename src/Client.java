@@ -20,11 +20,11 @@ public class Client {
             do {
                 // authentication method choice
                 System.out.println("\nPlease Specify An Authentication Method");
-                System.out.println("\n--> 'Login' or 'Register' <--\n");
+                System.out.println("1 : Login\n2 : Register");
                 String choice = scan.nextLine().trim();
                 writer.println(choice); // sends choice to server
 
-                if (choice.equalsIgnoreCase("login")) { // handles login process
+                if (choice.equalsIgnoreCase("1")) { // handles login process
 
                     System.out.println("Enter your username:");
                     String username = scan.nextLine();
@@ -42,7 +42,7 @@ public class Client {
                         System.out.println("Login Failed. Please try again");
                     }
 
-                } else if (choice.equalsIgnoreCase("register")) { // handle registration process
+                } else if (choice.equalsIgnoreCase("2")) { // handle registration process
 
                     System.out.println("Enter a username:");
                     String username = scan.nextLine();
@@ -73,7 +73,7 @@ public class Client {
             // Main menu
             while (true) {
                 System.out.println("\n>>> Main Menu : Please Enter A Number <<<");
-                System.out.println("\n1 : Search" + "\n2 : Post" + "\n3 : Friends" + "\n4 : View" + "\n5 : Exit\n");
+                System.out.println("\n1 : Search" + "\n2 : Post" + "\n3 : Friends" + "\n4 : Account" + "\n5 : Exit\n");
 
                 String menuAction = scan.nextLine();
                 writer.println(menuAction);
@@ -98,11 +98,11 @@ public class Client {
                         break;
 
                     case "2": //handles post creation/deletion
-                        System.out.println("Do you want to 'create' or 'delete' a post?");
+                        System.out.println("Post Menu\n1 : Create\n2 : Delete");
                         String postAction = scan.nextLine();
                         writer.println(postAction);
 
-                        if (postAction.equalsIgnoreCase("create")) {
+                        if (postAction.equalsIgnoreCase("1")) {
                             System.out.println("Add a caption:");
                             String title = scan.nextLine();
                             writer.println(title);
@@ -112,7 +112,7 @@ public class Client {
                             writer.println(imagePath);
 
                             System.out.println("Post created!");
-                        } else if (postAction.equalsIgnoreCase("delete")) {
+                        } else if (postAction.equalsIgnoreCase("2")) {
                             System.out.println("Enter caption of the post to delete:");
                             String titleToDelete = scan.nextLine();
                             writer.println(titleToDelete);
@@ -122,7 +122,7 @@ public class Client {
                         break;
 
                     case "3": //handles friend actions
-                        System.out.println("Do you want to 'add', 'block', or 'remove' a friend?");
+                        System.out.println("\nFriend Menu\n1 : Add\n2 : Block\n3 : Remove");
                         String friendAction = scan.nextLine();
                         writer.println(friendAction);
 
@@ -134,11 +134,11 @@ public class Client {
                         break;
 
                     case "4": //handles viewing posts and account info
-                        System.out.println("Do you want to view 'post' or 'info'?");
+                        System.out.println("\nAccount Menu\n1 : View Your Posts\n2 : View Your Personal Info");
                         String viewAction = scan.nextLine();
                         writer.println(viewAction);
 
-                        if (viewAction.equalsIgnoreCase("post")) {
+                        if (viewAction.equalsIgnoreCase("1")) {
                             Object posts = objectReader.readObject();
 
                             if (posts instanceof ArrayList<?>) {
@@ -162,9 +162,13 @@ public class Client {
                             } else {
                                 System.out.println("No posts available.");
                             }
-                        } else if (viewAction.equals("info")) {
-                            String info = reader.readLine();
-                            System.out.println("Account Info: " + info);
+                        } else if (viewAction.equals("2")) {
+                            String[] info = reader.readLine().split(";");
+                            System.out.println("\nUsername: " + info[0] + "\n"
+                                    + "Email: " + info[1] + "\n"
+                                    + "Password: " + info[2] + "\n"
+                                    + "Friends: "+ info[3] + "\n"
+                                    + "Blocked:  " + info[4]);
                         }
                         break;
 

@@ -50,7 +50,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
             UserProfile currentUser = null;
             String loginOrRegister = read.readLine(); //login or registration choice
 
-            if (loginOrRegister.equals("login")) {
+            if (loginOrRegister.equals("1")) {
 
                 System.out.println("User selected login");
 
@@ -69,7 +69,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
                 } while (!loginComplete);
 
-            } else if (loginOrRegister.equalsIgnoreCase("register")) {
+            } else if (loginOrRegister.equalsIgnoreCase("2")) {
 
                 System.out.println("User selected register");
 
@@ -131,21 +131,17 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();
                         if (prompt.equals("create")) {
-                            synchronized (this) {
-                                String title = read.readLine();
-                                String imagePath = read.readLine();
-                                String date = String.valueOf(LocalDate.now());
-                                new NewsPost(username, title, imagePath, date);
-                            }
+                            String title = read.readLine();
+                            String imagePath = read.readLine();
+                            String date = String.valueOf(LocalDate.now());
+                            new NewsPost(username, title, imagePath, date);
                             //make sure this saves to a file somehow
                         } else if (prompt.equals("delete")) {
                             //IMPORTANT: need to delete comments associated with post as well
                             //make an arraylist of all posts made by the user and dropdown of title
-                            synchronized (this) {
-                                String title = read.readLine();
-                                //needs to search through a file for a title and then delete the info of that post
-                                NewsPost.deletePost(title);
-                            }
+                            String title = read.readLine();
+                            //needs to search through a file for a title and then delete the info of that post
+                            NewsPost.deletePost(title);
                             //make sure each post's info is on one line
                         } else if (prompt.equals("delete comment")) {
 
@@ -157,15 +153,15 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     case "3" -> { // add/block/remove friends
                         prompt = read.readLine();
                         switch (prompt) {
-                            case "add" -> {
+                            case "1" -> {
                                 String friendToAdd = read.readLine();
                                 currentUser.addFriend(friendToAdd);
                             }
-                            case "block" -> {
+                            case "2" -> {
                                 String userToBlock = read.readLine();
                                 currentUser.blockUser(userToBlock);
                             }
-                            case "remove" -> {
+                            case "3" -> {
                                 String friendToRemove = read.readLine();
                                 currentUser.removeFriend(friendToRemove);
                             }
@@ -178,35 +174,32 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     case "4" -> {  // view posts and info
                         prompt = read.readLine();
                         switch(prompt) {
-                            case "post" -> {
-                                //load posts for this specfic user
-                                //IMPORTANT: change file & newsPost to put all post info on one line
-                                synchronized (this) {
-                                    String line;
-                                    ArrayList<NewsPost> userPosts = new ArrayList<>();
+                            case "1" -> {
+                                //load posts for this specific user
+                                String line;
+                                ArrayList<NewsPost> userPosts = new ArrayList<>();
 
-                                    while ((line = readPost.readLine()) != null) {
-                                        if (line.contains(currentUser.getUsername())) {
+                                while ((line = readPost.readLine()) != null) {
+                                    if(line.contains(currentUser.getUsername())) {
 
-                                            String[] postInfo = line.split(",");
+                                        String[] postInfo = line.split(",");
 
-                                            NewsPost tempPost = new NewsPost();
-                                            tempPost.setAuthor(postInfo[0]);
-                                            tempPost.setCaption(postInfo[1]);
-                                            tempPost.setImagePath(postInfo[2]);
-                                            tempPost.setDate(postInfo[3]);
-                                            tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
-                                            tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
-                                            tempPost.setComments(NewsPost.findComments(postInfo[1]));
+                                        NewsPost tempPost = new NewsPost();
+                                        tempPost.setAuthor(postInfo[0]);
+                                        tempPost.setCaption(postInfo[1]);
+                                        tempPost.setImagePath(postInfo[2]);
+                                        tempPost.setDate(postInfo[3]);
+                                        tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
+                                        tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
+                                        tempPost.setComments(NewsPost.findComments(postInfo[1]));
 
-                                            userPosts.add(tempPost);
-                                        }
+                                        userPosts.add(tempPost);
                                     }
-                                    objectWrite.writeObject(userPosts);
                                 }
+                                objectWrite.writeObject(userPosts);
                                 //need to parse through arraylist & make array splitting semicolons and make pretty
                             }
-                            case "info" -> {
+                            case "2" -> {
                                 //load info for this specfic user
                                 StringBuilder accountInfo = new StringBuilder();
                                 accountInfo.append(currentUser.getUsername() + ";");

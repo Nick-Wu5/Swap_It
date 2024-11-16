@@ -165,4 +165,15 @@ public class UserProfile implements User, Serializable {
         userInfo.append("Username: " + username + "\n" + "Friends: " + friends.size() + "\n");
         return userInfo.toString();
     }
+
+    public StringBuilder getAccountInfo() {
+
+        StringBuilder accountInfo = new StringBuilder();
+        accountInfo.append(this.getUsername()).append(";");
+        accountInfo.append(this.getEmail()).append(";");
+        accountInfo.append(this.getPassword()).append(";");
+        accountInfo.append(this.getFriends()).append(";");
+        accountInfo.append(this.getBlockedFriends()).append(";");
+        return accountInfo;
+    }
 }
