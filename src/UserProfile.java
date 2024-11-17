@@ -1,8 +1,6 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
-import java.io.Serializable;
 
 /**
  * Team Project - Social Media App
@@ -85,6 +83,9 @@ public class UserProfile implements User, Serializable {
     public boolean addFriend(String userToAdd) {
 
         for (String blockedFriend : this.blockedFriends) {
+
+            this.removeFriend("EmptyFriendsList");
+
             if (userToAdd.equals(blockedFriend)) {
                 return false;
             }
@@ -101,6 +102,10 @@ public class UserProfile implements User, Serializable {
      */
     public void removeFriend(String userToRemove) {
         this.friends.remove(userToRemove);
+
+        if (this.friends.size() == 0) {
+            this.addFriend("EmptyFriendsList");
+        }
     }
 
     /**
@@ -117,6 +122,16 @@ public class UserProfile implements User, Serializable {
             }
         }
         this.blockedFriends.add(userToBlock);
+        this.removeBlockedUser("EmptyBlockedList");
+
+    }
+
+    public void removeBlockedUser(String userToRemoveBlock) {
+        this.blockedFriends.remove(userToRemoveBlock);
+
+        if (this.friends.size() == 0) {
+            this.blockUser("EmptyBlockedList");
+        }
     }
 
     /**
@@ -159,13 +174,6 @@ public class UserProfile implements User, Serializable {
         }
     }
 
-    public String printUserInfo() {
-        StringBuilder userInfo = new StringBuilder();
-
-        userInfo.append("Username: " + username + "\n" + "Friends: " + friends.size() + "\n");
-        return userInfo.toString();
-    }
-
     public StringBuilder getAccountInfo() {
 
         StringBuilder accountInfo = new StringBuilder();
@@ -175,5 +183,127 @@ public class UserProfile implements User, Serializable {
         accountInfo.append(this.getFriends()).append(";");
         accountInfo.append(this.getBlockedFriends()).append(";");
         return accountInfo;
+    }
+
+    public ArrayList<NewsPost> getUserPosts() {
+
+        String line;
+        ArrayList<NewsPost> userPosts = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("newsPosts.txt"))) {
+            while ((line = br.readLine()) != null) {
+                if (line.contains(this.getUsername())) {
+
+                    String[] postInfo = line.split(",");
+
+                    NewsPost tempPost = new NewsPost();
+                    tempPost.setAuthor(postInfo[0]);
+                    tempPost.setCaption(postInfo[1]);
+                    tempPost.setImagePath(postInfo[2]);
+                    tempPost.setDate(postInfo[3]);
+                    tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
+                    tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
+                    tempPost.setComments(NewsPost.findComments(postInfo[1]));
+
+                    userPosts.add(tempPost);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userPosts;
+    }
+
+    public void updateFriendsList() {
+        try {
+            // Read the file into a list of strings
+            ArrayList<String> fileLines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    fileLines.add(line);
+                }
+            }
+
+            // Modify the relevant user's line
+            boolean userFound = false;
+            for (int i = 0; i < fileLines.size(); i++) {
+                String[] parts = fileLines.get(i).split(",");
+                if (parts[0].equals(username)) {
+
+                    parts[3] = String.join(";", this.getFriends()); // Replace with the new friends list
+
+                    fileLines.set(i, String.join(",", parts)); // Rebuild the line
+                    userFound = true;
+                    break;
+                }
+
+            }
+
+            if (!userFound) {
+                System.out.println("User not found: " + username);
+                return;
+            }
+
+            // Write back the updated lines to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))) {
+                for (String line : fileLines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+
+            System.out.println("Friends list updated successfully for user: " + this.getUsername());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBlockedList() {
+        try {
+            // Read the file into a list of strings
+            ArrayList<String> fileLines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    fileLines.add(line);
+                }
+            }
+
+            // Modify the relevant user's line
+            boolean userFound = false;
+            for (int i = 0; i < fileLines.size(); i++) {
+                String[] parts = fileLines.get(i).split(",");
+                if (parts[0].equals(username)) {
+
+                    parts[4] = String.join(";", this.getBlockedFriends()); // Replace with the new friends list
+
+                    fileLines.set(i, String.join(",", parts)); // Rebuild the line
+                    userFound = true;
+                    break;
+                }
+
+            }
+
+            if (!userFound) {
+                System.out.println("User not found: " + username);
+                return;
+            }
+
+            // Write back the updated lines to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))) {
+                for (String line : fileLines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+
+            System.out.println("Blocked list updated successfully for user: " + this.getUsername());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

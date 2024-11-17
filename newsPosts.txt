@@ -3,3 +3,4 @@ ramya,i love cs 180,this is an image path,2024-11-15,0,0,0
 ramya,jedi council room is a vibe!,this is an image path,2024-11-15,0,0,0
 nick,fuck cs 180!,images/imagePath,2024-11-15,0,0,0
 nick,sonny angel dolls!,imagePath,2024-11-15,0,0,0
+nick,Hi I love dogs,image of penny here,2024-11-17,0,0,0

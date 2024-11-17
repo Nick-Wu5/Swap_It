@@ -16,16 +16,17 @@ import static org.junit.Assert.*;
 
 public class NewsPostTest {
 
+    @Test
     public void testPost() {
         // Assuming UserProfile and NewsComment classes are already defined
         UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
 
         // Create a NewsPost instance
-        NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
+        NewsPost post = new NewsPost("taylorswift246", "Test Post Caption", "/path/to/image.jpg", "2024-11-03");
 
         // Test post details
-        assertEquals("The usernames should match the user object", post.getAuthor().getUsername(), "taylorswift246");
-        assertEquals("The title should match the post object", post.getCaption(), "Test Post Title");
+        assertEquals("The usernames should match the user object", post.getAuthor(), "taylorswift246");
+        assertEquals("The title should match the post object", post.getCaption(), "Test Post Caption");
         assertEquals("The image path should match the post object", post.getImagePath(), "/path/to/image.jpg");
         assertEquals("The date should match the post object" + post.getDate(), "2024-11-03");
         assertEquals("The upvotes should equal 0" + post.getUpvotes(), "0");

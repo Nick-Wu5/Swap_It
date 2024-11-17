@@ -28,7 +28,6 @@ public interface User {
 
     void setPassword(String newPassword);
 
-
     boolean addFriend(String userToAdd);
 
     void removeFriend(String userToRemove);
@@ -38,4 +37,7 @@ public interface User {
     String toFileFormat();
 
     void saveToFile();
+
+    ArrayList<NewsPost> getUserPosts();
+
 }

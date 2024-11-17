@@ -49,8 +49,21 @@ public class UserSearch implements Search {
         //Get email, password, and friends from data
         String email = userDetails[1];
         String password = userDetails[2];
-        ArrayList<String> friends = new ArrayList<>(Arrays.asList(userDetails[3].split(";")));
-        ArrayList<String> blockedFriends = new ArrayList<>(Arrays.asList(userDetails[4].split(";")));
+        ArrayList<String> friends;
+        ArrayList<String> blockedFriends;
+
+        if (!userDetails[3].isEmpty()) {
+            friends = new ArrayList<>(Arrays.asList(userDetails[3].split(";")));
+        } else {
+            friends = new ArrayList<>();
+        }
+
+        if (!userDetails[4].isEmpty()) {
+            blockedFriends = new ArrayList<>(Arrays.asList(userDetails[4].split(";")));
+        } else {
+            blockedFriends = new ArrayList<>();
+        }
+
 
         // Avoid using the constructor that saves to a file by using a different approach
         UserProfile searchedUser = new UserProfile();  // Use a no-arg constructor

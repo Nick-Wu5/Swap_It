@@ -130,18 +130,21 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     }
                     case "2" -> { // create/delete post and delete post
                         prompt = read.readLine();
-                        if (prompt.equals("create")) {
-                            String title = read.readLine();
-                            String imagePath = read.readLine();
-                            String date = String.valueOf(LocalDate.now());
-                            new NewsPost(username, title, imagePath, date);
-                            //make sure this saves to a file somehow
-                        } else if (prompt.equals("delete")) {
+                        if (prompt.equals("1")) {
+                            synchronized (this) {
+                                String title = read.readLine();
+                                String imagePath = read.readLine();
+                                String date = String.valueOf(LocalDate.now());
+                                new NewsPost(username, title, imagePath, date);
+                            }
+                        } else if (prompt.equals("2")) {
                             //IMPORTANT: need to delete comments associated with post as well
                             //make an arraylist of all posts made by the user and dropdown of title
-                            String title = read.readLine();
-                            //needs to search through a file for a title and then delete the info of that post
-                            NewsPost.deletePost(title);
+                            synchronized (this) {
+                                String title = read.readLine();
+                                //needs to search through a file for a title and then delete the info of that post
+                                NewsPost.deletePost(title);
+                            }
                             //make sure each post's info is on one line
                         } else if (prompt.equals("delete comment")) {
 
@@ -156,17 +159,29 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             case "1" -> {
                                 String friendToAdd = read.readLine();
                                 currentUser.addFriend(friendToAdd);
+                                currentUser.updateFriendsList();
+                                write.println("Added friend: " + friendToAdd);
                             }
                             case "2" -> {
                                 String userToBlock = read.readLine();
                                 currentUser.blockUser(userToBlock);
+                                currentUser.updateBlockedList();
+                                write.println("Blocked: " + userToBlock);
                             }
                             case "3" -> {
                                 String friendToRemove = read.readLine();
                                 currentUser.removeFriend(friendToRemove);
+                                currentUser.updateFriendsList();
+                                write.println("Removed friend: " + friendToRemove);
+                            }
+                            case "4" -> {
+                                String userToUnblock = read.readLine();
+                                currentUser.removeBlockedUser(userToUnblock);
+                                currentUser.updateBlockedList();
+                                write.println("Unblocked: " + userToUnblock);
                             }
                             default -> {
-                                System.out.println("A valid input was not selected!");
+                                write.println("A valid input was not selected!");
                                 throw new Exception();
                             }
                         }
@@ -175,40 +190,13 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         prompt = read.readLine();
                         switch(prompt) {
                             case "1" -> {
-                                //load posts for this specific user
-                                String line;
-                                ArrayList<NewsPost> userPosts = new ArrayList<>();
-
-                                while ((line = readPost.readLine()) != null) {
-                                    if(line.contains(currentUser.getUsername())) {
-
-                                        String[] postInfo = line.split(",");
-
-                                        NewsPost tempPost = new NewsPost();
-                                        tempPost.setAuthor(postInfo[0]);
-                                        tempPost.setCaption(postInfo[1]);
-                                        tempPost.setImagePath(postInfo[2]);
-                                        tempPost.setDate(postInfo[3]);
-                                        tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
-                                        tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
-                                        tempPost.setComments(NewsPost.findComments(postInfo[1]));
-
-                                        userPosts.add(tempPost);
-                                    }
+                                synchronized (this) {
+                                    objectWrite.writeObject(currentUser.getUserPosts());
                                 }
-                                objectWrite.writeObject(userPosts);
                                 //need to parse through arraylist & make array splitting semicolons and make pretty
                             }
                             case "2" -> {
-                                //load info for this specfic user
-                                StringBuilder accountInfo = new StringBuilder();
-                                accountInfo.append(currentUser.getUsername() + ";");
-                                accountInfo.append(currentUser.getEmail() + ";");
-                                accountInfo.append(currentUser.getPassword() + ";");
-                                accountInfo.append(currentUser.getFriends() + ";");
-                                accountInfo.append(currentUser.getBlockedFriends() + ";");
-                                //could possibly return string value of number of posts
-                                write.println(accountInfo);
+                                write.println(currentUser.getAccountInfo());
                             }
                             default -> {
                                 System.out.println("A valid input was not selected!");

@@ -192,11 +192,14 @@ public class NewsPost implements NewsFeed, Serializable {
         postInfo.append("upvotes: " + upvotes + "\n");
         postInfo.append("downvotes: " + downvotes + "\n");
 
-        postInfo.append("comments: \n ");
-        for (NewsComment comment : comments) {
-            postInfo.append(comment.toString() + "\n");
+        if (comments.size() == 0) {
+            postInfo.append("Comments: 0");
+        } else {
+            postInfo.append("comments: \n ");
+            for (NewsComment comment : comments) {
+                postInfo.append(comment.toString() + "\n");
+            }
         }
-        postInfo.append("---------------\n");
         return postInfo.toString();
     }
 }

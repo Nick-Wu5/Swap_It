@@ -90,10 +90,12 @@ public class Client {
                             System.out.println(userProfile); // "User not found" message
                         } else if (userProfile instanceof User) {
                             User user = (User) userProfile;
-                            System.out.println("Found user: " + user.getUsername());
-
+                            System.out.println("\nUser Exists!");
+                            System.out.println("Username: " + user.getUsername());
+                            System.out.println("Friends: " + user.getFriends().size());
+                            System.out.println("Posts: " + user.getUserPosts().size());
                         } else {
-                            System.out.println("Received an unexpected response: " + userProfile);
+                            System.out.println("User not found: " + userProfile);
                         }
                         break;
 
@@ -122,7 +124,7 @@ public class Client {
                         break;
 
                     case "3": //handles friend actions
-                        System.out.println("\nFriend Menu\n1 : Add\n2 : Block\n3 : Remove");
+                        System.out.println("\nFriend Menu\n1 : Add\n2 : Block\n3 : Remove\n4 : Unblock");
                         String friendAction = scan.nextLine();
                         writer.println(friendAction);
 
@@ -130,7 +132,8 @@ public class Client {
                         String friendUsername = scan.nextLine();
                         writer.println(friendUsername);
 
-                        System.out.println("Friend action performed.");
+                        String serverNotification = reader.readLine();
+                        System.out.println(serverNotification);
                         break;
 
                     case "4": //handles viewing posts and account info
@@ -154,6 +157,8 @@ public class Client {
                                         return;
                                     }
                                 }
+
+                                System.out.println();
 
                                 for (NewsPost post : userPosts) {
                                     System.out.println(post.toString());
