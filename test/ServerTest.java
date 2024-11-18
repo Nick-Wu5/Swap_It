@@ -1,9 +1,14 @@
 import org.junit.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Timeout;
+
 import java.io.*;
 import java.net.*;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ServerTest {
 
@@ -21,6 +26,7 @@ public class ServerTest {
             }
         });
         serverThread.start();
+
         // Give the server some time to start
         try {
             Thread.sleep(500);
@@ -35,22 +41,69 @@ public class ServerTest {
     }
 
     @Test
+    @Timeout(1)
     public void testServerConnection() {
-        try (Socket clientSocket = new Socket("localhost", PORT);
-             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+        String input = ""; // No specific input required for server connection verification
+        String expected = "Server: Client connected\n";
 
-            // Simulate client connecting to the server
-            assertTrue(clientSocket.isConnected(), "Client should connect to the server");
-            // Simulate sending and receiving messages
-            String testMessage = "Hello, Server!";
-            out.println(testMessage);
-        } catch (IOException e) {
+        // Redirect System.out to capture the output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        try (Socket clientSocket = new Socket("localhost", PORT)) {
+            // Wait briefly for the server to print the connection message
+            Thread.sleep(100);
+
+            // Capture the output
+            String stuOut = outContent.toString().replace("\r\n", "\n").trim();
+            expected = expected.trim();
+
+            assertEquals("Expected the server to confirm client connection", expected, stuOut);
+
+        } catch (IOException | InterruptedException e) {
             fail("Exception during client-server communication: " + e.getMessage());
+        } finally {
+            // Restore System.out
+            System.setOut(originalOut);
         }
     }
 
-    private void assertTrue(boolean connected, String s) {
+    @Test
+    @Timeout(1)
+    public void testInvalidPortHandling() {
+        // Redirect System.err to capture the output
+        ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+        PrintStream originalErr = System.err;
+        System.setErr(new PrintStream(errContent));
+
+        try {
+            // Attempt to create a server on an invalid port (-1)
+            new ServerSocket(-1);
+            fail("Expected an exception for invalid port number");
+
+        } catch (IOException e) {
+            String errorOutput = errContent.toString().replace("\r\n", "\n").trim();
+            assertTrue(errorOutput.contains("java.net.BindException"),
+                    "Expected a BindException for invalid port number");
+        } finally {
+            // Restore System.err
+            System.setErr(originalErr);
+        }
+    }
+
+    @Test
+    @Timeout(1)
+    public void testInvalidSocketHandling() {
+        try {
+            // Test the Server constructor with a null socket
+            Server server = new Server(null);
+            fail("Expected NullPointerException for null socket");
+
+        } catch (NullPointerException e) {
+            // Test passes because the exception is expected
+        }
     }
 }
+
 
