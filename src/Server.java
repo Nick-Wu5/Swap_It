@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class Server extends PasswordProtectedLogin implements Runnable {
 
-    //initializes the server socket at port 1234
+    // Initializes the server socket at port 1234
     private Socket clientSocket;
 
-    //handles IOException during server initialization
+    // Handles IOException during server initialization
     public Server(Socket socket) {
         this.clientSocket = socket;
     }
@@ -29,7 +29,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         }
     }
 
-    //handles client connections and actions
+    // Handles client connections and actions
     public void run() {
 
         System.out.println(new File("users.txt").getAbsolutePath());
@@ -40,7 +40,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         boolean loginComplete = false;
         boolean registrationComplete = false;
 
-        //try with resources for socket communication
+        // Try with resources for socket communication
         try (BufferedReader read = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter write = new PrintWriter(clientSocket.getOutputStream(), true);
              ObjectOutputStream objectWrite = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -48,19 +48,19 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
             System.out.println("Server: Client connected");
             UserProfile currentUser = null;
-            String loginOrRegister = read.readLine(); //login or registration choice
+            String loginOrRegister = read.readLine(); // Login or registration choice
 
             if (loginOrRegister.equals("1")) {
 
                 System.out.println("User selected login");
 
-                // loop until a successful login
+                // Loop until a successful login
                 do {
                     username = read.readLine();
-                    System.out.println("received username");
+                    System.out.println("Received username");
 
                     password = read.readLine();
-                    System.out.println("received password");
+                    System.out.println("Received password");
 
                     loginComplete = authenticate(username, password);
 
@@ -73,21 +73,20 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
                 System.out.println("User selected register");
 
-                // loop until a successful registration
+                // Loop until a successful registration
                 do {
-
                     username = read.readLine();
-                    System.out.println("received username");
+                    System.out.println("Received username");
 
                     email = read.readLine();
-                    System.out.println("received email");
+                    System.out.println("Received email");
 
                     password = read.readLine();
-                    System.out.println("received password");
+                    System.out.println("Received password");
 
                     CreateNewUser tempUser = new CreateNewUser(username, email, password);
 
-                    if (!tempUser.isAlreadyRegistered()) { // checks if user already exists
+                    if (!tempUser.isAlreadyRegistered()) { // Checks if user already exists
                         System.out.println("User: " + username + " created and saved to file");
                         registrationComplete = true;
                         objectWrite.writeBoolean(registrationComplete);
@@ -103,32 +102,62 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
             currentUser = UserSearch.findUserByUsername(username);
 
-            //handles actions while logged in
+            // Handles actions while logged in
             while (loginComplete) {
 
                 String menu = read.readLine();
                 String prompt = "";
 
                 switch (menu) {
-                    //switch case for comment stuff
-                    //IMPORTANT: make delete comment & post methods (after this is done we can just call this method)
-                    case "1" -> { // search for a user
-
+                    case "1" -> { // Search for a user
                         prompt = read.readLine();
-                        System.out.println("searching for user: " + prompt);
+                        System.out.println("Searching for user: " + prompt);
 
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
 
                         if (searchedUser == null) {
                             objectWrite.writeObject("User not found");
+                            objectWrite.flush();
                         } else {
                             objectWrite.writeObject(searchedUser);
+                            objectWrite.flush();
+
+                            String commentQuestion = read.readLine();
+
+                            boolean commentMenu = false;
+
+                            do {
+                                if (commentQuestion.equalsIgnoreCase("y")) {
+
+                                    ArrayList<NewsPost> searchedUserPosts = searchedUser.getUserPosts();
+
+                                    synchronized (this) {
+                                        objectWrite.writeObject(searchedUserPosts);
+                                    }
+                                    commentMenu = true;
+
+                                    String postToCommentOn = read.readLine();
+                                    String commentAnswer = read.readLine();
+
+                                    for (NewsPost newsPost : searchedUserPosts) {
+                                        if (newsPost.getCaption().equals(postToCommentOn)) {
+                                            newsPost.addComment(new NewsComment(commentAnswer,
+                                                    currentUser.getUsername(), postToCommentOn));
+                                        }
+                                    }
+
+                                } else if (commentQuestion.equalsIgnoreCase("n")) {
+                                    commentMenu = true;
+                                } else {
+                                    System.out.println("Invalid input received");
+                                }
+                            } while (!commentMenu);
                         }
 
                         objectWrite.flush();
                         break;
                     }
-                    case "2" -> { // create/delete post and delete post
+                    case "2" -> { // Create/delete post
                         prompt = read.readLine();
                         if (prompt.equals("1")) {
                             synchronized (this) {
@@ -138,22 +167,16 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 new NewsPost(username, title, imagePath, date);
                             }
                         } else if (prompt.equals("2")) {
-                            //IMPORTANT: need to delete comments associated with post as well
-                            //make an arraylist of all posts made by the user and dropdown of title
                             synchronized (this) {
                                 String title = read.readLine();
-                                //needs to search through a file for a title and then delete the info of that post
                                 NewsPost.deletePost(title);
                             }
-                            //make sure each post's info is on one line
-                        } else if (prompt.equals("delete comment")) {
-
+                        } else if (prompt.equals("3")) {
                             String content = read.readLine();
-                            NewsPost.deleteComment(content);
-
+                           // NewsPost.deleteComment(content);
                         }
                     }
-                    case "3" -> { // add/block/remove friends
+                    case "3" -> { // Add/block/remove friends
                         prompt = read.readLine();
                         switch (prompt) {
                             case "1" -> {
@@ -180,34 +203,22 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 currentUser.updateBlockedList();
                                 write.println("Unblocked: " + userToUnblock);
                             }
-                            default -> {
-                                write.println("A valid input was not selected!");
-                                throw new Exception();
-                            }
+                            default -> write.println("A valid input was not selected!");
                         }
                     }
-                    case "4" -> {  // view posts and info
+                    case "4" -> { // View posts and info
                         prompt = read.readLine();
-                        switch(prompt) {
+                        switch (prompt) {
                             case "1" -> {
                                 synchronized (this) {
                                     objectWrite.writeObject(currentUser.getUserPosts());
                                 }
-                                //need to parse through arraylist & make array splitting semicolons and make pretty
                             }
-                            case "2" -> {
-                                write.println(currentUser.getAccountInfo());
-                            }
-                            default -> {
-                                System.out.println("A valid input was not selected!");
-                                throw new Exception();
-                            }
+                            case "2" -> write.println(currentUser.getAccountInfo());
+                            default -> System.out.println("A valid input was not selected!");
                         }
                     }
-                    default -> {
-                        System.out.println("A valid input was not selected!");
-                        throw new Exception();
-                    }
+                    default -> System.out.println("A valid input was not selected!");
                 }
             }
 
@@ -217,7 +228,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                clientSocket.close();;
+                clientSocket.close();
                 System.out.println("Client disconnected");
             } catch (IOException e) {
                 System.out.println("Error closing socket: " + e.getMessage());

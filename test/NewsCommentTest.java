@@ -15,7 +15,7 @@ public class NewsCommentTest {
 
     public void testComments() {
         // Assuming UserProfile and NewsComment classes are already defined
-        UserProfile author = new UserProfile("taylorswift246", "taylor.swift@gmail.com", "7685958484");
+        String author = "taylorswift246";
 
         // Create a NewsPost instance
         NewsPost post = new NewsPost(author, "Test Post Title", "/path/to/image.jpg", "2024-11-03");
