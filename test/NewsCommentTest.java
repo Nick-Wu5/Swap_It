@@ -22,8 +22,8 @@ public class NewsCommentTest {
 
         // Test adding comments
         UserProfile commenter = new UserProfile("ryangosling", "ryan.gosling@gmail.com", "emmastone");
-        NewsComment comment1 = new NewsComment("Great post!", commenter);
-        NewsComment comment2 = new NewsComment("Thanks for sharing!", commenter);
+        NewsComment comment1 = new NewsComment("Great post!", "chris", "new views", 5, 3);
+        NewsComment comment2 = new NewsComment("Thanks for sharing!", "nick", "new views", 7, 2);
 
         post.addComment(comment1);
         post.addComment(comment2);
