@@ -1,5 +1,9 @@
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.*;
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -80,17 +84,91 @@ public class UserProfileTest {
     }
 
     @Test
-    public void testPrintUserInfo() {
-        // when user initially has 0 friends
-        String expectedInfo = "Username: taylorswift246\nFriends: 0\n";
-        assertEquals(expectedInfo, user1.printUserInfo());
-        // add a friend and check again
-        user1.addFriend("ryangosling");
-        expectedInfo ="Username: taylorswift246\nFriends: 1\n";
-        assertEquals(expectedInfo, user1.printUserInfo());
-        // add another friend to user1 and check the output
-        user1.addFriend("travisscott21");
-        expectedInfo ="Username: taylorswift246\nFriends: 2\n";
-        assertEquals(expectedInfo, user1.printUserInfo());
+    public void testSaveToFile() {
+        user1.saveToFile();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            boolean found = false;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("taylorswift246")) {
+                    found = true;
+                    assertEquals(line, user1.toFileFormat());
+                    break;
+                }
+            }
+            assertTrue("User should be saved to file", found);
+        } catch (IOException e) {
+            fail("Exception should not occur during file reading: " + e.getMessage());
+        }
     }
+
+    @Test
+    public void testGetUserPosts() {
+        // Simulate the existence of a file with posts
+        try (PrintWriter pw = new PrintWriter(new FileWriter("newsPosts.txt"))) {
+            pw.println("taylorswift246,Hello World!,path/to/image,2024-11-01,10,2");
+            pw.println("ryangosling,Good Morning,path/to/image2,2024-11-02,5,1");
+        } catch (IOException e) {
+            fail("Exception should not occur while setting up the test: " + e.getMessage());
+        }
+
+        ArrayList<NewsPost> posts = user1.getUserPosts();
+
+        assertEquals(1, posts.size());
+        assertEquals("Hello World!", posts.get(0).getCaption());
+        assertEquals(10, posts.get(0).getUpvotes());
+        assertEquals(2, posts.get(0).getDownvotes());
+    }
+
+    @Test
+    public void testUpdateFriendsList() {
+        user1.addFriend("ryangosling");
+        user1.saveToFile();
+
+        user1.setFriends(new ArrayList<>(Arrays.asList("travisscott21")));
+        user1.updateFriendsList();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            boolean updated = false;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("taylorswift246")) {
+                    assertTrue(line.contains("travisscott21"));
+                    assertFalse(line.contains("ryangosling"));
+                    updated = true;
+                    break;
+                }
+            }
+            assertTrue("Friends list should be updated in file", updated);
+        } catch (IOException e) {
+            fail("Exception should not occur during file reading: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdateBlockedList() {
+        user1.blockUser("ryangosling");
+        user1.saveToFile();
+
+        user1.setBlockedFriends(new ArrayList<>(Arrays.asList("travisscott21")));
+        user1.updateBlockedList();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            boolean updated = false;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("taylorswift246")) {
+                    assertTrue(line.contains("travisscott21"));
+                    assertFalse(line.contains("ryangosling"));
+                    updated = true;
+                    break;
+                }
+            }
+            assertTrue("Blocked list should be updated in file", updated);
+        } catch (IOException e) {
+            fail("Exception should not occur during file reading: " + e.getMessage());
+        }
+    }
+
 }

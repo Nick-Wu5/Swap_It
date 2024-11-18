@@ -22,7 +22,7 @@ class PasswordProtectedLoginTest {
     @BeforeEach
     void setUp() throws IOException {
         // Set up a temporary file with sample user data for testing
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
             writer.write("testUser:password123\n");
             writer.write("admin:adminPass\n");
         }
@@ -31,7 +31,7 @@ class PasswordProtectedLoginTest {
     @AfterEach
     void tearDown() throws IOException {
         // Clean up by deleting the temporary file after each test
-        Files.deleteIfExists(Paths.get(filename));
+        Files.deleteIfExists(Paths.get(FILENAME));
     }
 
     @Test

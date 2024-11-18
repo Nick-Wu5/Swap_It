@@ -32,7 +32,7 @@ public class NewsCommentTest {
 
         // Verify comments were added
         assertEquals("The number of comments made should equal 2" + post.getComments().size(), "2");
-        assertEquals("The author of the comment should match" + comment1.getAuthor().getUsername(), "ryangosling");
+        assertEquals("The author of the comment should match" + comment1.getAuthor(), "ryangosling");
         assertEquals("The contents of the comment should match" + comment2.getContent(), "Thanks for sharing!");
         assertEquals("The UpVotes should equal 0" + comment1.getUpvotes(), "0");
     }
