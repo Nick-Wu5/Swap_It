@@ -10,7 +10,7 @@ import java.io.*;
  * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
-public class NewsComment implements NewsFeed {
+public class NewsComment implements NewsFeed, Serializable {
 
     private int upvotes;  //number of upvotes per post
     private String captionOfPost; //title of post the comment is about
@@ -24,12 +24,6 @@ public class NewsComment implements NewsFeed {
         this.content = content;
         this.author = author;
         this.captionOfPost = captionOfPost;
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
-            writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file: " + e.getMessage());
-        }
     }
 
     public NewsComment(String content, String author, String captionOfPost) {
@@ -38,12 +32,6 @@ public class NewsComment implements NewsFeed {
         this.content = content;
         this.author = author;
         this.captionOfPost = captionOfPost;
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
-            writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file: " + e.getMessage());
-        }
     }
 
     public int getUpvotes() {
@@ -85,6 +73,24 @@ public class NewsComment implements NewsFeed {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void saveToFile() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
+            writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file: " + e.getMessage());
+        }
+    }
+
+    public String toString() {
+
+        StringBuilder printThis = new StringBuilder("");
+
+        printThis.append(author).append(": ").append(content);
+        printThis.append(String.format(" - (%d, %d)", upvotes, downvotes));
+
+        return printThis.toString();
     }
 }
 //push

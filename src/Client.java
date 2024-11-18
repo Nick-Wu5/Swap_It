@@ -123,6 +123,8 @@ public class Client {
                                     scan.nextLine(); // Consume newline
                                     String commentAnswer = scan.nextLine();
                                     writer.println(commentAnswer);
+                                    System.out.println("Comment created!");
+
                                 } else {
                                     System.out.println("No posts available.");
                                 }
@@ -155,7 +157,8 @@ public class Client {
                             System.out.println("Post deleted.");
                         } else if (postAction.equalsIgnoreCase("3")) {
                             System.out.println("Delete a comment:");
-                            // TODO: Implement delete comment functionality
+
+
                         }
                         break;
 

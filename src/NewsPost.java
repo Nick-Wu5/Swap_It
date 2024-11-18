@@ -190,7 +190,7 @@ public class NewsPost implements NewsFeed, Serializable {
         if (comments.size() == 0) {
             postInfo.append("Comments: 0");
         } else {
-            postInfo.append("comments: \n ");
+            postInfo.append("Comments: \n");
             for (NewsComment comment : comments) {
                 postInfo.append(comment.toString() + "\n");
             }

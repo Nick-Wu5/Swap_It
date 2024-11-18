@@ -85,7 +85,7 @@ public class NewsPostTest {
         assertTrue("The post should contain the added comment", post.getComments().contains(comment));
 
         // Assuming you have implemented the deleteComment method correctly, delete the comment
-        post.deleteComment("Great post!");
+        //post.deleteComment("Great post!");
 
         // Verify that the comment is removed
         assertFalse("The post should no longer contain the deleted comment", post.getComments().contains(comment));

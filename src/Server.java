@@ -141,8 +141,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
                                     for (NewsPost newsPost : searchedUserPosts) {
                                         if (newsPost.getCaption().equals(postToCommentOn)) {
-                                            newsPost.addComment(new NewsComment(commentAnswer,
-                                                    currentUser.getUsername(), postToCommentOn));
+                                            NewsComment newComment = new NewsComment(commentAnswer,
+                                                    currentUser.getUsername(), postToCommentOn);
+                                            newComment.saveToFile();
+                                            newsPost.addComment(newComment);
                                         }
                                     }
 
@@ -153,9 +155,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 }
                             } while (!commentMenu);
                         }
-
                         objectWrite.flush();
-                        break;
                     }
                     case "2" -> { // Create/delete post
                         prompt = read.readLine();
