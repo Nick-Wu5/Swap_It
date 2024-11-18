@@ -40,3 +40,5 @@ public class NewsCommentTest {
         assertEquals("The UpVotes should equal 0", 0, comment1.getUpvotes());
     }
 }
+
+//push
