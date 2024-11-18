@@ -20,6 +20,7 @@ class CreateNewUserTest {
     @BeforeEach
     void setUp() {
         // Clear the file and userProfiles list before each test to ensure no data carries over
+        CreateNewUser.loadUsersFromFile();
         CreateNewUser.getUserProfiles().clear();
         try {
             Files.write(Paths.get("users.txt"), new byte[0]); // Clear users.txt file
@@ -69,8 +70,10 @@ class CreateNewUserTest {
 
         // Check if the user was loaded correctly
         assertEquals(1, CreateNewUser.getUserProfiles().size(), "One user should be loaded from file");
-        UserProfile loadedUser = CreateNewUser.getUserProfiles().get(0);
-        assertEquals("persistentUser", loadedUser.getUsername(), "Loaded username should match");
-        assertEquals("persistentEmail@example.com", loadedUser.getEmail(), "Loaded email should match");
+        if (!CreateNewUser.getUserProfiles().isEmpty()) {
+            UserProfile loadedUser = CreateNewUser.getUserProfiles().get(0);
+            assertEquals("persistentUser", loadedUser.getUsername(), "Loaded username should match");
+            assertEquals("persistentEmail@example.com", loadedUser.getEmail(), "Loaded email should match");
+        }
     }
 }

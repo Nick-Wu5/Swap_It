@@ -1,3 +1,5 @@
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,6 +15,7 @@ import static org.junit.Assert.*;
 
 public class NewsCommentTest {
 
+    @Test
     public void testComments() {
         // Assuming UserProfile and NewsComment classes are already defined
         String author = "taylorswift246";
@@ -31,9 +34,9 @@ public class NewsCommentTest {
         comment1.incrementDownvotes();
 
         // Verify comments were added
-        assertEquals("The number of comments made should equal 2" + post.getComments().size(), "2");
-        assertEquals("The author of the comment should match" + comment1.getAuthor(), "ryangosling");
-        assertEquals("The contents of the comment should match" + comment2.getContent(), "Thanks for sharing!");
-        assertEquals("The UpVotes should equal 0" + comment1.getUpvotes(), "0");
+        assertEquals("The number of comments made should equal ", 2, post.getComments().size());
+        assertEquals("The author of the comment should match", "chris", comment1.getAuthor());
+        assertEquals("The contents of the comment should match", "Thanks for sharing!",comment2.getContent());
+        assertEquals("The UpVotes should equal 0", 0, comment1.getUpvotes());
     }
 }

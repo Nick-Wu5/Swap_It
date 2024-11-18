@@ -25,6 +25,10 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
 
         if (!this.alreadyRegistered) {
             super.saveToFile();
+            if (userProfiles == null) {
+                userProfiles = new ArrayList<>();
+            }
+            userProfiles.add(this);
             System.out.println("User registered successfully");
         } else {
             System.out.println("User already registered, cannot create profile.");
@@ -60,7 +64,12 @@ public class CreateNewUser extends UserProfile implements CreateNewUserInterface
 
     public UserProfile getUser() {
         if (!this.alreadyRegistered) {
-            return (UserProfile) userProfiles.get(userProfiles.size() - 1);
+            if (userProfiles != null && !userProfiles.isEmpty()) {
+                return (UserProfile) userProfiles.get(userProfiles.size() - 1);
+            } else {
+                System.out.println("User already registered, cannot create profile.");
+                return null;
+            }
         } else {
             System.out.println("User already registered, cannot create profile.");
             return null;
