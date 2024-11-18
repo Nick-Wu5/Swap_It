@@ -32,7 +32,18 @@ public class NewsComment implements NewsFeed {
         }
     }
 
-    public NewsComment(String content, UserProfile commenter) {
+    public NewsComment(String content, String author, String captionOfPost) {
+        this.upvotes = 0;
+        this.downvotes = 0;
+        this.content = content;
+        this.author = author;
+        this.captionOfPost = captionOfPost;
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
+            writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file: " + e.getMessage());
+        }
     }
 
     public int getUpvotes() {
@@ -54,6 +65,7 @@ public class NewsComment implements NewsFeed {
     public void incrementDownvotes() {
         downvotes++;
     }
+
     public void deleteComment(String content) {
 
         try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempComments.txt"));

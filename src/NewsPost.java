@@ -106,11 +106,6 @@ public class NewsPost implements NewsFeed, Serializable {
         return comments;
     }
 
-    public static void deleteComment(String title) {
-        //IMPORTANT: add author and TITLE to comment info
-
-    }
-
     public void incrementUpvotes() {
         upvotes++;
     }
