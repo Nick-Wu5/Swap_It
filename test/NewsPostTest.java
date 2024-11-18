@@ -91,3 +91,4 @@ public class NewsPostTest {
         assertFalse("The post should no longer contain the deleted comment", post.getComments().contains(comment));
     }
 }
+// method
