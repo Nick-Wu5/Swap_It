@@ -31,7 +31,7 @@ class CreateNewUserTest {
     @Test
     void testCreateNewUserNotAlreadyRegistered() {
         // Test creating a user that doesn't already exist
-        CreateNewUser newUser = new CreateNewUser("newUser", "password123");
+        CreateNewUser newUser = new CreateNewUser("newUser", "newUserEmail@example.com", "password123");
         assertFalse(newUser.isAlreadyRegistered(), "User should not be registered initially");
 
         // Check if the user profile was created
@@ -42,19 +42,26 @@ class CreateNewUserTest {
 
     @Test
     void testDuplicateUserRegistration() {
-        // Create the first user
-        new CreateNewUser("duplicateUser", "password123");
+        new CreateNewUser("duplicateUser", "duplicateEmail@example.com", "password123");
 
         // Attempt to create the same user again
-        CreateNewUser duplicateUser = new CreateNewUser("duplicateUser", "anotherPassword");
+        CreateNewUser duplicateUser = new CreateNewUser("duplicateUser", "anotherEmail@example.com", "anotherPassword");
         assertTrue(duplicateUser.isAlreadyRegistered(), "User should be marked as already registered");
-        assertNull(duplicateUser.getUserProfiles(), "No profile should be created for duplicate user"); //this test is failing
+
+        // Ensure no profile was created for the duplicate user
+        assertNull(duplicateUser.getUser(), "No profile should be created for duplicate user");
     }
 
     @Test
     void testPersistenceWithSaveAndLoad() {
+        try {
+            Files.write(Paths.get("users.txt"), new byte[0]); // Clear users.txt file
+        } catch (IOException e) {
+            fail("Error clearing users file before test: " + e.getMessage());
+        }
+
         // Create and save a user
-        new CreateNewUser("persistentUser", "persistentPass");
+        new CreateNewUser("persistentUser", "persistentEmail@example.com", "persistentPass");
 
         // Clear the in-memory list and reload from file
         CreateNewUser.getUserProfiles().clear();
@@ -64,5 +71,6 @@ class CreateNewUserTest {
         assertEquals(1, CreateNewUser.getUserProfiles().size(), "One user should be loaded from file");
         UserProfile loadedUser = CreateNewUser.getUserProfiles().get(0);
         assertEquals("persistentUser", loadedUser.getUsername(), "Loaded username should match");
+        assertEquals("persistentEmail@example.com", loadedUser.getEmail(), "Loaded email should match");
     }
 }
