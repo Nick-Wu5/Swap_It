@@ -32,6 +32,9 @@ public class NewsComment implements NewsFeed {
         }
     }
 
+    public NewsComment(String content, UserProfile commenter) {
+    }
+
     public int getUpvotes() {
         return upvotes - downvotes;
     }
