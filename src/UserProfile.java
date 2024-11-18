@@ -306,4 +306,27 @@ public class UserProfile implements User, Serializable {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<NewsComment> findCommentsForUser() {
+
+        ArrayList<NewsComment> comments = new ArrayList<>();
+
+        try (BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
+            String line;
+
+            while ((line = readComments.readLine()) != null) {
+                if (line.contains(this.getUsername())) {
+
+                    String[] commentInfo = line.split(",");
+
+                    comments.add(new NewsComment(commentInfo[0], commentInfo[1], commentInfo[2],
+                            Integer.parseInt(commentInfo[3]), Integer.parseInt(commentInfo[4])));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return comments;
+    }
 }

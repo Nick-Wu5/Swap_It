@@ -172,8 +172,13 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 NewsPost.deletePost(title);
                             }
                         } else if (prompt.equals("3")) {
-                            String content = read.readLine();
-                           // NewsPost.deleteComment(content);
+
+                            ArrayList<NewsComment> usersComments = currentUser.findCommentsForUser();
+                            synchronized (this) {
+                                objectWrite.writeObject(usersComments);
+                                String commentAnswer = read.readLine();
+                                NewsComment.deleteComment(commentAnswer);
+                            }
                         }
                     }
                     case "3" -> { // Add/block/remove friends

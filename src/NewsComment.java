@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Team Project - Social Media App
@@ -54,26 +55,33 @@ public class NewsComment implements NewsFeed, Serializable {
         downvotes++;
     }
 
-    public void deleteComment(String content) {
+    public static void deleteComment(String content) {
+        // Temporary storage for lines not matching the content to be deleted
+        ArrayList<String> remainingLines = new ArrayList<>();
 
-        try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempComments.txt"));
-             PrintWriter writeComments = new PrintWriter(new FileWriter("newsComments.txt", false));
-             BufferedReader tempRead = new BufferedReader(new FileReader("tempComments.txt"));
-             BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
+        // Read the original file and filter out the lines to delete
+        try (BufferedReader readComments = new BufferedReader(new FileReader("newsComments.txt"))) {
             String line;
             while ((line = readComments.readLine()) != null) {
-                if (line.contains(content)) {
-                    continue;
+                if (!line.contains(content)) { // Keep lines that do not match the content
+                    remainingLines.add(line);
                 }
-                tempWrite.println(line);
             }
-            while ((line = tempRead.readLine()) != null) {
+        } catch (IOException e) {
+            e.printStackTrace();
+            return; // Exit if an error occurs during reading
+        }
+
+        // Write the filtered lines back to the file
+        try (PrintWriter writeComments = new PrintWriter(new FileWriter("newsComments.txt", false))) {
+            for (String line : remainingLines) {
                 writeComments.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public synchronized void saveToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
