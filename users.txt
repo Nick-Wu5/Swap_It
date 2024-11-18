@@ -4,3 +4,5 @@ chris,chris_b@gmail.com,password123,EmptyFriendsList,EmptyBlockedList
 ramya,ramya.prasanna@gmail.com,purdue1234,EmptyFriendsList,EmptyBlockedList
 divya,divya.vemireddy@gmail.com,divya1234,EmptyFriendsList,EmptyBlockedList
 chris2,chrisemail@gmail.com,pqw;ejf,EmptyFriendsList,EmptyBlockedList
+taylorswift246,taylor.swift@gmail.com,7685958484,travisscott21,EmptyBlockedList
+taylorswift246,taylor.swift@gmail.com,7685958484,EmptyFriendsList,EmptyBlockedList

@@ -170,5 +170,4 @@ public class UserProfileTest {
             fail("Exception should not occur during file reading: " + e.getMessage());
         }
     }
-
 }
