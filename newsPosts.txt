@@ -1,10 +1,14 @@
-taylorswift246,Hello World!,path/to/image,2024-11-01,10,2
-ryangosling,Good Morning,path/to/image2,2024-11-02,5,1
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
-taylorswift246,Test Post Title,/path/to/image.jpg,2024-11-03,0,0,0
+divya,new views,this is an image path,11/10/2024,0,0,0
+divya,I love you Wang,Wang is the GOAT,11/10/2024,0,0,0
+ramya,Wang is so good-looking,this is an image path,2024-11-15,0,0,0
+ramya,jedi council room is a vibe!,this is an image path,2024-11-15,0,0,0
+nick,please give us a good grade!,images/imagePath,2024-11-15,0,0,0
+nick,sonny angel dolls!,imagePath,2024-11-15,0,0,0
+nick,Hi I love dogs,image of penny here,2024-11-17,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+taylorswift246,Test Post Caption,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+quinn,My first post!,image,2024-11-17,0,0,0

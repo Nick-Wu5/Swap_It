@@ -89,44 +89,46 @@ public class Client {
                             System.out.println("Friends: " + user.getFriends().size());
                             System.out.println("Posts: " + user.getUserPosts().size());
 
-                            System.out.println("Comment on " + user.getUsername() + "'s posts? : 'y' or 'n'");
-                            String commentQuestion = scan.nextLine();
-                            writer.println(commentQuestion);
+                            if (!user.getUserPosts().isEmpty()) {
+                                System.out.println("Comment on " + user.getUsername() + "'s posts? : 'y' or 'n'");
+                                String commentQuestion = scan.nextLine();
+                                writer.println(commentQuestion);
 
-                            if (commentQuestion.equalsIgnoreCase("y")) {
-                                Object posts = objectReader.readObject();
-                                if (posts instanceof ArrayList<?>) {
-                                    ArrayList<NewsPost> userPosts = new ArrayList<>();
-                                    for (Object obj : (ArrayList<?>) posts) {
-                                        if (obj instanceof NewsPost) {
-                                            userPosts.add((NewsPost) obj);
-                                        } else {
-                                            System.out.println("Found non-NewsPost object");
-                                            return;
+                                if (commentQuestion.equalsIgnoreCase("y")) {
+                                    Object posts = objectReader.readObject();
+                                    if (posts instanceof ArrayList<?>) {
+                                        ArrayList<NewsPost> userPosts = new ArrayList<>();
+                                        for (Object obj : (ArrayList<?>) posts) {
+                                            if (obj instanceof NewsPost) {
+                                                userPosts.add((NewsPost) obj);
+                                            } else {
+                                                System.out.println("Found non-NewsPost object");
+                                                return;
+                                            }
                                         }
+
+                                        System.out.println();
+                                        for (NewsPost post : userPosts) {
+                                            System.out.println(post.toString());
+                                        }
+
+                                        System.out.println("\nSelect The Post You Want To Comment On");
+                                        for (int i = 0; i < userPosts.size(); i++) {
+                                            System.out.println(i + 1 + " : " + userPosts.get(i).getCaption());
+                                        }
+
+                                        int commentMenu = scan.nextInt();
+                                        writer.println(userPosts.get(commentMenu - 1).getCaption());
+
+                                        System.out.println("Enter Comment: ");
+                                        scan.nextLine(); // Consume newline
+                                        String commentAnswer = scan.nextLine();
+                                        writer.println(commentAnswer);
+                                        System.out.println("Comment created!");
+
                                     }
-
-                                    System.out.println();
-                                    for (NewsPost post : userPosts) {
-                                        System.out.println(post.toString());
-                                    }
-
-                                    System.out.println("\nSelect The Post You Want To Comment On");
-                                    for (int i = 0; i < userPosts.size(); i++) {
-                                        System.out.println(i + 1 + " : " + userPosts.get(i).getCaption());
-                                    }
-
-                                    int commentMenu = scan.nextInt();
-                                    writer.println(userPosts.get(commentMenu - 1).getCaption());
-
-                                    System.out.println("Enter Comment: ");
-                                    scan.nextLine(); // Consume newline
-                                    String commentAnswer = scan.nextLine();
-                                    writer.println(commentAnswer);
-                                    System.out.println("Comment created!");
-
                                 } else {
-                                    System.out.println("No posts available.");
+                                    break;
                                 }
                             }
                         } else {
@@ -155,10 +157,40 @@ public class Client {
                             writer.println(captionToDelete);
 
                             System.out.println("Post deleted.");
+
                         } else if (postAction.equalsIgnoreCase("3")) {
-                            System.out.println("Delete a comment:");
 
+                            Object comments = objectReader.readObject();
 
+                            if (comments instanceof ArrayList<?>) {
+                                ArrayList<NewsComment> userComments = new ArrayList<>();
+                                for (Object obj : (ArrayList<?>) comments) {
+                                    if (obj instanceof NewsComment) {
+                                        userComments.add((NewsComment) obj);
+                                    } else {
+                                        System.out.println("Found non-NewsComment object");
+                                        return;
+                                    }
+                                }
+
+                                if (userComments.isEmpty()) {
+                                    System.out.println("No comments available.");
+                                    break;
+                                } else {
+                                    System.out.println("Choose which comment to delete");
+                                    for (int i = 0; i < userComments.size(); i++) {
+                                        System.out.println(i + 1 + " : " + userComments.get(i).getContent());
+                                    }
+                                }
+
+                                int commentMenu = scan.nextInt();
+                                scan.nextLine();
+                                writer.println(userComments.get(commentMenu - 1).getContent());
+                                System.out.println("Comment Deleted");
+                                break;
+                            } else {
+                                System.out.println("No posts available.");
+                            }
                         }
                         break;
 
