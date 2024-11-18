@@ -11,4 +11,10 @@ taylorswift246,Test Post Caption,/path/to/image.jpg,2024-11-03,0,0,0
 author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
 author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
 author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
-quinn,My first post!,image,2024-11-17,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+taylorswift246,Test Post Caption,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0
+taylorswift246,Test Post Caption,/path/to/image.jpg,2024-11-03,0,0,0
+author,Test Title,/path/to/image.jpg,2024-11-03,0,0,0

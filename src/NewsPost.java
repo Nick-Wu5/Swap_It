@@ -83,6 +83,10 @@ public class NewsPost implements NewsFeed, Serializable {
         return comments;
     }
 
+    public static ArrayList<NewsComment> findCommentsForUser(String user1) {
+        return findComments(user1);
+    }
+
     public void incrementUpvotes() {
         upvotes++;
     }
