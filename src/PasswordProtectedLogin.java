@@ -27,7 +27,7 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 users.add(parts[0]);
-                passes.add(parts[1]);
+                passes.add(parts[2]);
             }
         } catch (IOException e) {
             System.out.println("Error reading users from file: " + e.getMessage());
