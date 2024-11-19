@@ -1,8 +1,1 @@
-nick,nickwu2005@outlook.com,penny123,quinn;divya;Ramya,ramya
-quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
-chris,chris_b@gmail.com,password123,EmptyFriendsList,EmptyBlockedList
-ramya,ramya.prasanna@gmail.com,purdue1234,EmptyFriendsList,EmptyBlockedList
-divya,divya.vemireddy@gmail.com,divya1234,EmptyFriendsList,EmptyBlockedList
-chris2,chrisemail@gmail.com,pqw;ejf,EmptyFriendsList,EmptyBlockedList
-taylorswift246,taylor.swift@gmail.com,7685958484,travisscott21,EmptyBlockedList
-taylorswift246,taylor.swift@gmail.com,7685958484,EmptyFriendsList,EmptyBlockedList
+persistentUser,persistentEmail@example.com,persistentPass,EmptyFriendsList,EmptyBlockedList
