@@ -83,15 +83,17 @@ public class UserProfile implements User, Serializable {
     public boolean addFriend(String userToAdd) {
 
         for (String blockedFriend : this.blockedFriends) {
-
-            this.removeFriend("EmptyFriendsList");
-
             if (userToAdd.equals(blockedFriend)) {
                 return false;
             }
         }
 
         this.friends.add(userToAdd);
+
+        if (this.friends.contains("EmptyFriendsList") && !(userToAdd.equals("EmptyFriendsList"))) {
+            this.removeFriend("EmptyFriendsList");
+        }
+
         return true;
     }
 
@@ -121,15 +123,19 @@ public class UserProfile implements User, Serializable {
                 break;
             }
         }
-        this.blockedFriends.add(userToBlock);
-        this.removeBlockedUser("EmptyBlockedList");
 
+        this.blockedFriends.add(userToBlock);
+
+        if (this.blockedFriends.contains("EmptyBlockedList") && !(userToBlock.equals("EmptyBlockedList"))) {
+            this.removeBlockedUser("EmptyBlockedList");
+        }
     }
 
     public void removeBlockedUser(String userToRemoveBlock) {
+
         this.blockedFriends.remove(userToRemoveBlock);
 
-        if (this.friends.size() == 0) {
+        if (this.blockedFriends.size() == 0) {
             this.blockUser("EmptyBlockedList");
         }
     }
