@@ -24,21 +24,23 @@ public class Client {
                 writer.println(choice);
 
                 if (choice.equalsIgnoreCase("1")) { // Login process
-                    System.out.println("Enter your username:");
-                    String username = scan.nextLine();
-                    writer.println(username);
+                    do {
+                        System.out.println("Enter your username:");
+                        String username = scan.nextLine();
+                        writer.println(username);
 
-                    System.out.println("Enter your password:");
-                    String password = scan.nextLine();
-                    writer.println(password);
+                        System.out.println("Enter your password:");
+                        String password = scan.nextLine();
+                        writer.println(password);
 
-                    loginComplete = objectReader.readBoolean();
+                        loginComplete = objectReader.readBoolean();
 
-                    if (loginComplete) {
-                        System.out.println("Login Successful");
-                    } else {
-                        System.out.println("Login Failed. Please try again");
-                    }
+                        if (loginComplete) {
+                            System.out.println("Login Successful");
+                        } else {
+                            System.out.println("Login Failed. Please try again");
+                        }
+                    } while (!loginComplete);
                 } else if (choice.equalsIgnoreCase("2")) { // Registration process
                     System.out.println("Enter a username:");
                     String username = scan.nextLine();
