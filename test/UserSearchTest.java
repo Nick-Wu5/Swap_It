@@ -24,8 +24,8 @@ public class UserSearchTest {
 
         // Create the users.txt file with mock data for testing
         try (PrintWriter writer = new PrintWriter(new FileWriter("users.txt"))) {
-            writer.println("johndoe,,,johndoe@example.com,password123");
-            writer.println("janedoe,;friend1;friend2;,;blocked1;,janedoe@example.com,password456");
+            writer.println("johndoe,johndoe@example.com,password123,;,;");
+            writer.println("janedoe,janedoe@example.com,password456,;friend1;friend2;,;blocked1;");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,7 +68,7 @@ public class UserSearchTest {
     @Test
     public void testGetSearchedUser() {
         // Mock user details
-        String[] userDetails = {"janedoe", "friend1;friend2", "blocked1", "janedoe@example.com", "password456"};
+        String[] userDetails = {"janedoe", "janedoe@example.com", "password456", "friend1;friend2", "blocked1"};
         String parsedUsername = "janedoe";
 
         // Call getSearchedUser method

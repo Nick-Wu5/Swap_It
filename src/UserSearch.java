@@ -52,13 +52,13 @@ public class UserSearch implements Search {
         ArrayList<String> friends;
         ArrayList<String> blockedFriends;
 
-        if (!userDetails[3].isEmpty()) {
+        if (!userDetails[3].equals(";")) {
             friends = new ArrayList<>(Arrays.asList(userDetails[3].split(";")));
         } else {
             friends = new ArrayList<>();
         }
 
-        if (!userDetails[4].isEmpty()) {
+        if (!userDetails[4].equals(";")) {
             blockedFriends = new ArrayList<>(Arrays.asList(userDetails[4].split(";")));
         } else {
             blockedFriends = new ArrayList<>();
