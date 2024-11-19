@@ -25,7 +25,7 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
             String line;  //temp line of each line in users.txt
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
+                String[] parts = line.split(",");
                 users.add(parts[0]);
                 passes.add(parts[1]);
             }

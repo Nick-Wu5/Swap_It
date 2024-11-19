@@ -23,8 +23,8 @@ class PasswordProtectedLoginTest {
     void setUp() throws IOException {
         // Set up a temporary file with sample user data for testing
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
-            writer.write("testUser:password123\n");
-            writer.write("admin:adminPass\n");
+            writer.write("testUser,password123\n");
+            writer.write("admin,adminPass\n");
         }
     }
 
