@@ -57,10 +57,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                 // Loop until a successful login
                 do {
                     username = read.readLine();
-                    System.out.println("Received username");
+                    System.out.println("Received username: " + username);
 
                     password = read.readLine();
-                    System.out.println("Received password");
+                    System.out.println("Received password: " + password);
 
                     loginComplete = authenticate(username, password);
 

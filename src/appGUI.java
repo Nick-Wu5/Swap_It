@@ -1,11 +1,37 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.Socket;
 
 public class appGUI {
 
+    //Home Screen Components
     private JFrame frame;
-    private Client client;
+    private JPanel mainPanel;
+
+    private JLabel welcomeLabel;
+    private JLabel titleLabel;
+    private JPanel titlePanel;
+
+    private JPanel loginPanel;
+    private JButton loginButton;
+    private JTextField loginUsernameField;
+    private JPasswordField loginPasswordField;
+
+    private JPanel dividerPanel;
+    private JSeparator leftSeparator;
+    private JLabel orLabel;
+    private JSeparator rightSeparator;
+
+    private JTextField registerUsernameField;
+
+    //Network / File IO
+    private Socket socket;
+    private PrintWriter writer;
+    private BufferedReader reader;
+    private ObjectInputStream objectReader;
 
     public appGUI() {
         // Initialize GUI
@@ -13,31 +39,44 @@ public class appGUI {
             frame = new JFrame("Swap_It");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 700);
+            connectToServer();
             initializeSignIn();
             frame.setVisible(true);
             frame.setLayout(new BorderLayout());
         });
     }
 
+    private void connectToServer() {
+        try {
+            socket = new Socket("localhost", 1234);
+            writer = new PrintWriter(socket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            objectReader = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            System.out.println("Unable to connect to server");
+            e.printStackTrace();
+        }
+    }
+
     private void initializeSignIn() {
 
         // Main Panel
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
         frame.add(mainPanel, BorderLayout.CENTER);
 
         // Title Section
-        JLabel welcomeLabel = new JLabel("Welcome To", JLabel.CENTER);
+        welcomeLabel = new JLabel("Welcome To", JLabel.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel titleLabel = new JLabel("Swap_It", JLabel.CENTER);
+        titleLabel = new JLabel("Swap_It", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setForeground(new Color(255, 102, 51)); // Orange underscore
 
-        JPanel titlePanel = new JPanel();
+        titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.setBackground(Color.WHITE);
         titlePanel.add(Box.createRigidArea(new Dimension(0, 30))); // Spacing
@@ -49,19 +88,20 @@ public class appGUI {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacing
 
         // Login Section
-        JTextField loginUsernameField = new JTextField("Username");
+        loginUsernameField = new JTextField("Username");
         loginUsernameField.setMaximumSize(new Dimension(300, 40));
-        JPasswordField loginPasswordField = new JPasswordField("Password");
+        loginPasswordField = new JPasswordField("Password");
         loginPasswordField.setMaximumSize(new Dimension(300, 40));
 
-        JButton loginButton = new JButton("Log in");
+        loginButton = new JButton("Log in");
         loginButton.setBackground(new Color(255, 178, 102)); // Light orange
         loginButton.setForeground(Color.BLACK);
         loginButton.setFocusPainted(false);
         loginButton.setMaximumSize(new Dimension(300, 40));
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginButton.addActionListener(new LoginActionListener());
 
-        JPanel loginPanel = new JPanel();
+        loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.setBackground(Color.WHITE);
         loginPanel.add(loginUsernameField);
@@ -74,19 +114,19 @@ public class appGUI {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacing
 
         // Divider Section
-        JPanel dividerPanel = new JPanel();
+        dividerPanel = new JPanel();
         dividerPanel.setLayout(new BoxLayout(dividerPanel, BoxLayout.X_AXIS));
         dividerPanel.setBackground(Color.WHITE);
 
-        JSeparator leftSeparator = new JSeparator(SwingConstants.HORIZONTAL);
+        leftSeparator = new JSeparator(SwingConstants.HORIZONTAL);
         leftSeparator.setPreferredSize(new Dimension(100, 1));
 
-        JLabel orLabel = new JLabel("OR");
+        orLabel = new JLabel("OR");
         orLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         orLabel.setForeground(Color.GRAY);
-        //orLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        orLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JSeparator rightSeparator = new JSeparator(SwingConstants.HORIZONTAL);
+        rightSeparator = new JSeparator(SwingConstants.HORIZONTAL);
         rightSeparator.setPreferredSize(new Dimension(100, 1));
 
         dividerPanel.add(leftSeparator);
@@ -99,7 +139,7 @@ public class appGUI {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacing
 
         // Register Section
-        JTextField registerUsernameField = new JTextField("Username");
+        registerUsernameField = new JTextField("Username");
         registerUsernameField.setMaximumSize(new Dimension(300, 40));
         JTextField registerEmailField = new JTextField("Email");
         registerEmailField.setMaximumSize(new Dimension(300, 40));
@@ -132,8 +172,37 @@ public class appGUI {
         frame.repaint();
     }
 
+    private class LoginActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Thread(() -> {
+                try {
+                    String username = loginUsernameField.getText();
+                    String password = new String(loginPasswordField.getPassword());
+
+                    writer.println("1"); // Indicating login
+                    writer.println(username);
+                    writer.println(password);
+
+                    boolean loginComplete = objectReader.readBoolean();
+
+                    if (loginComplete) {
+                        System.out.println("Login Successful");
+                    } else {
+                        JOptionPane.showMessageDialog(mainPanel,
+                                "Incorrect username or password. Please try again.",
+                                "Login Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }).start();
+        }
+    }
+
     public static void main(String[] args) {
         new appGUI();
     }
-
 }
