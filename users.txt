@@ -1,2 +1,3 @@
 persistentUser,persistentEmail@example.com,persistentPass,EmptyFriendsList,EmptyBlockedList
 nick,nickwu2005@outlook.com,penny123,EmptyFriendsList,EmptyBlockedList
+quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
