@@ -48,14 +48,16 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
             System.out.println("Server: Client connected");
             UserProfile currentUser = null;
-            String loginOrRegister = read.readLine(); // Login or registration choice
 
-            if (loginOrRegister.equals("1")) {
+            //Loop until sign-in is successful
+            do {
+                String loginOrRegister = read.readLine(); // Login or registration choice
 
-                System.out.println("User selected login");
+                if (loginOrRegister.equals("1")) {
 
-                // Loop until a successful login
-                do {
+                    System.out.println("User selected login");
+
+                    // Loop until a successful login
                     username = read.readLine();
                     System.out.println("Received username: " + username);
 
@@ -67,14 +69,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     objectWrite.writeBoolean(loginComplete);
                     objectWrite.flush();
 
-                } while (!loginComplete);
+                } else if (loginOrRegister.equalsIgnoreCase("2")) {
 
-            } else if (loginOrRegister.equalsIgnoreCase("2")) {
+                    System.out.println("User selected register");
 
-                System.out.println("User selected register");
-
-                // Loop until a successful registration
-                do {
                     username = read.readLine();
                     System.out.println("Received username");
 
@@ -96,9 +94,8 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         objectWrite.writeBoolean(registrationComplete);
                         objectWrite.flush();
                     }
-
-                } while (!registrationComplete);
-            }
+                }
+            } while (!loginComplete || !registrationComplete);
 
             currentUser = UserSearch.findUserByUsername(username);
 

@@ -68,9 +68,7 @@ public class AppGUI extends JFrame {
 
     public void showHomeScreen() {
         // Create the home screen (next screen after login)
-        homeScreen = new JPanel();
-        homeScreen.setLayout(new BorderLayout());
-        homeScreen.add(new JLabel("Welcome to the Home Screen!"));
+        homeScreen = new HomeScreen(this);
 
         // Add the home screen to the main panel
         mainPanel.add(homeScreen, "HomeScreen");
