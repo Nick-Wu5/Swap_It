@@ -95,9 +95,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         objectWrite.flush();
                     }
                 }
-            } while (!loginComplete || !registrationComplete);
+            } while (!loginComplete && !registrationComplete);
 
             currentUser = UserSearch.findUserByUsername(username);
+            objectWrite.writeObject(currentUser);
 
             // Handles actions while logged in
             while (loginComplete) {
@@ -155,6 +156,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         objectWrite.flush();
                     }
                     case "2" -> { // Create/delete post
+                        System.out.println("User selected content");
                         prompt = read.readLine();
                         if (prompt.equals("1")) {
                             synchronized (this) {
@@ -162,6 +164,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 String imagePath = read.readLine();
                                 String date = String.valueOf(LocalDate.now());
                                 new NewsPost(username, title, imagePath, date);
+                                System.out.println("tried to create new post");
                             }
                         } else if (prompt.equals("2")) {
                             synchronized (this) {

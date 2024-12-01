@@ -1,2 +1,8 @@
-taylorswift246,Hello World!,path/to/image,2024-11-01,10,2
-ryangosling,Good Morning,path/to/image2,2024-11-02,5,1
+nick,My first post!,Placeholder Image,2024-11-30,0,0,0
+nick,Purdue football stinks,Sad cricket,2023-5-28,0,0,0
+quinn,Can't believe this is my life,Funny Lebron Image,2022-05-22,0,0,0
+ramya,I'm gonna be late,watch picture,2024-11-1,0,0,0
+divya,Brooklyn and Miami,cityscape picture,2021-7-5,0,0,0
+quinn,Warren Buffett is Him,Buffett Image,2024-2-9,0,0,0
+ramya,Dunsmore is Daddy,Silly photo here,2020-9-15,0,0,0
+divya,Wang plz give us an A,Praying emoji,2023-12-18,0,0,0

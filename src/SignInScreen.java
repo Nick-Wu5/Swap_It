@@ -127,28 +127,28 @@ public class SignInScreen extends JPanel {
             new Thread(() -> {
                 boolean loginComplete;
                 try {
-                        String username = loginUsernameField.getText();
-                        String password = new String(loginPasswordField.getPassword());
+                    String username = loginUsernameField.getText();
+                    String password = new String(loginPasswordField.getPassword());
 
-                        // Send login request
-                        writer.println("1"); // Indicating login
-                        writer.println(username);
+                    // Send login request
+                    writer.println("1"); // Indicating login
+                    writer.println(username);
                     System.out.println("sent: " + username);
-                        writer.println(password);
+                    writer.println(password);
                     System.out.println("sent: " + password);
-                        writer.flush();
+                    writer.flush();
 
-                        loginComplete = objectReader.readBoolean();  // Read server response
+                    loginComplete = objectReader.readBoolean();  // Read server response
 
-                        if (loginComplete) {
-                            System.out.println("Login Successful");
-                            appGUI.showHomeScreen();
-                        } else {
-                            JOptionPane.showMessageDialog(SignInScreen.this,
-                                    "Incorrect username or password. Please try again.",
-                                    "Login Failed",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
+                    if (loginComplete) {
+                        System.out.println("Login Successful");
+                        appGUI.showHomeScreen(UserSearch.findUserByUsername(username));
+                    } else {
+                        JOptionPane.showMessageDialog(SignInScreen.this,
+                                "Incorrect username or password. Please try again.",
+                                "Login Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -162,28 +162,27 @@ public class SignInScreen extends JPanel {
             new Thread(() -> {
                 boolean registrationComplete;
                 try {
-                        String username = registerUsernameField.getText();
-                        String email = registerEmailField.getText();
-                        String password = new String(registerPasswordField.getPassword());
+                    String username = registerUsernameField.getText();
+                    String email = registerEmailField.getText();
+                    String password = new String(registerPasswordField.getPassword());
 
-                        // Send register request
-                        writer.println("2"); // Indicating registration
-                        writer.println(username);
-                        writer.println(email);
-                        writer.println(password);
-                        writer.flush();
+                    // Send register request
+                    writer.println("2"); // Indicating registration
+                    writer.println(username);
+                    writer.println(email);
+                    writer.println(password);
+                    writer.flush();
 
-                        registrationComplete = objectReader.readBoolean();  // Read server response
+                    registrationComplete = objectReader.readBoolean();  // Read server response
 
-                        if (registrationComplete) {
-                            System.out.println("Registration Successful");
-                            appGUI.showHomeScreen();
-                        } else {
-                            JOptionPane.showMessageDialog(SignInScreen.this,
-                                    "User already exists, please login",
-                                    "Registration Failed",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
+                    if (registrationComplete) {
+                        appGUI.showHomeScreen(UserSearch.findUserByUsername(username));
+                    } else {
+                        JOptionPane.showMessageDialog(SignInScreen.this,
+                                "User already exists, please login",
+                                "Registration Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

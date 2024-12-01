@@ -1,3 +1,6 @@
-persistentUser,persistentEmail@example.com,persistentPass,EmptyFriendsList,EmptyBlockedList
-nick,nickwu2005@outlook.com,penny123,EmptyFriendsList,EmptyBlockedList
+nick,nickwu2005@outlook.com,penny123,quinn;chrisTheMan;ramya,EmptyBlockedList
 quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
+ramya,ramya23@gmail.com,password1234,EmptyFriendsList,EmptyBlockedList
+divya,divdivdiv@aol.com,citygirl4,EmptyFriendsList,EmptyBlockedList
+chrisTheMan,brantley4@gmail.com,munster,EmptyFriendsList,EmptyBlockedList
+null,null,null,EmptyFriendsList,EmptyBlockedList

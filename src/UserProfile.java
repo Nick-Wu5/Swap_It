@@ -43,7 +43,30 @@ public class UserProfile implements User, Serializable {
     }
 
     public ArrayList<String> getFriends() {
-        return this.friends;
+
+        ArrayList<String> friendsList = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userDetails = line.split(",");
+                if (userDetails[0].equals(this.username)) {
+                    if (userDetails[3].equals("EmptyFriendsList")) {
+                        break;
+                    } else if (!(userDetails[3].equals("EmptyFriendsList")) && !(userDetails[3].contains(";"))) {
+                        friendsList.add(userDetails[3]);
+                    } else {
+                        String[] friendsListArray = userDetails[3].split(";");
+                        for (String friend : friendsListArray) {
+                            friendsList.add(friend);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return friendsList;
     }
 
     public void setFriends(ArrayList<String> newFriends) {

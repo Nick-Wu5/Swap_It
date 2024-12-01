@@ -36,6 +36,7 @@ public class AppGUI extends JFrame {
         mainPanel = new JPanel(cardLayout);
         frame.add(mainPanel, BorderLayout.CENTER);
 
+
         connectToServer();
         initializeSignInScreen();  // Add the Sign-In screen initially
 
@@ -66,9 +67,9 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "SignInScreen");
     }
 
-    public void showHomeScreen() {
+    public void showHomeScreen(UserProfile loggedInUser) {
         // Create the home screen (next screen after login)
-        homeScreen = new HomeScreen(this);
+        homeScreen = new HomeScreen(writer,this, loggedInUser);
 
         // Add the home screen to the main panel
         mainPanel.add(homeScreen, "HomeScreen");
