@@ -1,55 +1,60 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class HomeScreen extends JPanel {
 
     private AppGUI appGUI;
+    private JPanel postsPanel;
+    private UserProfile user;
 
     public HomeScreen(PrintWriter writer, AppGUI appGUI, UserProfile user) {
 
+        appGUI.initializeOtherPages(user);
+
         this.appGUI = appGUI;
+        this.user = user;
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
 
-        //Header section
-        JPanel headerPanel = new JPanel(new BorderLayout());
+        JPanel mainContentPanel = new JPanel();
+        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
 
+        // Header section
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS)); // Horizontal arrangement
+
+        // Title label
         JLabel titleLabel = new JLabel("Swap_It");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 35));
         titleLabel.setForeground(Color.BLACK);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Create an orange background panel for the username
-        JPanel usernamePanel = new JPanel();
-        usernamePanel.setBackground(new Color(255, 178, 102)); // Light orange
-        usernamePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Align username label to the right
-
-        JLabel usernameLabel = new JLabel("@" + user.getUsername());
+        JLabel usernameLabel = new JLabel("Welcome @" + user.getUsername());
         usernameLabel.setForeground(Color.BLACK);
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        usernamePanel.add(usernameLabel); // Add username label to the orange panel
+        usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //Add title and username to the header
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(usernamePanel, BorderLayout.CENTER);
+        // Add labels to the header
+        headerPanel.add(titleLabel); // Add the title panel first
+        headerPanel.add(Box.createHorizontalGlue()); // Add space between title and username
+        headerPanel.add(usernameLabel); // Add the username panel
 
         // Posts Section
-        JPanel postsPanel = new JPanel();
+        postsPanel = new JPanel();
         postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-        postsPanel.setBackground(Color.WHITE);
 
         // Add sample posts
-        for (int i = 0; i < 2; i++) {
-            postsPanel.add(createPostPanel(user));
-        }
+        postsPanel.add(createPostPanel());
+        postsPanel.add(Box.createVerticalStrut(10));
+        postsPanel.add(createPostPanel());// Add 10px vertical space
 
         // "Load More Posts" Button
         JButton loadMoreButton = new JButton("Load more posts");
@@ -57,6 +62,7 @@ public class HomeScreen extends JPanel {
         loadMoreButton.setForeground(Color.BLACK);
         loadMoreButton.setFocusPainted(false);
         loadMoreButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button horizontally
+        loadMoreButton.addActionListener(new loadMoreActionListener());
 
         // Navigation Bar
         JPanel navBar = new JPanel();
@@ -64,66 +70,81 @@ public class HomeScreen extends JPanel {
         navBar.setBackground(Color.WHITE);
 
         String[] navIcons = {"🔍", "🏠", "➕", "👤"}; // Emoji placeholders for navigation icons
-        for (String icon : navIcons) {
-            JButton navButton = new JButton(icon);
+        String[] pageNames = {"SearchScreen", "HomeScreen", "AddPostScreen", "ProfileScreen"};
+
+        for (int i = 0; i < navIcons.length; i++) {
+            JButton navButton = new JButton(navIcons[i]);
             navButton.setFocusPainted(false);
             navButton.setContentAreaFilled(false);
             navButton.setBorder(BorderFactory.createEmptyBorder());
             navButton.setFont(new Font("Arial", Font.PLAIN, 20));
+
+            // Add ActionListener to navigate to the corresponding page
+            final String pageName = pageNames[i];
+            navButton.addActionListener(e -> appGUI.showPage(pageName));
+
             navBar.add(navButton);
         }
 
         // Add components to the main panel
-        add(headerPanel); // Header
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
-        add(new JScrollPane(postsPanel)); // Scrollable posts section
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
-        add(loadMoreButton); // "Load more posts" button
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
-        add(navBar); // Navigation bar
+        mainContentPanel.add(headerPanel); // Header
+        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
+        mainContentPanel.add(postsPanel); // posts section
+        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
+        mainContentPanel.add(loadMoreButton); // "Load more posts" button
+
+        add(mainContentPanel, BorderLayout.CENTER);
+        add(navBar, BorderLayout.SOUTH); // Navigation bar
     }
 
     // Helper Method to Create a Post Panel
-    private JPanel createPostPanel(UserProfile user) {
+    private JPanel createPostPanel() {
 
         JPanel postPanel = new JPanel();
         postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
         postPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        postPanel.setBackground(Color.WHITE);
+        postPanel.setBackground(new Color(230, 230, 230));
 
-        // Image Placeholder
-        JLabel imagePlaceholder = new JLabel();
-        imagePlaceholder.setPreferredSize(new Dimension(300, 150));
-        imagePlaceholder.setOpaque(true);
-        imagePlaceholder.setBackground(Color.LIGHT_GRAY);
-        imagePlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
+        // Load original image
+        ImageIcon originalIcon = new ImageIcon("images/Chris_dog1.png");
+        Image originalImage = originalIcon.getImage();
+
+        //Resize
+        Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        JLabel imageLabel = new JLabel(resizedIcon);
+        imageLabel.setPreferredSize(new Dimension(300, 150));
+        imageLabel.setOpaque(true);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Caption Label
         JLabel captionLabel = new JLabel();
-        captionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        captionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         captionLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        ArrayList<NewsPost> availablePosts = this.generateAvailablePosts(user);
+        ArrayList<NewsPost> availablePosts = this.generateAvailablePosts();
 
         if (!availablePosts.isEmpty()) {
             Random random = new Random();
             int randomIndex = random.nextInt(availablePosts.size()); //Generates a number between [0,size)
             NewsPost randomFriendPost = availablePosts.get(randomIndex);
-            // Image Placeholder
-            imagePlaceholder.setText(randomFriendPost.getImagePath());
+            // Add image from post here
+
             // Caption Label
             captionLabel.setText("@" + randomFriendPost.getAuthor() + " - " + randomFriendPost.getCaption());
         } else {
             System.out.println("No posts available");
         }
 
-        postPanel.add(imagePlaceholder);
+        postPanel.add(imageLabel);
         postPanel.add(captionLabel);
+
 
         return postPanel;
     }
 
-    private ArrayList<NewsPost> generateAvailablePosts(UserProfile user) {
+    private ArrayList<NewsPost> generateAvailablePosts() {
 
         ArrayList<NewsPost> availablePosts = new ArrayList<>();
         ArrayList<String> userFriends = user.getFriends();
@@ -158,5 +179,26 @@ public class HomeScreen extends JPanel {
         }
 
         return availablePosts;
+    }
+
+    private class loadMoreActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Thread(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    // Clear existing posts
+                    postsPanel.removeAll();
+
+                    // Add new posts
+                    postsPanel.add(createPostPanel());
+                    postsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing
+                    postsPanel.add(createPostPanel());
+
+                    // Refresh the UI to reflect the changes
+                    postsPanel.revalidate();
+                    postsPanel.repaint();
+                });
+            }).start();
+        }
     }
 }

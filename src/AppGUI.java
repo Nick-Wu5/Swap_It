@@ -12,6 +12,9 @@ public class AppGUI extends JFrame {
 
     private JPanel signInScreen;  // Panel for the Sign-In screen
     private JPanel homeScreen;    // Panel for the home screen (or next screen)
+    private JPanel searchScreen;
+    private JPanel addPostScreen;
+    private JPanel profileScreen;
 
     //Network / File IO
     private Socket socket;
@@ -76,6 +79,21 @@ public class AppGUI extends JFrame {
 
         // Switch to the home screen
         cardLayout.show(mainPanel, "HomeScreen");
+    }
+
+    public void initializeOtherPages(UserProfile loggedInUser) {
+
+        searchScreen = new SearchScreen(this, loggedInUser);
+        addPostScreen = new AddPostScreen(this, loggedInUser);
+        profileScreen = new ProfileScreen(this, loggedInUser);
+
+        mainPanel.add(searchScreen, "SearchScreen");
+        mainPanel.add(addPostScreen, "AddPostScreen");
+        mainPanel.add(profileScreen, "ProfileScreen");
+    }
+
+    public void showPage(String pageName) {
+        cardLayout.show(mainPanel, pageName);
     }
 
     public static void main(String[] args) {
