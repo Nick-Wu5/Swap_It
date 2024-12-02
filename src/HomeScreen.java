@@ -14,9 +14,9 @@ public class HomeScreen extends JPanel {
     private JPanel postsPanel;
     private UserProfile user;
 
-    public HomeScreen(PrintWriter writer, AppGUI appGUI, UserProfile user) {
+    public HomeScreen(ObjectInputStream objectReader, PrintWriter writer, AppGUI appGUI, UserProfile user) {
 
-        appGUI.initializeOtherPages(user);
+        appGUI.initializeOtherPages(user, objectReader, writer);
 
         this.appGUI = appGUI;
         this.user = user;

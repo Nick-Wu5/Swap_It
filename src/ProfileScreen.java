@@ -36,9 +36,10 @@ public class ProfileScreen extends JPanel {
         friendsLabel.setFont(new Font("Arial", Font.PLAIN, 24));
 
         userInfoPanel.add(postsLabel);
-        userInfoPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        userInfoPanel.add(Box.createRigidArea(new Dimension(30, 0)));
         userInfoPanel.add(friendsLabel);
 
+        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         mainContentPanel.add(usernameLabel);
         mainContentPanel.add(userInfoPanel);
 

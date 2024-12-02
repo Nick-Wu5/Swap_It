@@ -39,7 +39,6 @@ public class AppGUI extends JFrame {
         mainPanel = new JPanel(cardLayout);
         frame.add(mainPanel, BorderLayout.CENTER);
 
-
         connectToServer();
         initializeSignInScreen();  // Add the Sign-In screen initially
 
@@ -70,9 +69,9 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "SignInScreen");
     }
 
-    public void showHomeScreen(UserProfile loggedInUser) {
+    public void showHomeScreen(ObjectInputStream objectReader, PrintWriter writer, UserProfile loggedInUser) {
         // Create the home screen (next screen after login)
-        homeScreen = new HomeScreen(writer,this, loggedInUser);
+        homeScreen = new HomeScreen(objectReader, writer,this, loggedInUser);
 
         // Add the home screen to the main panel
         mainPanel.add(homeScreen, "HomeScreen");
@@ -81,9 +80,9 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "HomeScreen");
     }
 
-    public void initializeOtherPages(UserProfile loggedInUser) {
+    public void initializeOtherPages(UserProfile loggedInUser, ObjectInputStream objectReader, PrintWriter writer) {
 
-        searchScreen = new SearchScreen(this, loggedInUser);
+        searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
         addPostScreen = new AddPostScreen(this, loggedInUser);
         profileScreen = new ProfileScreen(this, loggedInUser);
 
@@ -93,7 +92,22 @@ public class AppGUI extends JFrame {
     }
 
     public void showPage(String pageName) {
+
         cardLayout.show(mainPanel, pageName);
+
+        switch (pageName){
+            case "SearchScreen":
+                writer.print("1");
+                break;
+            case "AddPostScreen":
+                writer.print("2");
+                break;
+            case "ProfileScreen":
+                writer.print("3");
+                break;
+            case "HomeScreen":
+                break;
+        }
     }
 
     public static void main(String[] args) {

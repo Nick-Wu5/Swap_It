@@ -43,7 +43,7 @@ public class SignInScreen extends JPanel {
         titlePanel.add(titleLabel);
 
         add(Box.createRigidArea(new Dimension(0, 40))); // Spacing
-        add(titlePanel);  // Add title panel to main panel
+        add(titlePanel);
 
         // Login Panel Section
         JPanel loginPanel = new JPanel();
@@ -55,7 +55,7 @@ public class SignInScreen extends JPanel {
         loginPasswordField.setMaximumSize(new Dimension(300, 40));
 
         JButton loginButton = new JButton("Log in");
-        loginButton.setBackground(new Color(255, 178, 102)); // Light orange
+        loginButton.setBackground(new Color(255, 178, 102));
         loginButton.setForeground(Color.BLACK);
         loginButton.setFocusPainted(false);
         loginButton.setMaximumSize(new Dimension(300, 40));
@@ -142,7 +142,7 @@ public class SignInScreen extends JPanel {
 
                     if (loginComplete) {
                         System.out.println("Login Successful");
-                        appGUI.showHomeScreen(UserSearch.findUserByUsername(username));
+                        appGUI.showHomeScreen(objectReader, writer, UserSearch.findUserByUsername(username));
                     } else {
                         JOptionPane.showMessageDialog(SignInScreen.this,
                                 "Incorrect username or password. Please try again.",
@@ -176,7 +176,7 @@ public class SignInScreen extends JPanel {
                     registrationComplete = objectReader.readBoolean();  // Read server response
 
                     if (registrationComplete) {
-                        appGUI.showHomeScreen(UserSearch.findUserByUsername(username));
+                        appGUI.showHomeScreen(objectReader, writer, UserSearch.findUserByUsername(username));
                     } else {
                         JOptionPane.showMessageDialog(SignInScreen.this,
                                 "User already exists, please login",

@@ -108,6 +108,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
 
                 switch (menu) {
                     case "1" -> { // Search for a user
+                        System.out.println("user selected search");
                         prompt = read.readLine();
                         System.out.println("Searching for user: " + prompt);
 
