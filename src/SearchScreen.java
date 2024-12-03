@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class SearchScreen extends JPanel {
+public class SearchScreen extends JPanel implements SearchScreenInterface {
 
     private PrintWriter writer;  // Used for sending data to the server
     private ObjectInputStream objectReader;

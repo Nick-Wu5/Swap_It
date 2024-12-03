@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ProfileScreen extends JPanel {
+public class ProfileScreen extends JPanel implements ProfileScreenInterface {
 
     private AppGUI appGUI;
     private UserProfile user;

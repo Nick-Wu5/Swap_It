@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
-public class ContentScreen extends JPanel {
+public class ContentScreen extends JPanel implements ContentScreenInterface {
 
     private AppGUI appGUI;
     private UserProfile user;

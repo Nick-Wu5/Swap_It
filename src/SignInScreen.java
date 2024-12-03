@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-public class SignInScreen extends JPanel {
+public class SignInScreen extends JPanel implements SignInScreenInterface {
 
     private BufferedReader reader;
     private PrintWriter writer;  // Used for sending data to the server
