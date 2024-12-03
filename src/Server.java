@@ -97,8 +97,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                 }
             } while (!loginComplete && !registrationComplete);
 
-            currentUser = UserSearch.findUserByUsername(username);
-            objectWrite.writeObject(currentUser);
+            /**
+             * currentUser = UserSearch.findUserByUsername(username);
+             *             objectWrite.writeObject(currentUser);
+             */
 
             // Handles actions while logged in
             while (loginComplete) {

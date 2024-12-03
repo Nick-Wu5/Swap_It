@@ -105,18 +105,7 @@ public class HomeScreen extends JPanel {
         postPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         postPanel.setBackground(new Color(230, 230, 230));
 
-        // Load original image
-        ImageIcon originalIcon = new ImageIcon("images/Chris_dog1.png");
-        Image originalImage = originalIcon.getImage();
-
-        //Resize
-        Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(resizedImage);
-
-        JLabel imageLabel = new JLabel(resizedIcon);
-        imageLabel.setPreferredSize(new Dimension(300, 150));
-        imageLabel.setOpaque(true);
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel imageLabel = new JLabel();
 
         // Caption Label
         JLabel captionLabel = new JLabel();
@@ -129,8 +118,19 @@ public class HomeScreen extends JPanel {
             Random random = new Random();
             int randomIndex = random.nextInt(availablePosts.size()); //Generates a number between [0,size)
             NewsPost randomFriendPost = availablePosts.get(randomIndex);
-            // Add image from post here
 
+            // Load original image
+            ImageIcon originalIcon = new ImageIcon(randomFriendPost.getImagePath());
+            Image originalImage = originalIcon.getImage();
+
+            //Resize
+            Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+            imageLabel = new JLabel(resizedIcon);
+            imageLabel.setPreferredSize(new Dimension(300, 150));
+            imageLabel.setOpaque(true);
+            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             // Caption Label
             captionLabel.setText("@" + randomFriendPost.getAuthor() + " - " + randomFriendPost.getCaption());
         } else {

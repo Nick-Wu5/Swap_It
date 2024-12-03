@@ -94,16 +94,17 @@ public class AppGUI extends JFrame {
     public void showPage(String pageName) {
 
         cardLayout.show(mainPanel, pageName);
+        System.out.println("Changed to " + pageName);
 
         switch (pageName){
             case "SearchScreen":
-                writer.print("1");
+                writer.println("1");
                 break;
             case "AddPostScreen":
-                writer.print("2");
+                writer.println("2");
                 break;
             case "ProfileScreen":
-                writer.print("3");
+                writer.println("3");
                 break;
             case "HomeScreen":
                 break;

@@ -1,8 +1,8 @@
-nick,My first post!,Placeholder Image,2024-11-30,0,0,0
-nick,Purdue football stinks,Sad cricket,2023-5-28,0,0,0
-quinn,Can't believe this is my life,Funny Lebron Image,2022-05-22,0,0,0
-ramya,I'm gonna be late,watch picture,2024-11-1,0,0,0
-divya,Brooklyn and Miami,cityscape picture,2021-7-5,0,0,0
-quinn,Warren Buffett is Him,Buffett Image,2024-2-9,0,0,0
-ramya,Dunsmore is Daddy,Silly photo here,2020-9-15,0,0,0
-divya,Wang plz give us an A,Praying emoji,2023-12-18,0,0,0
+nick,My first post!,images/Chris_dog1.png,2024-11-30,0,0,0
+nick,Purdue football stinks,images/Chris_dog2.png,2023-5-28,0,0,0
+quinn,Can't believe this is my life,images/Chris_dog3.png,2022-05-22,0,0,0
+ramya,I'm gonna be late,images/divya_scene1.png,2024-11-1,0,0,0
+divya,Brooklyn and Miami,images/divya_scene2.png,2021-7-5,0,0,0
+quinn,Warren Buffett is Him,images/nick_dog.png,2024-2-9,0,0,0
+ramya,Dunsmore is Daddy,images/Ramya_dog1.png,2020-9-15,0,0,0
+divya,Wang plz give us an A,images/Ramya_dog2.png,2023-12-18,0,0,0
