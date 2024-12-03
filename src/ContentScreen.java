@@ -12,7 +12,7 @@ public class ContentScreen extends JPanel {
         this.user = userProfile;
 
         setLayout(new BorderLayout());
-        JLabel label = new JLabel("Add Post Screen", SwingConstants.CENTER);
+        JLabel label = new JLabel("Content Screen", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
         add(label, BorderLayout.CENTER);
 
@@ -22,15 +22,14 @@ public class ContentScreen extends JPanel {
         navBar.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
         navBar.setBackground(Color.WHITE);
 
-        String[] navIcons = {"🔍", "🏠", "➕", "👤"};
-        String[] pageNames = {"SearchScreen", "HomeScreen", "AddPostScreen", "ProfileScreen"};
+        String[] pageNames = {"SearchScreen", "HomeScreen", "FriendScreen", "ContentScreen", "ProfileScreen"};
 
-        for (int i = 0; i < navIcons.length; i++) {
-            JButton navButton = new JButton(navIcons[i]);
+        for (int i = 0; i < pageNames.length; i++) {
+            JButton navButton = new JButton(pageNames[i]);
             navButton.setFocusPainted(false);
             navButton.setContentAreaFilled(false);
             navButton.setBorder(BorderFactory.createEmptyBorder());
-            navButton.setFont(new Font("Arial", Font.PLAIN, 20));
+            navButton.setFont(new Font("Arial", Font.PLAIN, 5));
 
             // Add ActionListener to navigate to the corresponding page
             final String pageName = pageNames[i];
