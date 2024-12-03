@@ -1,5 +1,7 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,14 +10,20 @@ public class ProfileScreen extends JPanel {
 
     private AppGUI appGUI;
     private UserProfile user;
+    private BufferedReader reader;
+    private ObjectInputStream objectInputStream;
+    private PrintWriter writer;
+    private JPanel displayInfoPanel;
+    private JPanel postsPanel;
+    private JScrollPane scrollPanel;
 
-    public ProfileScreen(AppGUI gui, UserProfile userProfile) {
+    public ProfileScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui, UserProfile userProfile) {
 
         this.appGUI = gui;
         this.user = userProfile;
-
-        ArrayList<NewsPost> userPosts = userProfile.getUserPosts();
-        ArrayList<String> userFriends = userProfile.getFriends();
+        this.reader = reader;
+        this.objectInputStream = objectReader;
+        this.writer = writer;
 
         setLayout(new BorderLayout());
 
@@ -31,10 +39,10 @@ public class ProfileScreen extends JPanel {
         userInfoPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         userInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel postsLabel = new JLabel("Posts: " + userPosts.size());
+        JLabel postsLabel = new JLabel("Posts: " + userProfile.getUserPosts().size());
         postsLabel.setFont(new Font("Arial", Font.PLAIN, 24));
 
-        JLabel friendsLabel = new JLabel("Friends: " + userFriends.size());
+        JLabel friendsLabel = new JLabel("Friends: " + userProfile.getFriends().size());
         friendsLabel.setFont(new Font("Arial", Font.PLAIN, 24));
 
         userInfoPanel.add(postsLabel);
@@ -51,55 +59,134 @@ public class ProfileScreen extends JPanel {
         viewPostsButton.setFocusPainted(false);
         viewPostsButton.setFont(new Font("Arial", Font.PLAIN, 20));
         viewPostsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        viewPostsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Display user's posts
-                ArrayList<NewsPost> posts = userProfile.getUserPosts();
-                if (!posts.isEmpty()) {
-                    StringBuilder postsString = new StringBuilder("Your Posts:\n");
-                    for (NewsPost post : posts) {
-                        postsString.append(post.toString()).append("\n");
-                    }
-                    JOptionPane.showMessageDialog(ProfileScreen.this, postsString.toString(),
-                            "Posts", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(ProfileScreen.this,
-                            "No posts available.", "Posts", JOptionPane.INFORMATION_MESSAGE);
-                }
+
+        displayInfoPanel = new JPanel();
+        displayInfoPanel.setLayout(new BorderLayout());
+
+        viewPostsButton.addActionListener(e -> {
+
+            displayInfoPanel.removeAll();
+            // Send that the user wants to display posts to server
+            writer.println("1");
+
+            //Retrieve posts from processed user from server
+            Object posts = null;
+
+            try {
+                posts = objectReader.readObject();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
+
+            if (posts instanceof ArrayList<?>) {
+                postsPanel = new JPanel();
+                postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+                postsPanel.setAutoscrolls(true);
+                ArrayList<NewsPost> userPosts = new ArrayList<>();
+                for (Object obj : (ArrayList<?>) posts) {
+                    if (obj instanceof NewsPost) {
+                        userPosts.add((NewsPost) obj);
+                    } else {
+                        System.out.println("Found non-NewsPost object");
+                        return;
+                    }
+                }
+
+                //Display posts in scrollable fashion to screen
+                for (NewsPost post : userPosts) {
+                    postsPanel.add(createGeneralPostPanel(post));
+                    postsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                }
+
+                scrollPanel = new JScrollPane(postsPanel);
+                scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+                displayInfoPanel.add(scrollPanel, BorderLayout.CENTER);
+                displayInfoPanel.revalidate();
+                displayInfoPanel.repaint();
+
+            } else {
+                JOptionPane.showMessageDialog(ProfileScreen.this,
+                        "You have no posts!",
+                        "Post Display Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+            writer.println("4");
         });
+
         JButton viewPersonalInfoButton = new JButton("View Personal Info");
         viewPersonalInfoButton.setBackground(new Color(255, 178, 102));
         viewPersonalInfoButton.setForeground(Color.BLACK);
         viewPersonalInfoButton.setFocusPainted(false);
         viewPersonalInfoButton.setFont(new Font("Arial", Font.PLAIN, 20));
         viewPersonalInfoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        viewPersonalInfoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Display user's personal information
-                String username = userProfile.getUsername();
-                String email = userProfile.getEmail();
-                String password = userProfile.getPassword();  // Be cautious with sensitive info
-                String friends = String.join(", ", userProfile.getFriends());
-                String blocked = String.join(", ", userProfile.getBlockedFriends());
 
-                String personalInfo = String.format(
-                        "Username: %s\nEmail: %s\nPassword: %s\nFriends: %s\nBlocked: %s",
-                        username, email, password, friends, blocked
-                );
+        viewPersonalInfoButton.addActionListener(e -> {
 
-                JOptionPane.showMessageDialog(ProfileScreen.this, personalInfo,
-                        "Personal Info", JOptionPane.INFORMATION_MESSAGE);
+            // Send that the user wants to display posts to server
+            writer.println("2");
+
+            try {
+
+                displayInfoPanel.removeAll();
+
+                String[] userInfo = reader.readLine().split(";");
+
+                // Create a panel with vertical layout for stacking labels
+                JPanel infoPanel = new JPanel();
+                infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+                infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+                JLabel userNameLabel = new JLabel("Username: " + userInfo[0]);
+                userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(userNameLabel);
+                infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+
+                JLabel emailLabel = new JLabel("Email: " + userInfo[1]);
+                emailLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(emailLabel);
+                infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+
+                JLabel passwordLabel = new JLabel("Password: " + userInfo[2]);
+                passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(passwordLabel);
+                infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+
+                JLabel userFriendsLabel = new JLabel("Friends: " + userInfo[3]);
+                userFriendsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(userFriendsLabel);
+                infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+
+                JLabel blockedLabel = new JLabel("Blocked: " + userInfo[4]);
+                blockedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(blockedLabel);
+
+                // Add the info panel to the main display panel
+                displayInfoPanel.setLayout(new BorderLayout());
+                displayInfoPanel.add(infoPanel, BorderLayout.CENTER);
+
+                displayInfoPanel.add(infoPanel);
+                displayInfoPanel.revalidate();
+                displayInfoPanel.repaint();
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
-        });
 
+            writer.println("4");
+        });
 
         mainContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         mainContentPanel.add(viewPostsButton); // Existing View Posts button
         mainContentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainContentPanel.add(viewPersonalInfoButton);
+        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainContentPanel.add(displayInfoPanel);
 
         //NAV BAR
 
@@ -126,5 +213,40 @@ public class ProfileScreen extends JPanel {
 
         add(mainContentPanel, BorderLayout.CENTER);
         add(navBar, BorderLayout.SOUTH);
+    }
+
+    private JPanel createGeneralPostPanel(NewsPost post) {
+
+        JPanel postPanel = new JPanel();
+        postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
+        postPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        postPanel.setBackground(new Color(230, 230, 230));
+
+        JLabel imageLabel = new JLabel();
+
+        // Caption Label
+        JLabel captionLabel = new JLabel();
+        captionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        captionLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        // Load original image
+        ImageIcon originalIcon = new ImageIcon(post.getImagePath());
+        Image originalImage = originalIcon.getImage();
+
+        //Resize
+        Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        imageLabel = new JLabel(resizedIcon);
+        imageLabel.setPreferredSize(new Dimension(300, 150));
+        imageLabel.setOpaque(true);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Caption Label
+        captionLabel.setText("@" + post.getAuthor() + " - " + post.getCaption());
+
+        postPanel.add(imageLabel);
+        postPanel.add(captionLabel);
+
+        return postPanel;
     }
 }

@@ -97,14 +97,13 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                 }
             } while (!loginComplete && !registrationComplete);
 
-            /**
-             * currentUser = UserSearch.findUserByUsername(username);
-             *             objectWrite.writeObject(currentUser);
-             */
+             currentUser = UserSearch.findUserByUsername(username);
+             //objectWrite.writeObject(currentUser);
 
             // Handles actions while logged in
             while (loginComplete) {
 
+                System.out.println("Looking for input");
                 String menu = read.readLine();
                 String prompt = "";
 
@@ -123,38 +122,61 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             objectWrite.writeObject(searchedUser);
                             objectWrite.flush();
 
-                            String commentQuestion = read.readLine();
+                            String command = read.readLine();
 
-                            boolean commentMenu = false;
+                            switch (command) {
+                                case "COMMENT":
 
-                            do {
-                                if (commentQuestion.equalsIgnoreCase("y")) {
+                                    String postCaption = read.readLine();
+                                    String commentText = read.readLine();
 
-                                    ArrayList<NewsPost> searchedUserPosts = searchedUser.getUserPosts();
-
-                                    synchronized (this) {
-                                        objectWrite.writeObject(searchedUserPosts);
-                                    }
-                                    commentMenu = true;
-
-                                    String postToCommentOn = read.readLine();
-                                    String commentAnswer = read.readLine();
-
-                                    for (NewsPost newsPost : searchedUserPosts) {
-                                        if (newsPost.getCaption().equals(postToCommentOn)) {
-                                            NewsComment newComment = new NewsComment(commentAnswer,
-                                                    currentUser.getUsername(), postToCommentOn);
-                                            newComment.saveToFile();
-                                            newsPost.addComment(newComment);
+                                    //find post here by caption
+                                    NewsPost targetPost = null;
+                                    synchronized (searchedUser) {
+                                        for (NewsPost post : searchedUser.getUserPosts()) {
+                                            if (post.getCaption().equals(postCaption)) {
+                                                targetPost = post;
+                                                break;
+                                            }
                                         }
                                     }
 
-                                } else if (commentQuestion.equalsIgnoreCase("n")) {
-                                    commentMenu = true;
-                                } else {
-                                    System.out.println("Invalid input received");
-                                }
-                            } while (!commentMenu);
+                                    if (targetPost != null) {
+                                        // Create and add the new comment
+                                        NewsComment newComment = new NewsComment(commentText, currentUser.getUsername(),
+                                                postCaption);
+                                        newComment.saveToFile(); // Save the comment to file
+                                        targetPost.addComment(newComment); // Add the comment to the post
+                                        System.out.println("Comment added to post: " + postCaption);
+                                    } else {
+                                        System.out.println("Post not found for caption: " + postCaption);
+                                    }
+                                    break;
+                                case "VIEW":
+                                    System.out.println("user is viewing comments");
+                                    break;
+                            }
+//                            if (commentQuestion.equalsIgnoreCase("y")) {
+//
+//                                ArrayList<NewsPost> searchedUserPosts = searchedUser.getUserPosts();
+//
+//                                synchronized (this) {
+//                                    objectWrite.writeObject(searchedUserPosts);
+//                                }
+//
+//                                String postToCommentOn = read.readLine();
+//                                String commentAnswer = read.readLine();
+//
+//                                for (NewsPost newsPost : searchedUserPosts) {
+//                                    if (newsPost.getCaption().equals(postToCommentOn)) {
+//                                        NewsComment newComment = new NewsComment(commentAnswer,
+//                                                currentUser.getUsername(), postToCommentOn);
+//                                        newComment.saveToFile();
+//                                        newsPost.addComment(newComment);
+//                                    }
+//                                }
+//
+//                            }
                         }
                         objectWrite.flush();
                     }
@@ -215,16 +237,25 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         }
                     }
                     case "4" -> { // View posts and info
+                        System.out.println("Looking at user info stuff");
                         prompt = read.readLine();
                         switch (prompt) {
                             case "1" -> {
                                 synchronized (this) {
-                                    objectWrite.writeObject(currentUser.getUserPosts());
+                                    if (!(currentUser.getUserPosts().isEmpty())){
+                                        objectWrite.writeObject(currentUser.getUserPosts());
+                                    } else {
+                                        objectWrite.writeObject("user has no posts");
+                                    }
                                 }
                             }
                             case "2" -> write.println(currentUser.getAccountInfo());
+                            case "exit" -> {}
                             default -> System.out.println("A valid input was not selected!");
                         }
+                    }
+                    case "5" -> {
+                        System.out.println("user selected home");
                     }
                     default -> System.out.println("A valid input was not selected!");
                 }
@@ -244,4 +275,3 @@ public class Server extends PasswordProtectedLogin implements Runnable {
         }
     }
 }
-//push comment

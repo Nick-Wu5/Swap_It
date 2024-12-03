@@ -36,7 +36,11 @@ public class NewsComment implements NewsFeed, Serializable {
     }
 
     public int getUpvotes() {
-        return upvotes - downvotes;
+        return upvotes;
+    }
+
+    public int getDownvotes() {
+        return downvotes;
     }
 
     public String getContent() {

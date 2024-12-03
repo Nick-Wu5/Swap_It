@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
 public class SignInScreen extends JPanel {
 
+    private BufferedReader reader;
     private PrintWriter writer;  // Used for sending data to the server
     private ObjectInputStream objectReader; // Used for receiving data from the server
     private AppGUI appGUI;  // Reference to AppGUI to be able to call showHomeScreen()
@@ -18,8 +20,9 @@ public class SignInScreen extends JPanel {
     private JTextField registerEmailField;
     private JPasswordField registerPasswordField;
 
-    public SignInScreen(PrintWriter writer, ObjectInputStream objectReader, AppGUI appGUI) {
+    public SignInScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI appGUI) {
 
+        this.reader = reader;
         this.writer = writer;          // Pass the writer from AppGUI
         this.objectReader = objectReader; // Pass the objectReader from AppGUI
         this.appGUI = appGUI;
@@ -142,7 +145,7 @@ public class SignInScreen extends JPanel {
 
                     if (loginComplete) {
                         System.out.println("Login Successful");
-                        appGUI.showHomeScreen(objectReader, writer, UserSearch.findUserByUsername(username));
+                        appGUI.showHomeScreen(reader, objectReader, writer, UserSearch.findUserByUsername(username));
                     } else {
                         JOptionPane.showMessageDialog(SignInScreen.this,
                                 "Incorrect username or password. Please try again.",
@@ -176,7 +179,7 @@ public class SignInScreen extends JPanel {
                     registrationComplete = objectReader.readBoolean();  // Read server response
 
                     if (registrationComplete) {
-                        appGUI.showHomeScreen(objectReader, writer, UserSearch.findUserByUsername(username));
+                        appGUI.showHomeScreen(reader, objectReader, writer, UserSearch.findUserByUsername(username));
                     } else {
                         JOptionPane.showMessageDialog(SignInScreen.this,
                                 "User already exists, please login",

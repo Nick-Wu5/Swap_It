@@ -14,9 +14,9 @@ public class HomeScreen extends JPanel {
     private JPanel postsPanel;
     private UserProfile user;
 
-    public HomeScreen(ObjectInputStream objectReader, PrintWriter writer, AppGUI appGUI, UserProfile user) {
+    public HomeScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer, AppGUI appGUI, UserProfile user) {
 
-        appGUI.initializeOtherPages(user, objectReader, writer);
+        appGUI.initializeOtherPages(user, reader, objectReader, writer);
 
         this.appGUI = appGUI;
         this.user = user;
@@ -139,7 +139,6 @@ public class HomeScreen extends JPanel {
 
         postPanel.add(imageLabel);
         postPanel.add(captionLabel);
-
 
         return postPanel;
     }

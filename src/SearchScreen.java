@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ public class SearchScreen extends JPanel {
     private UserProfile user;
     JTextField userToSearch;
     JPanel displayPanel;
+    JScrollPane displayScrollPane;
 
     public SearchScreen(PrintWriter writer, ObjectInputStream objectReader, AppGUI gui, UserProfile userProfile) {
 
@@ -48,7 +50,7 @@ public class SearchScreen extends JPanel {
         searchButton.addActionListener(new SearchLoginListener());
         searchPanel.add(searchButton);
 
-        //DISPLAY PANEL
+        //SEARCHED USER DISPLAY PANEL
 
         displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
@@ -107,11 +109,26 @@ public class SearchScreen extends JPanel {
                             JOptionPane.ERROR_MESSAGE);
                 } else if (searchedProfile instanceof UserProfile) {
 
-                    System.out.println(user.getUsername());
-
                     UserProfile searchedUser = (UserProfile) searchedProfile;
 
                     displayUserInfo(searchedUser);
+
+                    JPanel postsPanel = new JPanel();
+                    postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+
+                    for (NewsPost post : searchedUser.getUserPosts()) {
+                        postsPanel.add(searchPostPanel(post));
+                    }
+
+                    displayScrollPane = new JScrollPane(postsPanel);
+                    displayScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                    displayScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                    displayScrollPane.setMinimumSize(new Dimension(displayPanel.getWidth(), 300));
+                    displayScrollPane.setMaximumSize(new Dimension(displayPanel.getWidth(), 300));
+
+                    displayPanel.add(displayScrollPane, BorderLayout.CENTER);
+                    displayPanel.revalidate();
+                    displayPanel.repaint();
 
                 } else {
                     JOptionPane.showMessageDialog(SearchScreen.this,
@@ -127,9 +144,11 @@ public class SearchScreen extends JPanel {
         // Clear previous results
         displayPanel.removeAll();
 
-        JLabel userNameLabel = new JLabel(user.getUsername());
+        JLabel userNameLabel = new JLabel("Profile: " + user.getUsername());
         userNameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel userFriendsPostsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
 
         JLabel friendsLabel = new JLabel("Friends: " + user.getFriends().size());
         friendsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -139,19 +158,22 @@ public class SearchScreen extends JPanel {
         postsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         postsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        userFriendsPostsPanel.add(friendsLabel);
+        userFriendsPostsPanel.add(postsLabel);
+
         // Add new labels to display user info
+        displayPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
         displayPanel.add(userNameLabel);
         displayPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
-        displayPanel.add(friendsLabel);
+        displayPanel.add(userFriendsPostsPanel);
         displayPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
-        displayPanel.add(postsLabel);
 
         // Refresh the panel to show updated results
         displayPanel.revalidate();
         displayPanel.repaint();
     }
 
-    private JPanel createPostPanel(UserProfile user) {
+    private JPanel searchPostPanel (NewsPost post) {
 
         JPanel postPanel = new JPanel();
         postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
@@ -165,35 +187,118 @@ public class SearchScreen extends JPanel {
         captionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         captionLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        ArrayList<NewsPost> availablePosts = this.user.getUserPosts();
+        // Load original image
+        ImageIcon originalIcon = new ImageIcon(post.getImagePath());
+        Image originalImage = originalIcon.getImage();
 
-        if (!availablePosts.isEmpty()) {
-            Random random = new Random();
-            int randomIndex = random.nextInt(availablePosts.size()); //Generates a number between [0,size)
-            NewsPost randomFriendPost = availablePosts.get(randomIndex);
+        //Resize
+        Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
-            // Load original image
-            ImageIcon originalIcon = new ImageIcon(randomFriendPost.getImagePath());
-            Image originalImage = originalIcon.getImage();
+        imageLabel = new JLabel(resizedIcon);
+        imageLabel.setPreferredSize(new Dimension(300, 150));
+        imageLabel.setOpaque(true);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Caption Label
+        captionLabel.setText("@" + post.getAuthor() + " - " + post.getCaption());
 
-            //Resize
-            Image resizedImage = originalImage.getScaledInstance(300, 150, Image.SCALE_SMOOTH);
-            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JPanel commentPanel = new JPanel();
+        commentPanel.setLayout(new FlowLayout());
+        commentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            imageLabel = new JLabel(resizedIcon);
-            imageLabel.setPreferredSize(new Dimension(300, 150));
-            imageLabel.setOpaque(true);
-            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            // Caption Label
-            captionLabel.setText("@" + randomFriendPost.getAuthor() + " - " + randomFriendPost.getCaption());
-        } else {
-            System.out.println("No posts available");
-        }
+        JButton commentButton = new JButton("Comment");
+        commentPanel.add(commentButton);
+
+        commentButton.addActionListener(e -> {
+            String commentText = JOptionPane.showInputDialog(postPanel, "Enter your comment:", "Comment", JOptionPane.PLAIN_MESSAGE);
+            if (commentText != null && !commentText.trim().isEmpty()) {
+                writer.println("COMMENT"); // Command to indicate a comment is being sent
+                writer.println(post.getCaption()); // Send the post caption
+                writer.println(commentText); // Send the comment text
+                writer.flush();
+            }
+        });
+
+        JButton viewCommentsButton = new JButton("View Comments");
+        commentPanel.add(viewCommentsButton);
+
+        viewCommentsButton.addActionListener(e -> {
+            // Fetch comments for the post
+            writer.println("VIEW");
+
+            ArrayList<NewsComment> comments = NewsPost.findComments(post.getCaption());
+
+            // Create a dialog to display comments
+            JDialog commentsDialog = new JDialog((Frame) null, "Comments", true);
+            commentsDialog.setSize(200, 300);
+            commentsDialog.setLocationRelativeTo(displayPanel); // Center on screen
+            commentsDialog.setLayout(new BorderLayout());
+
+            // Main panel to hold all comments
+            JPanel commentsPanel = new JPanel();
+            commentsPanel.setLayout(new BoxLayout(commentsPanel, BoxLayout.Y_AXIS));
+            commentsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            // Add each comment to the panel
+            if (comments.isEmpty()) {
+                JLabel noCommentsLabel = new JLabel("No comments yet.");
+                noCommentsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                commentsPanel.add(noCommentsLabel);
+            } else {
+                for (NewsComment comment : comments) {
+                    JPanel postCommentPanel = createCommentPanel(comment);
+                    commentsPanel.add(postCommentPanel);
+                    commentsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing between comments
+                }
+            }
+
+            // Wrap the comments panel in a scroll pane
+            JScrollPane scrollPane = new JScrollPane(commentsPanel);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            // Add the scroll pane to the dialog
+            commentsDialog.add(scrollPane, BorderLayout.CENTER);
+
+            // Show the dialog
+            commentsDialog.setVisible(true);
+        });
 
         postPanel.add(imageLabel);
         postPanel.add(captionLabel);
-
+        postPanel.add(commentPanel);
 
         return postPanel;
+    }
+
+    private JPanel createCommentPanel(NewsComment comment) {
+        JPanel commentPanel = new JPanel();
+        commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.Y_AXIS));
+        commentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        commentPanel.setBackground(new Color(245, 245, 245));
+        commentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Author label
+        JLabel authorLabel = new JLabel("Author: " + comment.getAuthor());
+        authorLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        authorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Comment text label
+        JLabel contentLabel = new JLabel(comment.getContent());
+        contentLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        contentLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Likes and dislikes label
+        JLabel likesLabel = new JLabel("Upvotes: " + comment.getUpvotes() + " | Downvotes: " +
+                comment.getDownvotes());
+        likesLabel.setFont(new Font("Arial", Font.ITALIC, 12));
+        likesLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Add labels to the panel
+        commentPanel.add(authorLabel);
+        commentPanel.add(contentLabel);
+        commentPanel.add(likesLabel);
+
+        return commentPanel;
     }
 }

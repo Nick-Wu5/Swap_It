@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class AppGUI extends JFrame {
 
@@ -60,7 +62,7 @@ public class AppGUI extends JFrame {
 
     private void initializeSignInScreen() {
 
-        signInScreen = new SignInScreen(writer, objectReader, this);  // Create the SignInScreen instance
+        signInScreen = new SignInScreen(reader, writer, objectReader, this);  // Create the SignInScreen instance
 
         // Add the sign-in panel to the main panel
         mainPanel.add(signInScreen, "SignInScreen");
@@ -69,9 +71,9 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "SignInScreen");
     }
 
-    public void showHomeScreen(ObjectInputStream objectReader, PrintWriter writer, UserProfile loggedInUser) {
+    public void showHomeScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer, UserProfile loggedInUser) {
         // Create the home screen (next screen after login)
-        homeScreen = new HomeScreen(objectReader, writer,this, loggedInUser);
+        homeScreen = new HomeScreen(reader, objectReader, writer,this, loggedInUser);
 
         // Add the home screen to the main panel
         mainPanel.add(homeScreen, "HomeScreen");
@@ -80,11 +82,11 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "HomeScreen");
     }
 
-    public void initializeOtherPages(UserProfile loggedInUser, ObjectInputStream objectReader, PrintWriter writer) {
+    public void initializeOtherPages(UserProfile loggedInUser, BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer) {
 
         searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
         addPostScreen = new AddPostScreen(this, loggedInUser);
-        profileScreen = new ProfileScreen(this, loggedInUser);
+        profileScreen = new ProfileScreen(reader, writer, objectReader, this, loggedInUser);
 
         mainPanel.add(searchScreen, "SearchScreen");
         mainPanel.add(addPostScreen, "AddPostScreen");
@@ -94,9 +96,10 @@ public class AppGUI extends JFrame {
     public void showPage(String pageName) {
 
         cardLayout.show(mainPanel, pageName);
+        writer.println("exit");
         System.out.println("Changed to " + pageName);
 
-        switch (pageName){
+        switch (pageName) {
             case "SearchScreen":
                 writer.println("1");
                 break;
@@ -104,9 +107,12 @@ public class AppGUI extends JFrame {
                 writer.println("2");
                 break;
             case "ProfileScreen":
-                writer.println("3");
+                writer.println("4");
                 break;
             case "HomeScreen":
+                writer.println("5");
+                break;
+            default:
                 break;
         }
     }
