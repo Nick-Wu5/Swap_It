@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class AddPostScreen extends JPanel {
+public class ContentScreen extends JPanel {
 
     private AppGUI appGUI;
     private UserProfile user;
 
-    public AddPostScreen(AppGUI gui, UserProfile userProfile) {
+    public ContentScreen(AppGUI gui, UserProfile userProfile) {
 
         this.appGUI = gui;
         this.user = userProfile;

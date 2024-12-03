@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class AppGUI extends JFrame {
 
@@ -15,8 +13,9 @@ public class AppGUI extends JFrame {
     private JPanel signInScreen;  // Panel for the Sign-In screen
     private JPanel homeScreen;    // Panel for the home screen (or next screen)
     private JPanel searchScreen;
-    private JPanel addPostScreen;
+    private JPanel contentScreen;
     private JPanel profileScreen;
+    private JPanel friendScreen;
 
     //Network / File IO
     private Socket socket;
@@ -85,12 +84,14 @@ public class AppGUI extends JFrame {
     public void initializeOtherPages(UserProfile loggedInUser, BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer) {
 
         searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
-        addPostScreen = new AddPostScreen(this, loggedInUser);
+        contentScreen = new ContentScreen(this, loggedInUser);
         profileScreen = new ProfileScreen(reader, writer, objectReader, this, loggedInUser);
+        friendScreen = new FriendScreen();
 
         mainPanel.add(searchScreen, "SearchScreen");
-        mainPanel.add(addPostScreen, "AddPostScreen");
+        mainPanel.add(contentScreen, "ContentScreen");
         mainPanel.add(profileScreen, "ProfileScreen");
+        mainPanel.add(friendScreen, "FriendScreen");
     }
 
     public void showPage(String pageName) {
@@ -103,8 +104,11 @@ public class AppGUI extends JFrame {
             case "SearchScreen":
                 writer.println("1");
                 break;
-            case "AddPostScreen":
+            case "ContentScreen":
                 writer.println("2");
+                break;
+            case "FriendsScreen":
+                writer.println("3");
                 break;
             case "ProfileScreen":
                 writer.println("4");
