@@ -4,3 +4,4 @@ ramya,ramya23@gmail.com,password1234,EmptyFriendsList,EmptyBlockedList
 divya,divdivdiv@aol.com,citygirl4,EmptyFriendsList,EmptyBlockedList
 chrisTheMan,brantley4@gmail.com,munster,EmptyFriendsList,EmptyBlockedList
 Isaac,note4isaac@yahoo.com,bucky,EmptyFriendsList,EmptyBlockedList
+newAccount,email@gmail.com,password,EmptyFriendsList,EmptyBlockedList

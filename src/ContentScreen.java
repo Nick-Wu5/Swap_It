@@ -30,6 +30,7 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         JLabel label = new JLabel("Content", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
         label.setBorder(new EmptyBorder(30, 0, 0, 0));
+        label.setForeground(new Color(255, 178, 102));
 
         // CardLayout to swap panels
         CardLayout cardLayout = new CardLayout();
@@ -50,27 +51,6 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         // Show the main menu panel initially
         cardLayout.show(mainPanel, "Menu");
 
-        //NAV BAR
-        JPanel navBar = new JPanel();
-        navBar.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
-        navBar.setBackground(Color.WHITE);
-
-        String[] pageNames = {"SearchScreen", "HomeScreen", "FriendScreen", "ContentScreen", "ProfileScreen"};
-
-        for (int i = 0; i < pageNames.length; i++) {
-            JButton navButton = new JButton(pageNames[i]);
-            navButton.setFocusPainted(false);
-            navButton.setContentAreaFilled(false);
-            navButton.setBorder(BorderFactory.createEmptyBorder());
-            navButton.setFont(new Font("Arial", Font.PLAIN, 5));
-
-            // Add ActionListener to navigate to the corresponding page
-            final String pageName = pageNames[i];
-            navButton.addActionListener(e -> appGUI.showPage(pageName));
-
-            navBar.add(navButton);
-        }
-
         add(label, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
         add(createNavBar(), BorderLayout.SOUTH);
@@ -83,14 +63,22 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
+        Dimension buttonSize = new Dimension(200, 50);
+
         JButton createPostButton = new JButton("Create Post");
         createPostButton.setAlignmentX(CENTER_ALIGNMENT);
+        createPostButton.setPreferredSize(buttonSize);
+        createPostButton.setMaximumSize(buttonSize);
 
         JButton deletePostButton = new JButton("Delete Post");
         deletePostButton.setAlignmentX(CENTER_ALIGNMENT);
+        deletePostButton.setPreferredSize(buttonSize);
+        deletePostButton.setMaximumSize(buttonSize);
 
         JButton deleteCommentButton = new JButton("Delete Comment");
         deleteCommentButton.setAlignmentX(CENTER_ALIGNMENT);
+        deleteCommentButton.setPreferredSize(buttonSize);
+        deleteCommentButton.setMaximumSize(buttonSize);
 
         // Button actions to swap panels
         createPostButton.addActionListener(e -> {
@@ -135,6 +123,9 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         captionField.setAlignmentX(JPanel.CENTER_ALIGNMENT);
         captionField.setMaximumSize(new Dimension(300, 40));
 
+        JLabel commaWarningLabel = new JLabel("No commas please. Commas are scary");
+        commaWarningLabel.setAlignmentX(CENTER_ALIGNMENT);
+
         // Dropdown
         String[] imageOptions = {"Chris_dog1.png", "Chris_dog2.png", "Chris_dog3.png", "divya_scene1.png",
                 "divya_scene2.png", "divya_scene3.png", "nick_dog.png", "Ramya_dog1.png", "Ramya_dog2.png"};
@@ -176,6 +167,7 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         createPostPanel.add(imageDropdown);
         createPostPanel.add(Box.createVerticalStrut(10)); // Spacer
         createPostPanel.add(captionField);
+        createPostPanel.add(commaWarningLabel);
         createPostPanel.add(Box.createVerticalStrut(20)); // Spacer
         createPostPanel.add(createButton);
         createPostPanel.add(Box.createVerticalGlue()); // Push everything upward

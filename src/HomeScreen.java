@@ -62,12 +62,17 @@ public class HomeScreen extends JPanel {
         loadMoreButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button horizontally
         loadMoreButton.addActionListener(new loadMoreActionListener());
 
+        JLabel swapInfoLabel = new JLabel("Click to see more of your friends posts!");
+        swapInfoLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+        swapInfoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         // Add components to the main panel
         mainContentPanel.add(headerPanel); // Header
         mainContentPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
         mainContentPanel.add(postsPanel); // posts section
         mainContentPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
         mainContentPanel.add(loadMoreButton); // "Load more posts" button
+        mainContentPanel.add(swapInfoLabel);
 
         add(mainContentPanel, BorderLayout.CENTER);
         add(createNavBar(), BorderLayout.SOUTH); // Navigation bar

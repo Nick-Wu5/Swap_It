@@ -69,6 +69,10 @@ public class UserProfile implements User, Serializable {
         return friendsList;
     }
 
+    public ArrayList<String> getFriendsList() {
+        return this.friends;
+    }
+
     public void setFriends(ArrayList<String> newFriends) {
         this.friends = newFriends;
     }
@@ -264,13 +268,12 @@ public class UserProfile implements User, Serializable {
                 String[] parts = fileLines.get(i).split(",");
                 if (parts[0].equals(username)) {
 
-                    parts[3] = String.join(";", this.getFriends()); // Replace with the new friends list
+                    parts[3] = String.join(";", this.getFriendsList()); // Replace with the new friends list
 
                     fileLines.set(i, String.join(",", parts)); // Rebuild the line
                     userFound = true;
                     break;
                 }
-
             }
 
             if (!userFound) {

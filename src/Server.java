@@ -123,11 +123,11 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             objectWrite.writeObject(searchedUser);
                             objectWrite.flush();
 
+                            System.out.println("looking for add comment or view comment");
                             String command = read.readLine();
 
                             switch (command) {
                                 case "COMMENT":
-
                                     String postCaption = read.readLine();
                                     String commentText = read.readLine();
 
@@ -194,8 +194,10 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         switch (prompt) {
                             case "1" -> {
                                 String friendToAdd = read.readLine();
+                                System.out.println("current friends list: " + currentUser.getFriends());
                                 currentUser.addFriend(friendToAdd);
                                 currentUser.updateFriendsList();
+                                System.out.println("new friends list: " + currentUser.getFriends());
                                 write.println("Added friend: " + friendToAdd);
                             }
                             case "2" -> {
