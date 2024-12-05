@@ -70,7 +70,8 @@ public class AppGUI extends JFrame {
         cardLayout.show(mainPanel, "SignInScreen");
     }
 
-    public void showHomeScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer, UserProfile loggedInUser) {
+    public void showHomeScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer,
+                               UserProfile loggedInUser) {
         // Create the home screen (next screen after login)
         homeScreen = new HomeScreen(reader, objectReader, writer,this, loggedInUser);
 
@@ -79,12 +80,13 @@ public class AppGUI extends JFrame {
 
         // Switch to the home screen
         cardLayout.show(mainPanel, "HomeScreen");
+        System.out.println("called showHomeScreen");
     }
 
     public void initializeOtherPages(UserProfile loggedInUser, BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer) {
 
         searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
-        contentScreen = new ContentScreen(reader, objectReader, writer,this, loggedInUser);
+        contentScreen = new ContentScreen(reader, writer, objectReader,this, loggedInUser);
         profileScreen = new ProfileScreen(reader, writer, objectReader, this, loggedInUser);
         friendScreen = new FriendScreen();
 

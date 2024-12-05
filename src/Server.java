@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
 import java.time.LocalDate;
@@ -156,27 +157,6 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                     System.out.println("user is viewing comments");
                                     break;
                             }
-//                            if (commentQuestion.equalsIgnoreCase("y")) {
-//
-//                                ArrayList<NewsPost> searchedUserPosts = searchedUser.getUserPosts();
-//
-//                                synchronized (this) {
-//                                    objectWrite.writeObject(searchedUserPosts);
-//                                }
-//
-//                                String postToCommentOn = read.readLine();
-//                                String commentAnswer = read.readLine();
-//
-//                                for (NewsPost newsPost : searchedUserPosts) {
-//                                    if (newsPost.getCaption().equals(postToCommentOn)) {
-//                                        NewsComment newComment = new NewsComment(commentAnswer,
-//                                                currentUser.getUsername(), postToCommentOn);
-//                                        newComment.saveToFile();
-//                                        newsPost.addComment(newComment);
-//                                    }
-//                                }
-//
-//                            }
                         }
                         objectWrite.flush();
                     }
@@ -197,15 +177,15 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                             synchronized (this) {
                                 String title = read.readLine();
                                 NewsPost.deletePost(title);
+                                System.out.println("tried to delete post: " + title);
                             }
                         } else if (prompt.equals("3")) {
 
                             System.out.println("user trying to delete comment");
-                            ArrayList<NewsComment> usersComments = currentUser.findCommentsForUser();
                             synchronized (this) {
-                                objectWrite.writeObject(usersComments);
                                 String commentAnswer = read.readLine();
                                 NewsComment.deleteComment(commentAnswer);
+                                System.out.println("deleted: " + commentAnswer);
                             }
                         }
                     }

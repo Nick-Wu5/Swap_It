@@ -1,10 +1,11 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ContentScreen extends JPanel implements ContentScreenInterface {
@@ -14,8 +15,10 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
     private ObjectInputStream objectReader;
     private BufferedReader reader;
     private PrintWriter writer;
+    private Object userPosts;
 
-    public ContentScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer, AppGUI gui, UserProfile userProfile) {
+    public ContentScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui,
+                         UserProfile userProfile) {
 
         this.appGUI = gui;
         this.user = userProfile;
@@ -24,17 +27,18 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         this.reader = reader;
 
         setLayout(new BorderLayout());
-        JLabel label = new JLabel("Content Screen", SwingConstants.CENTER);
+        JLabel label = new JLabel("Content", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
+        label.setBorder(new EmptyBorder(30, 0, 0, 0));
 
         // CardLayout to swap panels
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
 
         // Panels for each functionality
-        JPanel menuPanel = createMenuPanel(writer, mainPanel, cardLayout);
+        JPanel menuPanel = createMenuPanel(objectReader, writer, mainPanel, cardLayout);
         JPanel createPostPanel = createCreatePostPanel(writer, mainPanel, cardLayout);
-        JPanel deletePostPanel = createDeletePostPanel(writer, mainPanel, cardLayout);
+        JPanel deletePostPanel = createDeletePostPanel (mainPanel, cardLayout);
         JPanel deleteCommentPanel = createDeleteCommentPanel(writer, mainPanel, cardLayout);
 
         // Add panels to CardLayout
@@ -47,7 +51,6 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         cardLayout.show(mainPanel, "Menu");
 
         //NAV BAR
-
         JPanel navBar = new JPanel();
         navBar.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
         navBar.setBackground(Color.WHITE);
@@ -75,7 +78,7 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
     }
 
     // Create Menu Panel
-    private static JPanel createMenuPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
+    private static JPanel createMenuPanel(ObjectInputStream objectReader, PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
 
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -122,7 +125,7 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
     }
 
     // Create Post Panel
-    private static JPanel createCreatePostPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
+    private JPanel createCreatePostPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
 
         JPanel createPostPanel = new JPanel();
         createPostPanel.setLayout(new BoxLayout(createPostPanel, BoxLayout.Y_AXIS));
@@ -181,55 +184,91 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
     }
 
     // Delete Post Panel
-    private static JPanel createDeletePostPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
-        JPanel deletePostPanel = new JPanel(new GridLayout(3, 1));
-        JLabel captionLabel = new JLabel("Enter Caption of Post to Delete:");
-        JTextField captionField = new JTextField();
+    private JPanel createDeletePostPanel(JPanel mainPanel, CardLayout cardLayout) {
+
+        JPanel deletePostPanel = new JPanel();
+        deletePostPanel.setLayout(new BoxLayout(deletePostPanel, BoxLayout.Y_AXIS));
+
+        ArrayList<String> captionsOfPosts = new ArrayList<>();
+        ArrayList<NewsPost> userPosts = user.getUserPosts();
+
+        for (NewsPost post : userPosts) {
+            captionsOfPosts.add(post.getCaption());
+        }
+
+        // Initial dropdown data
+        JComboBox<String> postDropdown = new JComboBox<>(captionsOfPosts.toArray(new String[0]));
+        postDropdown.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+        postDropdown.setMaximumSize(new Dimension(300, 30));
 
         JButton deleteButton = new JButton("Delete");
-        JButton backButton = new JButton("Back");
+        deleteButton.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 
         deleteButton.addActionListener(e -> {
-            String captionToDelete = captionField.getText();
-            // Simulate sending to backend
-            JOptionPane.showMessageDialog(deletePostPanel, "Post Deleted: " + captionToDelete);
-            captionField.setText("");
-            cardLayout.show(mainPanel, "Menu");
+            String captionToDelete = (String) postDropdown.getSelectedItem();
+
+            if (captionToDelete != null) {
+                // Remove the post from userPosts, captions, dropdown if needed
+                userPosts.removeIf(post -> post.getCaption().equals(captionToDelete));
+                captionsOfPosts.remove(captionToDelete);
+                postDropdown.setModel(new DefaultComboBoxModel<>(captionsOfPosts.toArray(new String[0])));
+
+                writer.println(captionToDelete);
+                writer.flush();
+
+                // Inform the user
+                JOptionPane.showMessageDialog(deletePostPanel, "Post Deleted: " + captionToDelete);
+
+                // Optionally return to the menu
+                cardLayout.show(mainPanel, "Menu");
+            } else {
+                JOptionPane.showMessageDialog(deletePostPanel, "No post selected to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
         });
 
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
-
-        deletePostPanel.add(captionLabel);
-        deletePostPanel.add(captionField);
+        deletePostPanel.add(Box.createVerticalStrut(20)); // Spacer
+        deletePostPanel.add(postDropdown);
+        deletePostPanel.add(Box.createVerticalStrut(20)); // Spacing
         deletePostPanel.add(deleteButton);
-        deletePostPanel.add(backButton);
+        deletePostPanel.add(Box.createVerticalGlue()); // Push everything upward
 
         return deletePostPanel;
     }
 
     // Delete Comment Panel
-    private static JPanel createDeleteCommentPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
-        JPanel deleteCommentPanel = new JPanel(new BorderLayout());
-        JLabel commentLabel = new JLabel("Select a comment to delete:");
+    private JPanel createDeleteCommentPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
+
+        ArrayList<NewsComment> commentsOfUser = user.findCommentsForUser();
+
+        JPanel deleteCommentPanel = new JPanel();
+        deleteCommentPanel.setLayout(new BoxLayout(deleteCommentPanel, BoxLayout.Y_AXIS));
+
+        JLabel commentLabel = new JLabel("Select one of your comments to delete:");
+        commentLabel.setBorder(new EmptyBorder(20, 5, 0, 5));
+        commentLabel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 
         // Dummy comments (replace with data from backend)
         ArrayList<String> comments = new ArrayList<>();
-        comments.add("Comment 1: This is a comment.");
-        comments.add("Comment 2: Another comment.");
-        comments.add("Comment 3: Yet another comment.");
+        for (NewsComment comment : commentsOfUser) {
+            comments.add(comment.getContent());
+        }
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
+
         for (String comment : comments) {
             listModel.addElement(comment);
         }
 
         JList<String> commentList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(commentList);
+        scrollPane.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+        scrollPane.setMaximumSize(new Dimension(300, 120));
 
         JButton deleteButton = new JButton("Delete");
-        JButton backButton = new JButton("Back");
+        deleteButton.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 
         deleteButton.addActionListener(e -> {
+
             int selectedIndex = commentList.getSelectedIndex();
             if (selectedIndex != -1) {
                 String selectedComment = comments.get(selectedIndex);
@@ -237,23 +276,26 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
                 JOptionPane.showMessageDialog(deleteCommentPanel, "Comment Deleted: " + selectedComment);
                 comments.remove(selectedIndex);
                 listModel.remove(selectedIndex);
+                writer.println(selectedComment);
             } else {
                 JOptionPane.showMessageDialog(deleteCommentPanel, "Please select a comment to delete.");
             }
+
+            writer.println("2");
+            cardLayout.show(mainPanel, "Menu");
         });
 
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
-
-        deleteCommentPanel.add(commentLabel, BorderLayout.NORTH);
-        deleteCommentPanel.add(scrollPane, BorderLayout.CENTER);
-        deleteCommentPanel.add(deleteButton, BorderLayout.SOUTH);
-        deleteCommentPanel.add(backButton, BorderLayout.SOUTH);
+        deleteCommentPanel.add(commentLabel);
+        deleteCommentPanel.add(Box.createVerticalStrut(20)); // Spacing
+        deleteCommentPanel.add(scrollPane);
+        deleteCommentPanel.add(Box.createVerticalStrut(20)); // Spacing
+        deleteCommentPanel.add(deleteButton);
 
         return deleteCommentPanel;
     }
 
     // Function to update the image preview
-    private static void updateImagePreview(JComboBox<String> imageDropdown, JLabel imagePreview) {
+    private void updateImagePreview(JComboBox<String> imageDropdown, JLabel imagePreview) {
         String selectedImage = (String) imageDropdown.getSelectedItem();
         if (selectedImage != null) {
             // Replace "path/to/images/" with the actual directory where your images are stored
@@ -300,5 +342,28 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         }
 
         return navBar;
+    }
+
+    private ArrayList<NewsComment> getCommentsFromServer() {
+
+        Object comments = null;
+        ArrayList<NewsComment> commentsList = new ArrayList<>();
+
+        try {
+            comments = objectReader.readObject();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (comments instanceof ArrayList) {
+            for (Object comment : (ArrayList) comments) {
+                commentsList.add((NewsComment) comment);
+            }
+        }
+
+        return commentsList;
+
     }
 }

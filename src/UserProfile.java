@@ -221,18 +221,19 @@ public class UserProfile implements User, Serializable {
 
         try (BufferedReader br = new BufferedReader(new FileReader("newsPosts.txt"))) {
             while ((line = br.readLine()) != null) {
-                if (line.contains(this.getUsername())) {
 
-                    String[] postInfo = line.split(",");
+                String[] userDetails = line.split(",");
+
+                if (userDetails[0].contains(this.getUsername())) {
 
                     NewsPost tempPost = new NewsPost();
-                    tempPost.setAuthor(postInfo[0]);
-                    tempPost.setCaption(postInfo[1]);
-                    tempPost.setImagePath(postInfo[2]);
-                    tempPost.setDate(postInfo[3]);
-                    tempPost.setUpvotes(Integer.parseInt(postInfo[4]));
-                    tempPost.setDownvotes(Integer.parseInt(postInfo[5]));
-                    tempPost.setComments(NewsPost.findComments(postInfo[1]));
+                    tempPost.setAuthor(userDetails[0]);
+                    tempPost.setCaption(userDetails[1]);
+                    tempPost.setImagePath(userDetails[2]);
+                    tempPost.setDate(userDetails[3]);
+                    tempPost.setUpvotes(Integer.parseInt(userDetails[4]));
+                    tempPost.setDownvotes(Integer.parseInt(userDetails[5]));
+                    tempPost.setComments(NewsPost.findComments(userDetails[1]));
 
                     userPosts.add(tempPost);
                 }
@@ -344,7 +345,7 @@ public class UserProfile implements User, Serializable {
             String line;
 
             while ((line = readComments.readLine()) != null) {
-                if (line.contains(this.getUsername())) {
+                if (line.split(",")[1].contains(this.getUsername())) {
 
                     String[] commentInfo = line.split(",");
 

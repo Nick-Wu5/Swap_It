@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class SearchScreen extends JPanel implements SearchScreenInterface {
 
@@ -194,6 +192,7 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
                 writer.println(commentText); // Send the comment text
                 writer.flush();
             }
+            writer.println("1");
         });
 
         JButton viewCommentsButton = new JButton("View Comments");
@@ -239,6 +238,7 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
 
             // Show the dialog
             commentsDialog.setVisible(true);
+            writer.println("1");
         });
 
         postPanel.add(imageLabel);

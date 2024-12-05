@@ -1,10 +1,7 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ProfileScreen extends JPanel implements ProfileScreenInterface {
 
@@ -108,15 +105,17 @@ public class ProfileScreen extends JPanel implements ProfileScreenInterface {
                 displayInfoPanel.add(scrollPanel, BorderLayout.CENTER);
                 displayInfoPanel.revalidate();
                 displayInfoPanel.repaint();
+                writer.println("4");
 
             } else {
                 JOptionPane.showMessageDialog(ProfileScreen.this,
                         "You have no posts!",
                         "Post Display Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
 
-            writer.println("4");
+                writer.println("4");
+
+            }
         });
 
         JButton viewPersonalInfoButton = new JButton("View Personal Info");

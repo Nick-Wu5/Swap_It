@@ -1,15 +1,18 @@
-nick,My first post!,images/Chris_dog1.png,2024-11-30,0,0,0
-nick,Purdue football stinks,images/Chris_dog2.png,2023-5-28,0,0,0
-quinn,Can't believe this is my life,images/Chris_dog3.png,2022-05-22,0,0,0
-ramya,I'm gonna be late,images/divya_scene1.png,2024-11-1,0,0,0
-divya,Brooklyn and Miami,images/divya_scene2.png,2021-7-5,0,0,0
-quinn,Warren Buffett is Him,images/nick_dog.png,2024-2-9,0,0,0
-ramya,Dunsmore is Daddy,images/Ramya_dog1.png,2020-9-15,0,0,0
-divya,Wang plz give us an A,images/Ramya_dog2.png,2023-12-18,0,0,0
-nick,Are you serious rn,images/Chris_dog1.png,2024-12-04,0,0,0
-nick,Wow beautiful sunset!,images/divya_scene2.png,2024-12-04,0,0,0
-nick,null,null,2024-12-04,0,0,0
-nick,null,null,2024-12-04,0,0,0
-nick,Penny is so cute,images/nick_dog.png,2024-12-04,0,0,0
-nick,Who is in the white lol,images/Chris_dog3.png,2024-12-04,0,0,0
-nick,null,null,2024-12-04,0,0,0
+quinn,in da cage,images/Chris_dog2.png,2024-12-04,0,0,0
+quinn,woah so cinematic,images/divya_scene1.png,2024-12-04,0,0,0
+quinn,goldens are the best,images/Ramya_dog2.png,2024-12-04,0,0,0
+quinn,I wonder what his name is,images/Ramya_dog1.png,2024-12-04,0,0,0
+chrisTheMan,skimboarding would be fun here,images/divya_scene2.png,2024-12-04,0,0,0
+chrisTheMan,good looking dog,images/nick_dog.png,2024-12-04,0,0,0
+chrisTheMan,that dog is giving me the death stare,images/Chris_dog2.png,2024-12-04,0,0,0
+chrisTheMan,I wish I was on a walk with that dog rn,images/Ramya_dog2.png,2024-12-04,0,0,0
+divya,Look at my travels!,images/divya_scene3.png,2024-12-04,0,0,0
+divya,Views from Tarkington!,images/divya_scene1.png,2024-12-04,0,0,0
+divya,Saw this guy in tark one time,images/Ramya_dog1.png,2024-12-04,0,0,0
+divya,Ayo pause,images/Chris_dog3.png,2024-12-04,0,0,0
+ramya,Look at my cute dog!,images/Ramya_dog1.png,2024-12-04,0,0,0
+ramya,Bros smiling look,images/Ramya_dog2.png,2024-12-04,0,0,0
+ramya,Much love to penny,images/nick_dog.png,2024-12-04,0,0,0
+ramya,This is giving me avatar vibes,images/divya_scene1.png,2024-12-04,0,0,0
+ramya,The dog does NOT want to be in there lol,images/Chris_dog2.png,2024-12-04,0,0,0
+nick,doesn't compare to loot lake,images/divya_scene3.png,2024-12-05,0,0,0

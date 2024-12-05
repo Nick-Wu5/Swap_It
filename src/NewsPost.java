@@ -41,22 +41,34 @@ public class NewsPost implements NewsFeed, Serializable {
     public NewsPost() {}
 
     public static void deletePost(String caption) {
-        try (PrintWriter tempWrite = new PrintWriter(new FileWriter("tempFile.txt"));
-             PrintWriter writePost = new PrintWriter(new FileWriter("newsPost.txt", false));
-             BufferedReader tempRead = new BufferedReader(new FileReader("tempFile.txt"));
-             BufferedReader readPost = new BufferedReader(new FileReader("newsPost.txt"))) {
+        System.out.println("Looking to delete the post: " + caption);
+
+        // Temporary file to write updated content
+        File originalFile = new File("newsPosts.txt");
+        File tempFile = new File("tempFile.txt");
+
+        try (
+                BufferedReader readPost = new BufferedReader(new FileReader(originalFile));
+                PrintWriter tempWrite = new PrintWriter(new FileWriter(tempFile))
+        ) {
             String line;
+
             while ((line = readPost.readLine()) != null) {
-                if (line.contains(caption)) {
+
+                String[] parts = line.split(",");
+                if (parts[1].equals(caption)) {
                     continue;
                 }
                 tempWrite.println(line);
             }
-            while ((line = tempRead.readLine()) != null) {
-                writePost.println(line);
-            }
         } catch (IOException e) {
             e.printStackTrace();
+            return;
+        }
+
+        // Replace the original file with the temporary file
+        if (!tempFile.renameTo(originalFile)) {
+            System.out.println("Error replacing the original file.");
         }
     }
 
