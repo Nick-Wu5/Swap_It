@@ -6,3 +6,10 @@ divya,Brooklyn and Miami,images/divya_scene2.png,2021-7-5,0,0,0
 quinn,Warren Buffett is Him,images/nick_dog.png,2024-2-9,0,0,0
 ramya,Dunsmore is Daddy,images/Ramya_dog1.png,2020-9-15,0,0,0
 divya,Wang plz give us an A,images/Ramya_dog2.png,2023-12-18,0,0,0
+nick,Are you serious rn,images/Chris_dog1.png,2024-12-04,0,0,0
+nick,Wow beautiful sunset!,images/divya_scene2.png,2024-12-04,0,0,0
+nick,null,null,2024-12-04,0,0,0
+nick,null,null,2024-12-04,0,0,0
+nick,Penny is so cute,images/nick_dog.png,2024-12-04,0,0,0
+nick,Who is in the white lol,images/Chris_dog3.png,2024-12-04,0,0,0
+nick,null,null,2024-12-04,0,0,0

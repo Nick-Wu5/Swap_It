@@ -84,7 +84,7 @@ public class AppGUI extends JFrame {
     public void initializeOtherPages(UserProfile loggedInUser, BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer) {
 
         searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
-        contentScreen = new ContentScreen(this, loggedInUser);
+        contentScreen = new ContentScreen(reader, objectReader, writer,this, loggedInUser);
         profileScreen = new ProfileScreen(reader, writer, objectReader, this, loggedInUser);
         friendScreen = new FriendScreen();
 
@@ -107,7 +107,7 @@ public class AppGUI extends JFrame {
             case "ContentScreen":
                 writer.println("2");
                 break;
-            case "FriendsScreen":
+            case "FriendScreen":
                 writer.println("3");
                 break;
             case "ProfileScreen":

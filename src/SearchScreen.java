@@ -56,32 +56,10 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
         displayPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //NAV BAR
-
-        JPanel navBar = new JPanel();
-        navBar.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
-        navBar.setBackground(Color.WHITE);
-
-        String[] pageNames = {"SearchScreen", "HomeScreen", "FriendScreen", "ContentScreen", "ProfileScreen"};
-
-        for (int i = 0; i < pageNames.length; i++) {
-            JButton navButton = new JButton(pageNames[i]);
-            navButton.setFocusPainted(false);
-            navButton.setContentAreaFilled(false);
-            navButton.setBorder(BorderFactory.createEmptyBorder());
-            navButton.setFont(new Font("Arial", Font.PLAIN, 5));
-
-            // Add ActionListener to navigate to the corresponding page
-            final String pageName = pageNames[i];
-            navButton.addActionListener(e -> appGUI.showPage(pageName));
-
-            navBar.add(navButton);
-        }
-
         //Final layout
         add(searchPanel, BorderLayout.NORTH);
         add(displayPanel, BorderLayout.CENTER);
-        add(navBar, BorderLayout.SOUTH);
+        add(createNavBar(), BorderLayout.SOUTH);
     }
 
     private class SearchLoginListener implements ActionListener {
@@ -299,5 +277,38 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         commentPanel.add(likesLabel);
 
         return commentPanel;
+    }
+
+    private JPanel createNavBar() {
+        // Navigation Bar
+        JPanel navBar = new JPanel();
+        navBar.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10)); // Centered navigation bar
+        navBar.setBackground(Color.WHITE);
+
+        String[] pageNames = {"SearchScreen", "ContentScreen", "HomeScreen", "FriendScreen", "ProfileScreen"};
+        String[] icons = {"searchIcon.png", "contentIcon.png", "homeIcon.png", "friendsIcon.png", "profileIcon.png"};
+
+        for (int i = 0; i < pageNames.length; i++) {
+            // Load the icon
+            ImageIcon icon = new ImageIcon("images/navBarIcons/" + icons[i]); // Replace "path/to/icons/" with the actual path
+
+            // Optionally scale the icon to fit the button size
+            Image scaledImage = icon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            // Create a button with the icon
+            JButton navButton = new JButton(scaledIcon);
+            navButton.setFocusPainted(false);
+            navButton.setContentAreaFilled(false);
+            navButton.setBorder(BorderFactory.createEmptyBorder());
+
+            // Add ActionListener to navigate to the corresponding page
+            final String pageName = pageNames[i];
+            navButton.addActionListener(e -> appGUI.showPage(pageName));
+
+            navBar.add(navButton);
+        }
+
+        return navBar;
     }
 }

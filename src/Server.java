@@ -184,6 +184,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         System.out.println("User selected content");
                         prompt = read.readLine();
                         if (prompt.equals("1")) {
+                            System.out.println("user trying to create post");
                             synchronized (this) {
                                 String title = read.readLine();
                                 String imagePath = read.readLine();
@@ -192,12 +193,14 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 System.out.println("tried to create new post");
                             }
                         } else if (prompt.equals("2")) {
+                            System.out.println("user trying to delete post");
                             synchronized (this) {
                                 String title = read.readLine();
                                 NewsPost.deletePost(title);
                             }
                         } else if (prompt.equals("3")) {
 
+                            System.out.println("user trying to delete comment");
                             ArrayList<NewsComment> usersComments = currentUser.findCommentsForUser();
                             synchronized (this) {
                                 objectWrite.writeObject(usersComments);
