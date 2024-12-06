@@ -190,6 +190,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                         }
                     }
                     case "3" -> { // Add/block/remove friends
+                        System.out.println("User selected friend actions");
                         prompt = read.readLine();
                         switch (prompt) {
                             case "1" -> {

@@ -88,7 +88,7 @@ public class AppGUI extends JFrame {
         searchScreen = new SearchScreen(writer, objectReader,  this, loggedInUser);
         contentScreen = new ContentScreen(reader, writer, objectReader,this, loggedInUser);
         profileScreen = new ProfileScreen(reader, writer, objectReader, this, loggedInUser);
-        friendScreen = new FriendScreen();
+        friendScreen = new FriendScreen(reader, writer, objectReader, this, loggedInUser);
 
         mainPanel.add(searchScreen, "SearchScreen");
         mainPanel.add(contentScreen, "ContentScreen");
