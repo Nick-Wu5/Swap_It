@@ -1,4 +1,4 @@
-nick,nickwu2005@outlook.com,penny123,quinn;chrisTheMan;ramya,EmptyBlockedList
+nick,nickwu2005@outlook.com,penny123,divya;Isaac,quinn;ramya;chrisTheMan
 quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
 ramya,ramya23@gmail.com,password1234,EmptyFriendsList,EmptyBlockedList
 divya,divdivdiv@aol.com,citygirl4,EmptyFriendsList,EmptyBlockedList

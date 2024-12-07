@@ -81,6 +81,33 @@ public class UserProfile implements User, Serializable {
         return this.blockedFriends;
     }
 
+    public ArrayList<String> getBlockedFriendsFromFile() {
+
+        ArrayList<String> blockedList = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userDetails = line.split(",");
+                if (userDetails[0].equals(this.username)) {
+                    if (userDetails[4].equals("EmptyBlockedList")) {
+                        break;
+                    } else if (!(userDetails[4].equals("EmptyBlockedList")) && !(userDetails[4].contains(";"))) {
+                        blockedList.add(userDetails[4]);
+                    } else {
+                        String[] blockedListArray = userDetails[4].split(";");
+                        for (String blockedProfile : blockedListArray) {
+                            blockedList.add(blockedProfile);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blockedList;
+    }
+
     public void setBlockedFriends(ArrayList<String> newBlockedFriends) {
         this.blockedFriends = newBlockedFriends;
     }
@@ -144,9 +171,10 @@ public class UserProfile implements User, Serializable {
      */
     public void blockUser(String userToBlock) {
 
-        for (String friend : this.friends) {
+        for (String friend : this.getFriendsList()) {
             if (userToBlock.equals(friend)) {
                 this.removeFriend(friend);
+                this.updateFriendsList();
                 break;
             }
         }
