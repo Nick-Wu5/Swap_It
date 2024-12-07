@@ -102,7 +102,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
              //objectWrite.writeObject(currentUser);
 
             // Handles actions while logged in
-            while (loginComplete) {
+            while (loginComplete || registrationComplete) {
 
                 System.out.println("Looking for input");
                 String menu = read.readLine();

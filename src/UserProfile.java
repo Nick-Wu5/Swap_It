@@ -66,6 +66,10 @@ public class UserProfile implements User, Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (friendsList.isEmpty()) {
+            friendsList.add("EmptyFriendsList");
+        }
         return friendsList;
     }
 
@@ -104,6 +108,9 @@ public class UserProfile implements User, Serializable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (blockedList.isEmpty()) {
+            blockedList.add("EmptyBlockedList");
         }
         return blockedList;
     }

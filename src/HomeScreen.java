@@ -14,8 +14,6 @@ public class HomeScreen extends JPanel {
 
     public HomeScreen(BufferedReader reader, ObjectInputStream objectReader, PrintWriter writer, AppGUI appGUI, UserProfile user) {
 
-        appGUI.initializeOtherPages(user, reader, objectReader, writer);
-
         this.appGUI = appGUI;
         this.user = user;
 
@@ -73,6 +71,8 @@ public class HomeScreen extends JPanel {
         mainContentPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
         mainContentPanel.add(loadMoreButton); // "Load more posts" button
         mainContentPanel.add(swapInfoLabel);
+
+        appGUI.initializeOtherPages(user, reader, objectReader, writer);
 
         add(mainContentPanel, BorderLayout.CENTER);
         add(createNavBar(), BorderLayout.SOUTH); // Navigation bar

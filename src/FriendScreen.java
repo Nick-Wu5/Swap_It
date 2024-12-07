@@ -46,6 +46,7 @@ public class FriendScreen extends JPanel {
         listsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel friendsLabel = new JLabel();
+
         if (userProfile.getFriends().getFirst().equals("EmptyFriendsList")) {
             friendsLabel.setText("Friends: 0");
         } else {

@@ -40,7 +40,12 @@ public class ProfileScreen extends JPanel implements ProfileScreenInterface {
         JLabel postsLabel = new JLabel("Posts: " + userProfile.getUserPosts().size());
         postsLabel.setFont(new Font("Arial", Font.PLAIN, 24));
 
-        JLabel friendsLabel = new JLabel("Friends: " + userProfile.getFriends().size());
+        JLabel friendsLabel = new JLabel();
+        if (userProfile.getFriends().getFirst().equals("EmptyFriendsList")) {
+            friendsLabel.setText("Friends: 0");
+        } else {
+            friendsLabel.setText("Friends: " + userProfile.getFriends().size());
+        }
         friendsLabel.setFont(new Font("Arial", Font.PLAIN, 24));
 
         userInfoPanel.add(postsLabel);
