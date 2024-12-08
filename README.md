@@ -12,6 +12,8 @@ Our project is designed to run by using the `AppGUI` and `Server` Java files. To
 ## Submissions 📝
 
 * Nick Wu - Submitted Vocareum workspace
+* Divya Vemireddy - Submitted Project Report
+* Divya Vemireddy - Submitted Presentation
 * [GitHub Repository](https://github.com/Nick-Wu5/Swap_It)
 
 ## Detailed Description of Classes 📦
