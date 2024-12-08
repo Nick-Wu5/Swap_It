@@ -1,4 +1,4 @@
-# Swap_It 🚀
+# Swap_It 🚀 - Photo Posts Extra Credit!!
 
 ## Table of Contents 📚
 - [Compiling and Running SwapIt](#compiling-and-running-swapit-)
