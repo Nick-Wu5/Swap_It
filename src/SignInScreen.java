@@ -3,28 +3,38 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 
+/**
+ * SignInScreen
+ * <p>
+ * Provides the GUI for the user to sign in or register in the social media application.
+ * This panel includes fields for entering login credentials and registration details,
+ * along with buttons to perform login or registration actions.
+ *
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ */
 public class SignInScreen extends JPanel implements SignInScreenInterface {
 
-    private BufferedReader reader;
-    private PrintWriter writer;  // Used for sending data to the server
-    private ObjectInputStream objectReader; // Used for receiving data from the server
-    private AppGUI appGUI;  // Reference to AppGUI to be able to call showHomeScreen()
+    private BufferedReader reader;  // Reads data from the server
+    private PrintWriter writer;  // Sends data to the server
+    private ObjectInputStream objectReader;  // Receives object data from the server
+    private AppGUI appGUI;  // Reference to the main application GUI for navigation
 
-    private JTextField loginUsernameField;
-    private JPasswordField loginPasswordField;
-    private JTextField registerUsernameField;
-    private JTextField registerEmailField;
-    private JPasswordField registerPasswordField;
+    private JTextField loginUsernameField;  // Input field for login username
+    private JPasswordField loginPasswordField;  // Input field for login password
+    private JTextField registerUsernameField;  // Input field for registration username
+    private JTextField registerEmailField;  // Input field for registration email
+    private JPasswordField registerPasswordField;  // Input field for registration password
 
     public SignInScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI appGUI) {
 
         this.reader = reader;
-        this.writer = writer;          // Pass the writer from AppGUI
-        this.objectReader = objectReader; // Pass the objectReader from AppGUI
+        this.writer = writer;
+        this.objectReader = objectReader;
         this.appGUI = appGUI;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -124,6 +134,11 @@ public class SignInScreen extends JPanel implements SignInScreenInterface {
         add(registerPanel);  // Add register panel to main panel
     }
 
+    /**
+     * Handles the login button's action. Sends login credentials to the server and
+     * navigates to the home screen on successful login. Displays an error message
+     * if login fails.
+     */
     private class LoginActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -159,6 +174,11 @@ public class SignInScreen extends JPanel implements SignInScreenInterface {
         }
     }
 
+    /**
+     * Handles the register button's action. Sends registration details to the server
+     * and navigates to the home screen on successful registration. Displays an error
+     * message if the user already exists.
+     */
     private class RegisterActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

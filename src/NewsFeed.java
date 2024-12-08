@@ -1,19 +1,58 @@
+import java.util.ArrayList;
+
 /**
- * Team Project - Social Media App
+ * NewsPostInterface
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Defines the basic operations for managing news posts in the social media application.
  *
- * @version November 3, 2024
+ * @version December 7, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public interface NewsFeed {
-    void incrementDownvotes();
 
     void incrementUpvotes();
 
-    int getUpvotes();
+    void incrementDownvotes();
 
     String getAuthor();
+
+    void setAuthor(String author);
+
+    String getCaption();
+
+    void setCaption(String caption);
+
+    String getImagePath();
+
+    void setImagePath(String imagePath);
+
+    String getDate();
+
+    void setDate(String date);
+
+    int getUpvotes();
+
+    void setUpvotes(int upvotes);
+
+    int getDownvotes();
+
+    void setDownvotes(int downvotes);
+
+    ArrayList<NewsComment> getComments();
+
+    void addComment(NewsComment comment);
+
+    void setComments(ArrayList<NewsComment> comments);
+
+    String toString();
+
+    static void deletePost(String caption) {}
+
+    static ArrayList<NewsComment> findComments(String captionOfPost) {
+        return null;
+    }
+
+    static ArrayList<NewsComment> findCommentsForUser(String user1) {
+        return null;
+    }
 }

@@ -2,20 +2,29 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * ContentScreen
+ * <p>
+ * A JPanel that represents the content management screen. This screen allows users
+ * to create, delete, and manage posts or comments. It includes multiple panels
+ * for different functionalities, navigated via a CardLayout.
+ *
+ * @version December 7, 2024
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ */
 public class ContentScreen extends JPanel implements ContentScreenInterface {
 
-    private AppGUI appGUI;
-    private UserProfile user;
-    private ObjectInputStream objectReader;
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private Object userPosts;
+    private AppGUI appGUI;  // Reference to the main application GUI
+    private UserProfile user;  // Profile of the logged-in user
+    private ObjectInputStream objectReader;  // Stream for receiving serialized object data
+    private BufferedReader reader;  // Stream for reading text data from the server
+    private PrintWriter writer;  // Stream for sending text data to the server
+    private Object userPosts;  // Placeholder for user post data
+    private DefaultComboBoxModel<String> postDropdownModel;  // Model for dropdown menu options
 
     public ContentScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui,
                          UserProfile userProfile) {
@@ -38,8 +47,8 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
 
         // Panels for each functionality
         JPanel menuPanel = createMenuPanel(objectReader, writer, mainPanel, cardLayout);
-        JPanel createPostPanel = createCreatePostPanel(writer, mainPanel, cardLayout);
-        JPanel deletePostPanel = createDeletePostPanel (mainPanel, cardLayout);
+        JPanel createPostPanel = createCreatePostPanel(writer, mainPanel, cardLayout, userProfile);
+        JPanel deletePostPanel = createDeletePostPanel (mainPanel, cardLayout, userProfile);
         JPanel deleteCommentPanel = createDeleteCommentPanel(writer, mainPanel, cardLayout);
 
         // Add panels to CardLayout
@@ -57,8 +66,17 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
 
     }
 
-    // Create Menu Panel
-    private static JPanel createMenuPanel(ObjectInputStream objectReader, PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
+    /**
+     * Creates the main menu panel with navigation buttons for different functionalities.
+     *
+     * @param objectReader ObjectInputStream for serialized object communication
+     * @param writer PrintWriter for server communication
+     * @param mainPanel JPanel containing all the screens
+     * @param cardLayout CardLayout managing transitions between screens
+     * @return JPanel representing the menu with navigation buttons
+     */
+    private static JPanel createMenuPanel(ObjectInputStream objectReader, PrintWriter writer, JPanel mainPanel,
+                                          CardLayout cardLayout) {
 
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -112,8 +130,18 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         return menuPanel;
     }
 
-    // Create Post Panel
-    private JPanel createCreatePostPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
+    /**
+     * Creates the Create Post panel, where users can add new posts by providing
+     * a caption and selecting an image. Displays a preview of the selected image.
+     *
+     * @param writer PrintWriter for server communication
+     * @param mainPanel JPanel containing all the screens
+     * @param cardLayout CardLayout managing transitions between screens
+     * @param userProfile Profile of the logged-in user
+     * @return JPanel for creating posts
+     */
+    private JPanel createCreatePostPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout,
+                                         UserProfile userProfile) {
 
         JPanel createPostPanel = new JPanel();
         createPostPanel.setLayout(new BoxLayout(createPostPanel, BoxLayout.Y_AXIS));
@@ -157,6 +185,7 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
             writer.println(selectedImage);
             JOptionPane.showMessageDialog(createPostPanel, "Post Created!\nCaption: " + caption + "\nImage Path: " + selectedImage);
             cardLayout.show(mainPanel, "Menu");
+            refreshPostDropdown(postDropdownModel, userProfile);
             writer.println("2");
         });
 
@@ -175,8 +204,16 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         return createPostPanel;
     }
 
-    // Delete Post Panel
-    private JPanel createDeletePostPanel(JPanel mainPanel, CardLayout cardLayout) {
+    /**
+     * Creates the Delete Post panel, where users can delete an existing post
+     * by selecting it from a dropdown menu.
+     *
+     * @param mainPanel JPanel containing all the screens
+     * @param cardLayout CardLayout managing transitions between screens
+     * @param userProfile Profile of the logged-in user
+     * @return JPanel for deleting posts
+     */
+    private JPanel createDeletePostPanel(JPanel mainPanel, CardLayout cardLayout, UserProfile userProfile) {
 
         JPanel deletePostPanel = new JPanel();
         deletePostPanel.setLayout(new BoxLayout(deletePostPanel, BoxLayout.Y_AXIS));
@@ -189,7 +226,8 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         }
 
         // Initial dropdown data
-        JComboBox<String> postDropdown = new JComboBox<>(captionsOfPosts.toArray(new String[0]));
+        postDropdownModel = new DefaultComboBoxModel<>(captionsOfPosts.toArray(new String[0]));
+        JComboBox<String> postDropdown = new JComboBox<>(postDropdownModel);
         postDropdown.setAlignmentX(JPanel.CENTER_ALIGNMENT);
         postDropdown.setMaximumSize(new Dimension(300, 30));
 
@@ -212,9 +250,12 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
                 JOptionPane.showMessageDialog(deletePostPanel, "Post Deleted: " + captionToDelete);
 
                 // Optionally return to the menu
+                refreshPostDropdown(postDropdownModel, userProfile);
                 cardLayout.show(mainPanel, "Menu");
+                writer.println("2");
             } else {
                 JOptionPane.showMessageDialog(deletePostPanel, "No post selected to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+                writer.println("2");
             }
         });
 
@@ -227,7 +268,15 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         return deletePostPanel;
     }
 
-    // Delete Comment Panel
+    /**
+     * Creates the Delete Comment panel, allowing users to delete one of their
+     * comments by selecting it from a list.
+     *
+     * @param writer PrintWriter for server communication
+     * @param mainPanel JPanel containing all the screens
+     * @param cardLayout CardLayout managing transitions between screens
+     * @return JPanel for deleting comments
+     */
     private JPanel createDeleteCommentPanel(PrintWriter writer, JPanel mainPanel, CardLayout cardLayout) {
 
         ArrayList<NewsComment> commentsOfUser = user.findCommentsForUser();
@@ -286,7 +335,12 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         return deleteCommentPanel;
     }
 
-    // Function to update the image preview
+    /**
+     * Updates the preview image based on the selected item in the dropdown menu.
+     *
+     * @param imageDropdown JComboBox containing image options
+     * @param imagePreview JLabel used to display the selected image
+     */
     private void updateImagePreview(JComboBox<String> imageDropdown, JLabel imagePreview) {
         String selectedImage = (String) imageDropdown.getSelectedItem();
         if (selectedImage != null) {
@@ -303,6 +357,12 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         }
     }
 
+    /**
+     * Creates the navigation bar at the bottom of the screen with buttons
+     * for navigating between the main application screens.
+     *
+     * @return JPanel representing the navigation bar
+     */
     private JPanel createNavBar() {
         // Navigation Bar
         JPanel navBar = new JPanel();
@@ -336,26 +396,26 @@ public class ContentScreen extends JPanel implements ContentScreenInterface {
         return navBar;
     }
 
-    private ArrayList<NewsComment> getCommentsFromServer() {
+    /**
+     * Refreshes the dropdown model for post selection by reloading the
+     * captions of the user's posts.
+     *
+     * @param postDropdownModel DefaultComboBoxModel used in the dropdown
+     * @param user UserProfile containing the user's posts
+     */
+    private static void refreshPostDropdown(DefaultComboBoxModel<String> postDropdownModel, UserProfile user) {
 
-        Object comments = null;
-        ArrayList<NewsComment> commentsList = new ArrayList<>();
+        ArrayList<String> updatedCaptions = new ArrayList<>();
+        ArrayList<NewsPost> updatedUserPosts = user.getUserPosts();
 
-        try {
-            comments = objectReader.readObject();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        for (NewsPost post : updatedUserPosts) {
+            updatedCaptions.add(post.getCaption());
         }
 
-        if (comments instanceof ArrayList) {
-            for (Object comment : (ArrayList) comments) {
-                commentsList.add((NewsComment) comment);
-            }
+        // Clear and repopulate the dropdown model
+        postDropdownModel.removeAllElements();
+        for (String caption : updatedCaptions) {
+            postDropdownModel.addElement(caption);
         }
-
-        return commentsList;
-
     }
 }

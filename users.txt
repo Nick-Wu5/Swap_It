@@ -1,10 +1,7 @@
-nick,nickwu2005@outlook.com,penny123,divya;Isaac,quinn;ramya;chrisTheMan
+nick,nickwu2005@outlook.com,penny123,divya,ramya
 quinn,quinnwu2007@icloud.com,avian14165,EmptyFriendsList,EmptyBlockedList
 ramya,ramya23@gmail.com,password1234,EmptyFriendsList,EmptyBlockedList
 divya,divdivdiv@aol.com,citygirl4,EmptyFriendsList,EmptyBlockedList
 chrisTheMan,brantley4@gmail.com,munster,EmptyFriendsList,EmptyBlockedList
 Isaac,note4isaac@yahoo.com,bucky,EmptyFriendsList,EmptyBlockedList
-testUser,email@gmail.com,password123,EmptyFriendsList,EmptyBlockedList
-Username,Email,Password,EmptyFriendsList,EmptyBlockedList
-newAccount,Email,Password,EmptyFriendsList,EmptyBlockedList
-testingg,Email,Password,EmptyFriendsList,EmptyBlockedList
+user,test@email.com,password123,EmptyFriendsList,EmptyBlockedList

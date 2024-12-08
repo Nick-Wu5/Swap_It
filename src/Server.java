@@ -1,13 +1,22 @@
-import java.lang.reflect.Array;
-import java.net.*;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/**
+ * Server
+ * <p>
+ * Represents the server component of the social media application. The server listens for client connections,
+ * handles authentication, user registration, and facilitates interactions such as creating/deleting posts,
+ * managing friends, and viewing user data. It supports concurrent connections using threads.
+ *
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ */
 public class Server extends PasswordProtectedLogin implements Runnable {
 
-    // Initializes the server socket at port 1234
-    private Socket clientSocket;
+    private Socket clientSocket;  // The client socket for communication
 
     // Handles IOException during server initialization
     public Server(Socket socket) {
@@ -98,8 +107,7 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                 }
             } while (!loginComplete && !registrationComplete);
 
-             currentUser = UserSearch.findUserByUsername(username);
-             //objectWrite.writeObject(currentUser);
+            currentUser = UserSearch.findUserByUsername(username);
 
             // Handles actions while logged in
             while (loginComplete || registrationComplete) {
@@ -112,6 +120,12 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                     case "1" -> { // Search for a user
                         System.out.println("user selected search");
                         prompt = read.readLine();
+
+                        if (prompt.equals("exit")) {
+                            System.out.println("prompt invalid");
+                            break;
+                        }
+
                         System.out.println("Searching for user: " + prompt);
 
                         UserProfile searchedUser = UserSearch.findUserByUsername(prompt);
@@ -187,6 +201,8 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 NewsComment.deleteComment(commentAnswer);
                                 System.out.println("deleted: " + commentAnswer);
                             }
+                        } else if (prompt.equals("exit")) {
+                            System.out.println("user exited");
                         }
                     }
                     case "3" -> { // Add/block/remove friends
@@ -198,52 +214,68 @@ public class Server extends PasswordProtectedLogin implements Runnable {
                                 System.out.println("current friends list: " + currentUser.getFriends());
                                 currentUser.addFriend(friendToAdd);
                                 currentUser.updateFriendsList();
-                                System.out.println("new friends list: " + currentUser.getFriends());
                                 write.println("Added friend: " + friendToAdd);
-                            }
+                                write.flush();
+                                System.out.println("new friends list: " + currentUser.getFriends());}
                             case "2" -> {
                                 String userToBlock = read.readLine();
+                                write.println("Blocked: " + userToBlock);
+                                write.flush();
                                 currentUser.blockUser(userToBlock);
                                 currentUser.updateBlockedList();
-                                write.println("Blocked: " + userToBlock);
+                                currentUser.updateFriendsList();
                             }
                             case "3" -> {
                                 String friendToRemove = read.readLine();
+                                write.println("Removed friend: " + friendToRemove);
+                                write.flush();
                                 currentUser.removeFriend(friendToRemove);
                                 currentUser.updateFriendsList();
-                                write.println("Removed friend: " + friendToRemove);
                             }
                             case "4" -> {
                                 String userToUnblock = read.readLine();
+                                write.println("Unblocked: " + userToUnblock);
+                                write.flush();
                                 currentUser.removeBlockedUser(userToUnblock);
                                 currentUser.updateBlockedList();
-                                write.println("Unblocked: " + userToUnblock);
+                            } case "exit" -> {
+                                System.out.println("user changed pages");
                             }
                             default -> write.println("A valid input was not selected!");
                         }
                     }
                     case "4" -> { // View posts and info
-                        System.out.println("Looking at user info stuff");
+                        System.out.println("User selected account");
+
                         prompt = read.readLine();
-                        switch (prompt) {
-                            case "1" -> {
-                                synchronized (this) {
-                                    if (!(currentUser.getUserPosts().isEmpty())){
-                                        objectWrite.writeObject(currentUser.getUserPosts());
-                                    } else {
-                                        objectWrite.writeObject("user has no posts");
+                        if (prompt.equals("exit")) {
+                            System.out.println("user exited");
+                        } else {
+                            switch (prompt) {
+                                case "1" -> {
+                                    System.out.println("viewing posts");
+                                    synchronized (this) {
+                                        if (!(currentUser.getUserPosts().isEmpty())) {
+                                            ArrayList<NewsPost> posts = currentUser.getUserPosts();
+                                            objectWrite.writeObject(posts);
+                                            objectWrite.flush();
+                                        } else {
+                                            objectWrite.writeObject(new ArrayList<>());
+                                            objectWrite.flush();
+                                        }
                                     }
                                 }
+                                case "2" -> write.println(currentUser.getAccountInfo());
+                                default -> System.out.println("A valid input was not selected!");
                             }
-                            case "2" -> write.println(currentUser.getAccountInfo());
-                            case "exit" -> {}
-                            default -> System.out.println("A valid input was not selected!");
                         }
+
                     }
                     case "5" -> {
                         System.out.println("user selected home");
-                    }
-                    default -> System.out.println("A valid input was not selected!");
+                    } case "exit" -> {
+                        System.out.println("user exited");
+                    } default -> System.out.println("A valid input was not selected!");
                 }
             }
 

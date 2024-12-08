@@ -1,25 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 
+/**
+ * FriendScreen
+ * <p>
+ * A JPanel that represents the "Friends" screen in the social media application.
+ * It allows users to view their friends and blocked users, as well as perform
+ * actions like adding, removing, blocking, or unblocking users.
+ *
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ */
 public class FriendScreen extends JPanel {
-    private AppGUI appGUI;
-    private UserProfile user;
-    private BufferedReader reader;
-    private ObjectInputStream objectInputStream;
-    private PrintWriter writer;
-    private JTextField userToSearch;
-    JLabel friendsListLabel = new JLabel("");
-    StringBuilder friendsListString = new StringBuilder();
-    JLabel blockedListLabel = new JLabel("");
-    StringBuilder blockedListString = new StringBuilder();
 
-    private JList<String> friendsListUI = new JList<>();
-    private JList<String> blockedListUI = new JList<>();
-    private DefaultListModel<String> friendsListModel = new DefaultListModel<>();
-    private DefaultListModel<String> blockedListModel = new DefaultListModel<>();
+    private AppGUI appGUI;  // Reference to the main application GUI
+    private UserProfile user;  // Profile of the logged-in user
+    private BufferedReader reader;  // Stream for reading text data from the server
+    private ObjectInputStream objectInputStream;  // Stream for receiving serialized object data
+    private PrintWriter writer;  // Stream for sending text data to the server
 
-    public FriendScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui, UserProfile userProfile) {
+    private JPanel mainContentPanel;
+    private JList<String> friendsListUI = new JList<>();  // UI component to display the friends list
+    private JList<String> blockedListUI = new JList<>();  // UI component to display the blocked users list
+    private DefaultListModel<String> friendsListModel = new DefaultListModel<>();  // Model for the friends list UI
+    private DefaultListModel<String> blockedListModel = new DefaultListModel<>();  // Model for the blocked users list
+    // UI
+
+    public FriendScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui,
+                        UserProfile userProfile) {
+
         this.reader = reader;
         this.writer = writer;
         this.objectInputStream = objectReader;
@@ -28,7 +41,7 @@ public class FriendScreen extends JPanel {
 
         setLayout(new BorderLayout());
 
-        JPanel mainContentPanel = new JPanel();
+        mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
 
         JLabel usernameLabel = new JLabel(userProfile.getUsername(), SwingConstants.CENTER);
@@ -186,11 +199,10 @@ public class FriendScreen extends JPanel {
         unblockUserButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         unblockUserButton.addActionListener(e -> {
-            // Send that the user wants to display posts to server
+
             writer.println("4");
             writer.println(searchUser());
 
-            //Retrieve posts from processed user from server
             String message = null;
 
             try {
@@ -219,14 +231,31 @@ public class FriendScreen extends JPanel {
         add(createNavBar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Prompts the user to enter a username for search or actions (e.g., add, block, remove).
+     *
+     * @return the username entered by the user
+     */
     private String searchUser() {
-        return JOptionPane.showInputDialog(null, "Enter Username Here");
+        return JOptionPane.showInputDialog(mainContentPanel,
+                "Enter Username Here");
     }
 
+    /**
+     * Displays a message to the user in a dialog box.
+     *
+     * @param message the message to display
+     */
     private void displayMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, "Friend Actions", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(mainContentPanel, message, "Friend Actions", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Creates the navigation bar at the bottom of the screen with buttons
+     * for navigating between main application screens.
+     *
+     * @return the navigation bar as a JPanel
+     */
     private JPanel createNavBar() {
         // Navigation Bar
         JPanel navBar = new JPanel();
@@ -260,7 +289,12 @@ public class FriendScreen extends JPanel {
         return navBar;
     }
 
+    /**
+     * Updates the friends and blocked users lists displayed in the UI
+     * based on the data in the user's profile.
+     */
     private void refreshFriendBlockedLists() {
+
         friendsListModel.clear();
         blockedListModel.clear();
 
@@ -279,6 +313,7 @@ public class FriendScreen extends JPanel {
         } else {
             blockedListModel.addElement("No blocked users");
         }
+
     }
 
 }

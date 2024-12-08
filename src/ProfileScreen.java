@@ -1,18 +1,31 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * ProfileScreen
+ * <p>
+ * Represents the user profile screen in the social media application. This screen displays
+ * user-specific information, including their username, post count, friends count, and personal details.
+ * Users can view their posts or personal information in a dynamic interface.
+ *
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ */
 public class ProfileScreen extends JPanel implements ProfileScreenInterface {
 
-    private AppGUI appGUI;
-    private UserProfile user;
-    private BufferedReader reader;
-    private ObjectInputStream objectInputStream;
-    private PrintWriter writer;
-    private JPanel displayInfoPanel;
-    private JPanel postsPanel;
-    private JScrollPane scrollPanel;
+    private AppGUI appGUI;  // Reference to the main application GUI
+    private UserProfile user;  // Profile of the logged-in user
+    private BufferedReader reader;  // Stream for reading text data from the server
+    private ObjectInputStream objectInputStream;  // Stream for receiving serialized object data
+    private PrintWriter writer;  // Stream for sending text data to the server
+    private JPanel displayInfoPanel;  // Panel for displaying user-specific information
+    private JPanel postsPanel;  // Panel for displaying the user's posts
+    private JScrollPane scrollPanel;  // Scrollable panel for navigating through posts
 
     public ProfileScreen(BufferedReader reader, PrintWriter writer, ObjectInputStream objectReader, AppGUI gui,
                          UserProfile userProfile) {
@@ -73,53 +86,56 @@ public class ProfileScreen extends JPanel implements ProfileScreenInterface {
             writer.println("1");
 
             //Retrieve posts from processed user from server
-            Object posts = null;
+            Object posts;
 
             try {
                 posts = objectReader.readObject();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
+                System.out.println("Successfully read object: " + posts.getClass().getName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return;
             }
 
             if (posts instanceof ArrayList<?>) {
-                postsPanel = new JPanel();
-                postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-                postsPanel.setAutoscrolls(true);
-                ArrayList<NewsPost> userPosts = new ArrayList<>();
-                for (Object obj : (ArrayList<?>) posts) {
-                    if (obj instanceof NewsPost) {
-                        userPosts.add((NewsPost) obj);
-                    } else {
-                        System.out.println("Found non-NewsPost object");
-                        return;
+
+                if (((ArrayList<?>) posts).isEmpty()) {
+
+                    JOptionPane.showMessageDialog(ProfileScreen.this,
+                            "You have no posts!",
+                            "Post Display Error",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    writer.println("4");
+                } else  {
+
+                    postsPanel = new JPanel();
+                    postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+                    postsPanel.setAutoscrolls(true);
+                    ArrayList<NewsPost> userPosts = new ArrayList<>();
+                    for (Object obj : (ArrayList<?>) posts) {
+                        if (obj instanceof NewsPost) {
+                            userPosts.add((NewsPost) obj);
+                        } else {
+                            System.out.println("Found non-NewsPost object");
+                            return;
+                        }
                     }
+
+                    //Display posts in scrollable fashion to screen
+                    for (NewsPost post : userPosts) {
+                        postsPanel.add(createGeneralPostPanel(post));
+                        postsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    }
+
+                    scrollPanel = new JScrollPane(postsPanel);
+                    scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                    scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+                    displayInfoPanel.add(scrollPanel, BorderLayout.CENTER);
+                    displayInfoPanel.revalidate();
+                    displayInfoPanel.repaint();
+                    writer.println("4");
                 }
-
-                //Display posts in scrollable fashion to screen
-                for (NewsPost post : userPosts) {
-                    postsPanel.add(createGeneralPostPanel(post));
-                    postsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                }
-
-                scrollPanel = new JScrollPane(postsPanel);
-                scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-                scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-                displayInfoPanel.add(scrollPanel, BorderLayout.CENTER);
-                displayInfoPanel.revalidate();
-                displayInfoPanel.repaint();
-                writer.println("4");
-
-            } else {
-                JOptionPane.showMessageDialog(ProfileScreen.this,
-                        "You have no posts!",
-                        "Post Display Error",
-                        JOptionPane.ERROR_MESSAGE);
-
-                writer.println("4");
-
             }
         });
 
@@ -197,6 +213,13 @@ public class ProfileScreen extends JPanel implements ProfileScreenInterface {
         add(createNavBar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Creates a panel to display a specific post's details, including its image and caption.
+     * The panel is styled and formatted for a clean and organized presentation.
+     *
+     * @param post The NewsPost object representing the post to display
+     * @return A JPanel containing the post's image and caption
+     */
     private JPanel createGeneralPostPanel(NewsPost post) {
 
         JPanel postPanel = new JPanel();
@@ -232,6 +255,12 @@ public class ProfileScreen extends JPanel implements ProfileScreenInterface {
         return postPanel;
     }
 
+    /**
+     * Creates the navigation bar at the bottom of the screen. The navigation bar allows users
+     * to switch between main application screens, such as Search, Home, and Profile screens.
+     *
+     * @return A JPanel representing the navigation bar with navigation buttons
+     */
     private JPanel createNavBar() {
         // Navigation Bar
         JPanel navBar = new JPanel();

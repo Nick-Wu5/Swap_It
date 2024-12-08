@@ -2,18 +2,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * SearchScreen
+ * <p>
+ * Represents the search functionality of the social media application. Users can search for profiles,
+ * view their information, and interact with their posts by adding comments or viewing existing ones.
+ * The screen includes a search bar, user information display, and post interaction features.
+ *
+ * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ */
 public class SearchScreen extends JPanel implements SearchScreenInterface {
 
-    private PrintWriter writer;  // Used for sending data to the server
-    private ObjectInputStream objectReader;
-    private AppGUI appGUI;
-    private UserProfile user;
-    JTextField userToSearch;
-    JPanel displayPanel;
-    JScrollPane displayScrollPane;
+    private PrintWriter writer;  // Stream to send data to the server
+    private ObjectInputStream objectReader;  // Stream to receive serialized objects from the server
+    private AppGUI appGUI;  // Reference to the main application GUI
+    private UserProfile user;  // Profile of the logged-in user
+    private JTextField userToSearch;  // Text field for entering the username to search
+    public JPanel displayPanel;  // Panel for displaying user information and posts
+    private JScrollPane displayScrollPane;  // Scrollable pane for navigating user posts
 
     public SearchScreen(PrintWriter writer, ObjectInputStream objectReader, AppGUI gui, UserProfile userProfile) {
 
@@ -28,7 +40,6 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         add(label, BorderLayout.CENTER);
 
         //SEARCH PANEL
-
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -58,6 +69,11 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         add(createNavBar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Handles the search functionality for finding user profiles. It sends the
+     * search query to the server, processes the response, and updates the display
+     * panel with the searched user's information or posts.
+     */
     private class SearchLoginListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -113,6 +129,12 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         }
     }
 
+    /**
+     * Displays information about the searched user, including their username,
+     * number of friends, and number of posts.
+     *
+     * @param user The UserProfile object representing the searched user
+     */
     private void displayUserInfo(UserProfile user) {
         // Clear previous results
         displayPanel.removeAll();
@@ -123,7 +145,12 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
 
         JPanel userFriendsPostsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
 
-        JLabel friendsLabel = new JLabel("Friends: " + user.getFriends().size());
+        JLabel friendsLabel = new JLabel();
+        if (user.getFriends().getFirst().equals("EmptyFriendsList")) {
+            friendsLabel.setText("Friends: 0");
+        } else {
+            friendsLabel.setText("Friends: " + user.getFriends().size());
+        }
         friendsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         friendsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -146,7 +173,14 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         displayPanel.repaint();
     }
 
-    private JPanel searchPostPanel (NewsPost post) {
+    /**
+     * Creates a panel to display a specific post of the searched user. The panel includes
+     * the post's image, caption, and buttons for adding a comment or viewing existing comments.
+     *
+     * @param post The NewsPost object representing the post to display
+     * @return A JPanel containing the post's information and interaction buttons
+     */
+    private JPanel searchPostPanel(NewsPost post) {
 
         JPanel postPanel = new JPanel();
         postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
@@ -246,6 +280,12 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         return postPanel;
     }
 
+    /**
+     * Creates a navigation bar at the bottom of the screen, allowing users
+     * to switch between different application screens.
+     *
+     * @return A JPanel representing the navigation bar with navigation buttons
+     */
     private JPanel createCommentPanel(NewsComment comment) {
         JPanel commentPanel = new JPanel();
         commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.Y_AXIS));
@@ -277,6 +317,12 @@ public class SearchScreen extends JPanel implements SearchScreenInterface {
         return commentPanel;
     }
 
+    /**
+     * Creates a navigation bar at the bottom of the screen, allowing users
+     * to switch between different application screens.
+     *
+     * @return A JPanel representing the navigation bar with navigation buttons
+     */
     private JPanel createNavBar() {
         // Navigation Bar
         JPanel navBar = new JPanel();

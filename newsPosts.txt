@@ -15,5 +15,5 @@ ramya,Bros smiling look,images/Ramya_dog2.png,2024-12-04,0,0,0
 ramya,Much love to penny,images/nick_dog.png,2024-12-04,0,0,0
 ramya,This is giving me avatar vibes,images/divya_scene1.png,2024-12-04,0,0,0
 ramya,The dog does NOT want to be in there lol,images/Chris_dog2.png,2024-12-04,0,0,0
-nick,doesn't compare to loot lake,images/divya_scene3.png,2024-12-05,0,0,0
-nick,This gives me Moanna 2 vibes,images/divya_scene3.png,2024-12-05,0,0,0
+quinn,doesn't compare to loot lake,images/divya_scene3.png,2024-12-05,0,0,0
+nick,cute golden!,images/Ramya_dog2.png,2024-12-08,0,0,0

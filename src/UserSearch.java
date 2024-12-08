@@ -1,15 +1,18 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
- * Team Project - Social Media App
+ * UserSearch
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Provides functionality to search for user profiles in the social media application.
+ * This class includes methods to find a user by their username and retrieve detailed
+ * information about the searched user from the database.
  *
- * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
  */
 public class UserSearch implements Search {
 

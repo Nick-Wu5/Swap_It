@@ -2,23 +2,24 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Team Project - Social Media App
+ * NewsPost
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Represents a news post in the social media application. Each post contains details such as the author,
+ * caption, image path, date, upvotes, downvotes, and associated comments. This class provides methods
+ * to manage posts, including creating, deleting, and retrieving comments for a post.
  *
- * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
  */
 public class NewsPost implements NewsFeed, Serializable {
-    private String author;  //author profile of post
-    private String caption;  //caption of post
-    private String imagePath;  //path to image of post
-    private String date;  //date of published post
-    private int upvotes;  //number of upvotes per post
-    private int downvotes;  //number of downvotes per post
-    private ArrayList<NewsComment> comments;  //number of comments per post
+
+    private String author;  // Author of the post
+    private String caption;  // Caption of the post
+    private String imagePath;  // File path to the image associated with the post
+    private String date;  // Date the post was created
+    private int upvotes;  // Number of upvotes the post has received
+    private int downvotes;  // Number of downvotes the post has received
+    private ArrayList<NewsComment> comments;  // List of comments associated with the post
 
     public NewsPost(String author, String caption, String imagePath, String date) {
         this.author = author;
@@ -38,8 +39,16 @@ public class NewsPost implements NewsFeed, Serializable {
         }
     }
 
-    public NewsPost() {}
+    public NewsPost() {
+    }
 
+    /**
+     * Deletes a post from the "newsPosts.txt" file based on its caption.
+     * The method creates a temporary file and copies all lines except the one
+     * matching the specified caption. Replaces the original file with the temporary file.
+     *
+     * @param caption the caption of the post to delete
+     */
     public static void deletePost(String caption) {
         System.out.println("Looking to delete the post: " + caption);
 
@@ -72,6 +81,14 @@ public class NewsPost implements NewsFeed, Serializable {
         }
     }
 
+    /**
+     * Finds and retrieves all comments associated with a specific post caption
+     * from the "newsComments.txt" file. Reads the file and creates NewsComment
+     * objects for each matching entry.
+     *
+     * @param captionOfPost the caption of the post whose comments are to be retrieved
+     * @return an ArrayList of NewsComment objects associated with the post
+     */
     public static ArrayList<NewsComment> findComments(String captionOfPost) {
 
         ArrayList<NewsComment> comments = new ArrayList<>();
@@ -95,22 +112,35 @@ public class NewsPost implements NewsFeed, Serializable {
         return comments;
     }
 
+    /**
+     * Finds and retrieves all comments associated with a specific user.
+     * Uses the `findComments` method to perform the search.
+     *
+     * @param user1 the username of the user whose comments are to be retrieved
+     * @return an ArrayList of NewsComment objects associated with the user
+     */
     public static ArrayList<NewsComment> findCommentsForUser(String user1) {
         return findComments(user1);
     }
 
+    /**
+     * Increments the upvote count for the post by 1.
+     */
     public void incrementUpvotes() {
         upvotes++;
     }
 
+    /**
+     * Increments the downvote count for the post by 1.
+     */
     public void incrementDownvotes() {
         downvotes++;
     }
 
+    //Getters and setters
     public String getAuthor() {
         return author;
     }
-
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -118,7 +148,6 @@ public class NewsPost implements NewsFeed, Serializable {
     public String getCaption() {
         return caption;
     }
-
     public void setCaption(String caption) {
         this.caption = caption;
     }
@@ -126,7 +155,6 @@ public class NewsPost implements NewsFeed, Serializable {
     public String getImagePath() {
         return imagePath;
     }
-
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
@@ -134,7 +162,6 @@ public class NewsPost implements NewsFeed, Serializable {
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -142,7 +169,6 @@ public class NewsPost implements NewsFeed, Serializable {
     public int getUpvotes() {
         return upvotes - downvotes;
     }
-
     public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
     }
@@ -150,7 +176,6 @@ public class NewsPost implements NewsFeed, Serializable {
     public int getDownvotes() {
         return downvotes;
     }
-
     public void setDownvotes(int downvotes) {
         this.downvotes = downvotes;
     }
@@ -158,15 +183,20 @@ public class NewsPost implements NewsFeed, Serializable {
     public ArrayList<NewsComment> getComments() {
         return comments;
     }
-
     public void addComment(NewsComment comment) {
         comments.add(comment);
     }
-
     public void setComments(ArrayList<NewsComment> comments) {
         this.comments = comments;
     }
 
+    /**
+     * Returns a string representation of the post, including its details and comments.
+     * Displays information such as the author, caption, image path, date, upvotes,
+     * downvotes, and comments in a formatted manner.
+     *
+     * @return a formatted string representation of the post
+     */
     @Override
     public String toString() {
 

@@ -1,16 +1,16 @@
 import java.io.*;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
- * Team Project - Social Media App
+ * UserProfile
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Represents a user's profile in the social media application. A user profile contains
+ * information such as the username, email, password, friends list, and blocked list.
+ * It provides methods to manage friends, blocked users, and user-related data such as
+ * posts and comments.
  *
- * @version November 3, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
  */
 public class UserProfile implements User, Serializable {
 
@@ -33,15 +33,29 @@ public class UserProfile implements User, Serializable {
     public UserProfile() {
     }
 
-    //Getters and Setters
+    /**
+     * Retrieves the username of the user.
+     *
+     * @return the username of the user
+     */
     public String getUsername() {
         return this.username;
     }
 
+    /**
+     * Updates the username of the user.
+     *
+     * @param newUsername the new username to set
+     */
     public void setUsername(String newUsername) {
         this.username = newUsername;
     }
 
+    /**
+     * Retrieves the list of friends associated with the user by reading from the file.
+     *
+     * @return a list of friends for the user
+     */
     public ArrayList<String> getFriends() {
 
         ArrayList<String> friendsList = new ArrayList<>();
@@ -73,18 +87,38 @@ public class UserProfile implements User, Serializable {
         return friendsList;
     }
 
+    /**
+     * Retrieves the list of friends stored in memory for the user.
+     *
+     * @return the friends list in memory
+     */
     public ArrayList<String> getFriendsList() {
         return this.friends;
     }
 
+    /**
+     * Sets a new friends list for the user.
+     *
+     * @param newFriends the new list of friends
+     */
     public void setFriends(ArrayList<String> newFriends) {
         this.friends = newFriends;
     }
 
+    /**
+     * Retrieves the list of blocked users stored in memory.
+     *
+     * @return the blocked friends list in memory
+     */
     public ArrayList<String> getBlockedFriends() {
         return this.blockedFriends;
     }
 
+    /**
+     * Retrieves the list of blocked users associated with the user by reading from the file.
+     *
+     * @return a list of blocked friends for the user
+     */
     public ArrayList<String> getBlockedFriendsFromFile() {
 
         ArrayList<String> blockedList = new ArrayList<>();
@@ -115,22 +149,47 @@ public class UserProfile implements User, Serializable {
         return blockedList;
     }
 
+    /**
+     * Sets a new blocked friends list for the user.
+     *
+     * @param newBlockedFriends the new list of blocked friends
+     */
     public void setBlockedFriends(ArrayList<String> newBlockedFriends) {
         this.blockedFriends = newBlockedFriends;
     }
 
+    /**
+     * Retrieves the email of the user.
+     *
+     * @return the email address of the user
+     */
     public String getEmail() {
         return this.email;
     }
 
+    /**
+     * Updates the email address of the user.
+     *
+     * @param newEmail the new email address to set
+     */
     public void setEmail(String newEmail) {
         this.email = newEmail;
     }
 
+    /**
+     * Retrieves the password of the user.
+     *
+     * @return the password of the user
+     */
     public String getPassword() {
         return this.password;
     }
 
+    /**
+     * Updates the password of the user.
+     *
+     * @param newPassword the new password to set
+     */
     public void setPassword(String newPassword) {
         this.password = newPassword;
     }
@@ -193,6 +252,11 @@ public class UserProfile implements User, Serializable {
         }
     }
 
+    /**
+     * Unblocks a user from the blocked friends list.
+     *
+     * @param userToRemoveBlock the username of the user to unblock
+     */
     public void removeBlockedUser(String userToRemoveBlock) {
 
         this.blockedFriends.remove(userToRemoveBlock);
@@ -242,6 +306,11 @@ public class UserProfile implements User, Serializable {
         }
     }
 
+    /**
+     * Retrieves the user's account information as a formatted string.
+     *
+     * @return a StringBuilder containing the user's account information
+     */
     public StringBuilder getAccountInfo() {
 
         StringBuilder accountInfo = new StringBuilder();
@@ -253,6 +322,11 @@ public class UserProfile implements User, Serializable {
         return accountInfo;
     }
 
+    /**
+     * Retrieves the user's posts from the "newsPosts.txt" file.
+     *
+     * @return a list of NewsPost objects associated with the user
+     */
     public ArrayList<NewsPost> getUserPosts() {
 
         String line;
@@ -286,6 +360,9 @@ public class UserProfile implements User, Serializable {
         return userPosts;
     }
 
+    /**
+     * Updates the user's friends list in the "users.txt" file.
+     */
     public void updateFriendsList() {
         try {
             // Read the file into a list of strings
@@ -330,6 +407,9 @@ public class UserProfile implements User, Serializable {
         }
     }
 
+    /**
+     * Updates the user's blocked friends list in the "users.txt" file.
+     */
     public void updateBlockedList() {
         try {
             // Read the file into a list of strings
@@ -375,6 +455,11 @@ public class UserProfile implements User, Serializable {
         }
     }
 
+    /**
+     * Finds and retrieves all comments associated with the user from the "newsComments.txt" file.
+     *
+     * @return a list of NewsComment objects related to the user
+     */
     public ArrayList<NewsComment> findCommentsForUser() {
 
         ArrayList<NewsComment> comments = new ArrayList<>();

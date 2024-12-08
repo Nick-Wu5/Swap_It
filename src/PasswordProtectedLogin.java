@@ -1,15 +1,17 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
- * Team Project - Social Media App
+ * PasswordProtectedLogin
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Provides a secure login system for the social media application. This class manages user authentication
+ * by loading usernames and passwords from a file and verifying user credentials.
  *
- * @version November 3, 2024
- * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
+ * @version December 7, 2024
+ * @author
+ * Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
 public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
     private static final String FILENAME = "users.txt";  //file name of users.txt
@@ -20,6 +22,11 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
         loadUsersFromFile();
     }
 
+    /**
+     * Loads usernames and passwords from the "users.txt" file into the `users` and `passes` lists.
+     * Each line in the file is split to extract the username and password.
+     * Handles file I/O errors gracefully.
+     */
     private void loadUsersFromFile() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
@@ -34,14 +41,32 @@ public class PasswordProtectedLogin implements PasswordProtectedLoginInterface {
         }
     }
 
+    /**
+     * Retrieves the list of usernames.
+     *
+     * @return an ArrayList containing all usernames
+     */
     public static ArrayList<String> getUsers() {
         return PasswordProtectedLogin.users;
     }
 
+    /**
+     * Retrieves the list of passwords.
+     *
+     * @return an ArrayList containing all passwords
+     */
     public static ArrayList<String> getPasses() {
         return PasswordProtectedLogin.passes;
     }
 
+    /**
+     * Authenticates a user by checking the provided username and password against
+     * the loaded user data.
+     *
+     * @param username the username to authenticate
+     * @param password the password to authenticate
+     * @return true if the username and password match an entry in the user data, false otherwise
+     */
     public boolean authenticate(String username, String password) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equals(username) && passes.get(i).equals(password)) {

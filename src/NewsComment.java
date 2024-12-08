@@ -1,23 +1,22 @@
 import java.io.*;
-import java.util.ArrayList;
 
 /**
- * Team Project - Social Media App
+ * NewsComment
  * <p>
- * This program provides a social networking system that allows users to create password-protected accounts and log in
- * securely. It includes features for searching and viewing other user profiles, as well as options to add, block, or
- * remove friends. The system also supports account and relationship management for an interactive user experience.
+ * Represents a comment in the social media application. Each comment is associated with
+ * a specific post and includes details such as the author, content, upvotes, and downvotes.
+ * Provides methods for managing comments, including saving to a file and deleting specific comments.
  *
- * @version November 3, 2024
+ * @version December 7, 2024
  * @author Nick Wu, Chris Brantley, Ramya Prasanna, and Divya Vemireddy
  */
-public class NewsComment implements NewsFeed, Serializable {
+public class NewsComment implements NewsCommentInterface, Serializable {
 
-    private int upvotes;  //number of upvotes per post
-    private String captionOfPost; //title of post the comment is about
-    private int downvotes;  //number of downvotes per post
-    private String content;  //text content of post
-    private String author;  //author that published post
+    private int upvotes;  // Number of upvotes for the comment
+    private String captionOfPost;  // Title of the post the comment is associated with
+    private int downvotes;  // Number of downvotes for the comment
+    private String content;  // The text content of the comment
+    private String author;  // The author who wrote the comment
 
     public NewsComment(String content, String author, String captionOfPost, int upvotes, int downvotes) {
         this.upvotes = 0;
@@ -35,30 +34,63 @@ public class NewsComment implements NewsFeed, Serializable {
         this.captionOfPost = captionOfPost;
     }
 
+    /**
+     * Retrieves the number of upvotes for the comment.
+     *
+     * @return the number of upvotes
+     */
     public int getUpvotes() {
         return upvotes;
     }
 
+    /**
+     * Retrieves the number of downvotes for the comment.
+     *
+     * @return the number of downvotes
+     */
     public int getDownvotes() {
         return downvotes;
     }
 
+    /**
+     * Retrieves the text content of the comment.
+     *
+     * @return the content of the comment
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * Retrieves the author of the comment.
+     *
+     * @return the author of the comment
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Increments the upvote count for the comment by 1.
+     */
     public void incrementUpvotes() {
         upvotes++;
     }
 
+    /**
+     * Increments the downvote count for the comment by 1.
+     */
     public void incrementDownvotes() {
         downvotes++;
     }
 
+    /**
+     * Deletes a comment from the `newsComments.txt` file by its content.
+     * Reads the original file and writes all other comments to a temporary file,
+     * then replaces the original file with the temporary file.
+     *
+     * @param content the content of the comment to delete
+     */
     public static void deleteComment(String content) {
         File originalFile = new File("newsComments.txt");
         File tempFile = new File("tempComments.txt");
@@ -87,6 +119,10 @@ public class NewsComment implements NewsFeed, Serializable {
         }
     }
 
+    /**
+     * Saves the comment to the `newsComments.txt` file in a comma-separated format.
+     * Appends the comment to the file, ensuring no existing comments are overwritten.
+     */
     public synchronized void saveToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter("newsComments.txt", true))) {
             writer.println(content + "," + author + "," + captionOfPost + "," + upvotes + "," + downvotes);
@@ -95,6 +131,12 @@ public class NewsComment implements NewsFeed, Serializable {
         }
     }
 
+    /**
+     * Returns a string representation of the comment, including the author, content,
+     * and the count of upvotes and downvotes.
+     *
+     * @return a string representation of the comment
+     */
     public String toString() {
 
         StringBuilder printThis = new StringBuilder("");
@@ -105,4 +147,3 @@ public class NewsComment implements NewsFeed, Serializable {
         return printThis.toString();
     }
 }
-//push
